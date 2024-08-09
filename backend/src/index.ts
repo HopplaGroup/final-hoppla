@@ -2,10 +2,25 @@ import { Elysia } from 'elysia';
 import { routes } from './routes' //add this line
 import { searchRides } from './search-rides';
 import { swagger } from '@elysiajs/swagger'
+import { basicAuth } from '@eelkevdbos/elysia-basic-auth'
+
+process.env["BASIC_AUTH_CREDENTIALS"] = "admin:admin;user:user"
 
 const app = new Elysia()
+  .use(basicAuth({
+    realm: 'Hoppla Documentation',
+    credentials: {
+      env: 'BASIC_AUTH_CREDENTIALS'
+    },
+    scope: 'swagger'
+  }))
+
   .use(swagger({
-    path: '/',
+    path: '/swagger',
+    swaggerOptions: {
+
+    },
+
     documentation: {
       info: {
         title: 'Amazing Hoppla API Documentation',
