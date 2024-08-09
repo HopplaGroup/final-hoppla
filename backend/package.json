@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@elysiajs/eden": "^1.1.2",
+    "@types/bun": "latest",
+    "prisma": "^5.18.0"
+  },
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts",
+    "postinstall": "bunx prisma generate",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "test": "bun test"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@elysiajs/swagger": "^1.1.0",
+    "@prisma/client": "5.18.0",
+    "elysia": "^1.1.5"
+  }
+}
