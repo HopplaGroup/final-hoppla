@@ -8,7 +8,7 @@ const app = new Elysia()
     path: '/',
     documentation: {
       info: {
-        title: 'Test Hoppla API Documentation',
+        title: 'Amazing Hoppla API Documentation',
         version: '1.0.0',
 
       },
