@@ -7,7 +7,7 @@ const app = new Elysia()
   .use(swagger({
     documentation: {
       info: {
-        title: 'Hoppla API Documentation',
+        title: 'Test Hoppla API Documentation',
         version: '1.0.0',
 
       },
