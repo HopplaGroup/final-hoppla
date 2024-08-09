@@ -9,10 +9,7 @@ process.env["BASIC_AUTH_CREDENTIALS"] = "admin:admin;user:user"
 const app = new Elysia()
   .use(basicAuth({
     realm: 'Hoppla Documentation',
-    credentials: {
-      env: 'BASIC_AUTH_CREDENTIALS'
-    },
-    scope: 'swagger'
+    scope: '/swagger',
   }))
 
   .use(swagger({
