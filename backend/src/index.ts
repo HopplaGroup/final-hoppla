@@ -5,6 +5,7 @@ import { swagger } from '@elysiajs/swagger'
 
 const app = new Elysia()
   .use(swagger({
+    path: '/',
     documentation: {
       info: {
         title: 'Test Hoppla API Documentation',
