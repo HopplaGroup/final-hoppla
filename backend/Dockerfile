@@ -2,13 +2,17 @@ FROM node:22 AS base
 RUN npm install -g bun
 
 FROM base AS install
-
+RUN ls *
 WORKDIR /dev
-COPY package.json bun.lockb /prisma ./
+COPY package.json bun.lockb ./
+COPY prisma ./prisma
+# these files not copied hmmm
+RUN ls *
 RUN bun install --frozen-lockfile --prefer-frozen-lockfile
 
 WORKDIR /prod
-COPY package.json bun.lockb /prisma ./
+COPY package.json bun.lockb ./
+COPY prisma ./prisma
 RUN bun install --frozen-lockfile --prefer-frozen-lockfile --production
 
 FROM base AS build
