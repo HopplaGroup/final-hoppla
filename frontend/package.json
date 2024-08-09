@@ -7,7 +7,7 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "postinstall": "prisma generate",
+    "postinstall": "pnpm dlx prisma generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
