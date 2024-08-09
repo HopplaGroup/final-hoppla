@@ -34,8 +34,8 @@ services:
   next-app:
     container_name: next-app
     build:
-      context: ./
-      dockerfile: ./frontend/Dockerfile
+      context: ./frontend
+      # dockerfile: ./frontend/Dockerfile
       args:
         BACKEND_URL: http://backend-app:3000
     restart: always

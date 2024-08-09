@@ -15,6 +15,7 @@ RUN ls *
 RUN bun install --frozen-lockfile --production
 
 FROM base AS build
+
 WORKDIR /build
 COPY --from=install /dev/node_modules node_modules
 COPY . .
@@ -22,6 +23,7 @@ ENV NODE_ENV=production
 RUN bun run build > /dev/null
 
 FROM base AS release
+
 WORKDIR /app
 
 COPY --from=install /prod/node_modules node_modules
