@@ -4,15 +4,12 @@ RUN npm install -g bun
 FROM base AS install
 
 WORKDIR /dev
-COPY /package.json bun.lockb ./
-COPY /prisma ./prisma
-RUN bun install --frozen-lockfile
+COPY package.json bun.lockb /prisma ./
+RUN bun install --frozen-lockfile --prefer-frozen-lockfile
 
 WORKDIR /prod
-COPY /package.json bun.lockb ./
-COPY /prisma ./prisma
-RUN ls *
-RUN bun install --frozen-lockfile --production
+COPY package.json bun.lockb /prisma ./
+RUN bun install --frozen-lockfile --prefer-frozen-lockfile --production
 
 FROM base AS build
 
