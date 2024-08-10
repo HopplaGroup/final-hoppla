@@ -2,6 +2,8 @@ FROM node:22 AS base
 
 RUN npm install -g bun
 
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
 FROM base AS install
 
 WORKDIR /temp/dev
@@ -25,5 +27,9 @@ WORKDIR /app
 COPY --from=install /temp/prod/node_modules ./node_modules
 COPY --from=prerelease /app/src ./src
 COPY --from=prerelease /app/package.json ./
+
+RUN chown -R appuser:appuser .
+
+USER appuser
 
 CMD [ "bun", "run", "start" ]

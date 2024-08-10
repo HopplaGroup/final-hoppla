@@ -3,7 +3,7 @@ import { PLACES } from "./places";
 
 const NOMINATIM_URL = process.env.NOMINATIM_URL!;
 
-const IS_NOMINATIM_ON = false
+const IS_NOMINATIM_ON = false;
 
 export const routes = new Elysia()
   .get(
@@ -60,7 +60,6 @@ export const routes = new Elysia()
         summary: "Get places by name",
         tags: ["Places"],
       },
-
     }
   )
   .get(
@@ -75,7 +74,7 @@ export const routes = new Elysia()
           name: result.name[query.locale],
           lat: result.lat,
           lon: result.lon,
-        }
+        };
       }
 
       if (IS_NOMINATIM_ON) {
@@ -84,7 +83,7 @@ export const routes = new Elysia()
             `${NOMINATIM_URL}/lookup.php?osm_ids=${osm}&accept-language=${query.locale}&countrycodes=ge&format=jsonv2`
           );
           const data = await response.json();
-          console.log(data)
+          console.log(data);
 
           if (data.length >= 1) {
             const doc = data[0];
@@ -113,6 +112,83 @@ export const routes = new Elysia()
       detail: {
         summary: "Get place by OSM",
         tags: ["Places"],
+      },
+    }
+  )
+  .get(
+    "/v1/getDirections",
+    async ({ query, error }) => {
+      const ORS_URL = process.env.ORS_URL!;
+
+      const origin = PLACES.find((place) => place.osm === query.originOsm);
+
+      if (!origin) {
+        throw new Error("Origin not found");
+      }
+
+      const destination = PLACES.find(
+        (place) => place.osm === query.destinationOsm
+      );
+
+      if (!destination) {
+        throw new Error("Destination not found");
+      }
+
+      try {
+        // const response = await axios.post(
+        //   `http://20.215.62.128:8089/ors/v2/directions/driving-car`,
+        //   {
+        //     coordinates: [start, end],
+        //   },
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
+        // return response.data;
+        // send post rquest with fetch
+        const response = await fetch(
+          `${ORS_URL}/ors/v2/directions/driving-car?start=${origin.lat},${origin.lon}&end=${destination.lat},${destination.lon}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            verbose: true,
+            body: JSON.stringify({
+              coordinates: [
+                [origin.lon, origin.lat], // Ensure correct order: [lon, lat]
+                [destination.lon, destination.lat],
+              ],
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+      return error("Internal Server Error");
+    },
+    {
+      query: t.Object({
+        originOsm: t.String(),
+        destinationOsm: t.String(),
+        locale: t.Enum({
+          en: "en",
+          ka: "ka",
+        }),
+      }),
+      detail: {
+        summary: "Get path from A to B",
+        tags: ["Rides"],
       },
     }
   );
