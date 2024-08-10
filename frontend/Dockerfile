@@ -24,16 +24,15 @@ FROM base AS runner
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# RUN addgroup nodejs
-# RUN adduser -SDH nextjs
-# RUN mkdir .next
-# RUN chown nextjs:nodejs .next
-
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# USER nextjs
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+RUN chown -R appuser:appuser .next
+
+USER appuser
 
 ARG BACKEND_URL
 ENV BACKEND_URL=${BACKEND_URL}
