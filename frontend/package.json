@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.1.1",
-  "type": "module",
   "scripts": {
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
