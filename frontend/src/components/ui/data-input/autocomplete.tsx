@@ -23,6 +23,7 @@ interface AutocompleteProps<T> {
   getKey: (item: T) => Key;
   filterItems: (items: T[], query: string) => T[];
   placeholder?: string;
+  showMax?: number;
 }
 
 export function Autocomplete<T>({
@@ -34,11 +35,14 @@ export function Autocomplete<T>({
   getKey,
   filterItems,
   placeholder = "Select an option",
+  showMax,
 }: AutocompleteProps<T>) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<T | null>(defaultSelected || null);
 
-  const filteredItems = query === "" ? items : filterItems(items, query);
+  const filteredItems = (
+    query === "" ? items : filterItems(items, query)
+  ).slice(0, showMax);
 
   const handleChange = (value: NoInfer<T> | null) => {
     setSelected(value);

@@ -84,7 +84,7 @@ model DriverVerificationRequest {
   id String @id @default(cuid())
 
   licencePhotos String[]
-  licenceNumber String
+  // licenceNumber String
   selfie        String
   status        DriverVerificationRequestStatus
 
@@ -105,10 +105,9 @@ model Car {
 
   name       String
   type       CarType
-  color      String
   plate      String   @unique
   mark       String
-  year       Int
+  // year       Int
   capacity   Int
   isVerified Boolean  @default(false)
   photos     String[]

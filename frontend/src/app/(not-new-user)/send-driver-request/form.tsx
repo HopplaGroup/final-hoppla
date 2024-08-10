@@ -47,7 +47,7 @@ export function SendDriverRequestForm({
         string,
         string
       ]) || [undefined, undefined],
-      licenceNumber: driverVerificationRequest?.licenceNumber || undefined,
+      // licenceNumber: driverVerificationRequest?.licenceNumber || undefined,
       driverId: user.id,
     },
   });
@@ -143,7 +143,7 @@ export function SendDriverRequestForm({
             </FormItem>
           )}
         />
-
+        {/* 
         <FormField
           control={form.control}
           name="licenceNumber"
@@ -166,7 +166,7 @@ export function SendDriverRequestForm({
               <FormMessage errorMessage="Please enter a valid license number in the format AB-000-AB." />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button disabled={isSubmitting} type="submit">
           {m.kind_gaudy_puma_exhale()}
