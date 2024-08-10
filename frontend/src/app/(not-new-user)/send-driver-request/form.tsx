@@ -136,7 +136,8 @@ export function SendDriverRequestForm({
                 </div>
               </FormControl>
               <FormDescription>
-                Upload photos of the front and back of your driver's license.
+                {`                Upload photos of the front and back of your driver's license.
+`}
               </FormDescription>
               <FormMessage errorMessage="Both front and back license photos are required. Please upload them." />
             </FormItem>
@@ -160,7 +161,7 @@ export function SendDriverRequestForm({
                 />
               </FormControl>
               <FormDescription>
-                Enter your driver's license number (format: AB-000-AB).
+                {`Enter your driver's license number (format: AB-000-AB).`}
               </FormDescription>
               <FormMessage errorMessage="Please enter a valid license number in the format AB-000-AB." />
             </FormItem>
