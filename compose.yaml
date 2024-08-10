@@ -47,12 +47,12 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
       PORT: 3000
       HOSTNAME: "0.0.0.0"
-    healthcheck:
-      test: ["CMD", "wget", "-q0", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
-      start_period: 5s
+    # healthcheck:
+    #   test: ["CMD", "wget", "-q0", "http://localhost:3000/health"]
+    #   interval: 30s
+    #   timeout: 30s
+    #   retries: 3
+    #   start_period: 5s
   # --MAIN-POSTGRES-------------------------------------
   postgres:
     container_name: postgres-for-next-app
@@ -102,7 +102,7 @@ services:
     container_name: ors-app
     image: openrouteservice/openrouteservice:v8.0.0
     ports:
-      - "8082:8082"
+      - "8089:8082"
     environment:
       REBUILD_GRAPHS: False
       CONTAINER_LOG_LEVEL: INFO
