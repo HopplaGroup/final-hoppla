@@ -3,11 +3,19 @@ import { Button } from "@/components/ui/actions/button";
 import { getUser } from "@/lib/utils/auth";
 import { UserImage } from "./user-image";
 import { redirect } from "next/navigation";
+import db from "@/lib/utils/db";
 
 export default async function DashboardPage() {
   const user = await getUser();
 
   if (!user) redirect("/");
+
+  const driverVerificationRequest =
+    await db.driverVerificationRequest.findUnique({
+      where: {
+        driverId: user.id,
+      },
+    });
 
   return (
     <section className="relative pt-28 pb-20">
@@ -22,9 +30,18 @@ export default async function DashboardPage() {
         </div>
         <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
           <div className="flex items-center gap-5">
-            <Button variant="outline" href="/send-driver-request">
-              Verify Driver
-            </Button>
+            {(driverVerificationRequest?.status === "PENDING" ||
+              !driverVerificationRequest) && (
+              <Button variant="outline" href="/send-driver-request">
+                {driverVerificationRequest
+                  ? "Edit Driver Request"
+                  : "Send Driver Request"}
+              </Button>
+            )}
+            {driverVerificationRequest?.status === "REJECTED" &&
+              "U are rejected"}
+            {driverVerificationRequest?.status === "APPROVED" &&
+              "U are approved"}
           </div>
           <div className="flex items-center gap-4">
             <Button variant="outline">Message</Button>

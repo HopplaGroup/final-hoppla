@@ -123,7 +123,7 @@ export const routes = new Elysia()
       const origin = PLACES.find((place) => place.osm === query.originOsm);
 
       if (!origin) {
-        throw new Error("Origin not found");
+        throw new Error("Not Found");
       }
 
       const destination = PLACES.find(
@@ -131,53 +131,34 @@ export const routes = new Elysia()
       );
 
       if (!destination) {
-        throw new Error("Destination not found");
+        throw new Error("Not Found");
       }
 
-      try {
-        // const response = await axios.post(
-        //   `http://20.215.62.128:8089/ors/v2/directions/driving-car`,
-        //   {
-        //     coordinates: [start, end],
-        //   },
-        //   {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
-        // return response.data;
-        // send post rquest with fetch
-        const response = await fetch(
-          `${ORS_URL}/ors/v2/directions/driving-car?start=${origin.lat},${origin.lon}&end=${destination.lat},${destination.lon}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            verbose: true,
-            body: JSON.stringify({
-              coordinates: [
-                [origin.lon, origin.lat], // Ensure correct order: [lon, lat]
-                [destination.lon, destination.lat],
-              ],
-            }),
-          }
-        );
+      const response = await fetch(
+        `${ORS_URL}/ors/v2/directions/driving-car?start=${origin.lon},${origin.lat}&end=${destination.lon},${destination.lat}`
+      );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        return data;
-      } catch (error) {
-        console.error(error);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return error("Internal Server Error");
+
+      const data = await response.json();
+      // return data;
+      return {
+        distance: data.features[0].properties.summary.distance,
+        duration: data.features[0].properties.summary.duration,
+        path: data.features[0].geometry.coordinates.map(
+          (c: [number, number]) => [c[1], c[0]]
+        ),
+      };
     },
     {
+      response: t.Object({
+        distance: t.Number(),
+        duration: t.Number(),
+
+        path: t.Array(t.Tuple([t.Number(), t.Number()])),
+      }),
       query: t.Object({
         originOsm: t.String(),
         destinationOsm: t.String(),

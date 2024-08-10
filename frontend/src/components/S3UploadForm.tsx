@@ -200,7 +200,7 @@ export const UploadForm = ({
       )} */}
       <div
         className={cn(
-          "w-[200px] h-[200px] group cursor-pointer rounded-lg overflow-hidden relative",
+          "w-[200px] h-[200px] border group cursor-pointer rounded-lg overflow-hidden relative",
           className,
           {
             "cursor-default": uploading,

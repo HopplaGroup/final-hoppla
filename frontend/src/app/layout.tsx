@@ -33,13 +33,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
-  // const searchedPlaces = await api.v1.getPlacesByName.get({
-  //   $query: {
 
-  //   },
-  // });
-
-  // fake_users.error
   return (
     <LanguageProvider>
       <html lang={languageTag()} suppressHydrationWarning>
@@ -50,9 +44,6 @@ export default async function RootLayout({
                 <Navbar />
               </header>
               <main className="mt-20">
-                {/* <pre>
-                  <code>{JSON.stringify(fake_users, null, 2)}</code>
-                </pre> */}
                 {children} <Toaster />
               </main>
               <div>

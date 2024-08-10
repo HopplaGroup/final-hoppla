@@ -20,15 +20,20 @@ import { useLoading } from "@/lib/providers/loading-provider";
 
 import * as m from "@/paraglide/messages.js";
 import { CreateDriverVerifciationRequestSchema } from "./schema";
-import { createDriverVerificationRequest } from "./actions";
-import { DriverVerificationRequest } from "@prisma/client";
+import {
+  createDriverVerificationRequest,
+  updateDriverVerificationRequest,
+} from "./actions";
+import { DriverVerificationRequest, User } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { UploadForm } from "@/components/S3UploadForm";
 
 export function SendDriverRequestForm({
   driverVerificationRequest,
+  user,
 }: {
   driverVerificationRequest: DriverVerificationRequest | null;
+  user: User;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -36,9 +41,17 @@ export function SendDriverRequestForm({
 
   const form = useForm<z.infer<typeof CreateDriverVerifciationRequestSchema>>({
     resolver: zodResolver(CreateDriverVerifciationRequestSchema),
-    defaultValues: {},
+    defaultValues: {
+      selfie: driverVerificationRequest?.selfie || undefined,
+      licencePhotos: (driverVerificationRequest?.licencePhotos as [
+        string,
+        string
+      ]) || [undefined, undefined],
+      licenceNumber: driverVerificationRequest?.licenceNumber || undefined,
+      driverId: user.id,
+    },
   });
-
+  console.log(form.formState.errors);
   async function onSubmit(
     values: z.infer<typeof CreateDriverVerifciationRequestSchema>
   ) {
@@ -46,10 +59,13 @@ export function SendDriverRequestForm({
     setIsSubmitting(true);
     const toastId = toast.loading("Sending...");
     const result = driverVerificationRequest
-      ? await createDriverVerificationRequest(values)
+      ? await updateDriverVerificationRequest({
+          ...values,
+          id: driverVerificationRequest.id,
+        })
       : await createDriverVerificationRequest(values);
     if (result.success) {
-      toast.success("Succesffyly sended", {
+      toast.success("Succesffyly sent", {
         id: toastId,
       });
       push("/profile");
@@ -62,10 +78,9 @@ export function SendDriverRequestForm({
   }
 
   const inputRef = useMask({
-    // looks like this AAA-000-AAA A is Capital letter and 0 is digit
-    mask: "@@@-$$$-@@@",
+    mask: "__-$$$-__",
     replacement: {
-      "@": /[A-Z]/,
+      _: /[a-zA-Z]/,
       $: /\d/,
     },
   });
@@ -88,8 +103,10 @@ export function SendDriverRequestForm({
                   onSuccessfulUpload={field.onChange}
                 />
               </FormControl>
-              <FormDescription>soem description</FormDescription>
-              <FormMessage errorMessage={"some eror messgae"} />
+              <FormDescription>
+                Upload a clear and recent selfie for identity verification.
+              </FormDescription>
+              <FormMessage errorMessage="Selfie is required for verification. Please upload a clear photo." />
             </FormItem>
           )}
         />
@@ -99,29 +116,29 @@ export function SendDriverRequestForm({
           name="licencePhotos"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>licencePhotos</FormLabel>
+              <FormLabel>License Photos</FormLabel>
               <FormControl>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-4">
                   <UploadForm
-                    defaultUrl={
-                      (field.value?.length > 0 && field.value[0]) || undefined
-                    }
+                    className="w-full"
+                    defaultUrl={field.value[0]}
                     onSuccessfulUpload={(url) => {
-                      field.onChange([url, field.value?.[1]]);
+                      field.onChange([url, field.value[1]]);
                     }}
                   />
                   <UploadForm
-                    defaultUrl={
-                      (field.value?.length > 1 && field.value[1]) || undefined
-                    }
+                    className="w-full"
+                    defaultUrl={field.value[1]}
                     onSuccessfulUpload={(url) => {
                       field.onChange([field.value[0], url]);
                     }}
                   />
                 </div>
               </FormControl>
-              <FormDescription>soem description</FormDescription>
-              <FormMessage errorMessage={"some eror messgae"} />
+              <FormDescription>
+                Upload photos of the front and back of your driver's license.
+              </FormDescription>
+              <FormMessage errorMessage="Both front and back license photos are required. Please upload them." />
             </FormItem>
           )}
         />
@@ -131,12 +148,21 @@ export function SendDriverRequestForm({
           name="licenceNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>licenceNumber</FormLabel>
+              <FormLabel>License Number</FormLabel>
               <FormControl>
-                <Input {...field} ref={inputRef} />
+                <Input
+                  {...field}
+                  ref={inputRef}
+                  placeholder="AB-000-AB"
+                  onChange={(event) => {
+                    field.onChange(event.target.value.toUpperCase());
+                  }}
+                />
               </FormControl>
-              <FormDescription>soem description</FormDescription>
-              <FormMessage errorMessage={"some eror messgae"} />
+              <FormDescription>
+                Enter your driver's license number (format: AB-000-AB).
+              </FormDescription>
+              <FormMessage errorMessage="Please enter a valid license number in the format AB-000-AB." />
             </FormItem>
           )}
         />

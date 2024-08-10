@@ -1,10 +1,7 @@
-
-import { z } from 'zod'; // Assuming you're using Zod for schema validation
+import { z } from "zod"; // Assuming you're using Zod for schema validation
 
 // Define a generic type for your success and error responses
-type Result<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+type Result<T> = { success: true; data: T } | { success: false; error: string };
 
 // Create a higher-order function
 export function createServerAction<T, U>(

@@ -71,6 +71,6 @@ const app = new Elysia()
   .get("/health", () => {
     return { status: "OK" };
   })
-  .listen(3000);
+  .listen(process.env.PORT || 3000);
 
 export type App = typeof app;

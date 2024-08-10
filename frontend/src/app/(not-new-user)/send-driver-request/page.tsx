@@ -36,7 +36,10 @@ export default async function DriverVerficationRequestPage({
           </div>
 
           <div className="relative w-full max-w-lg text-center">
-            <SendDriverRequestForm driverVerificationRequest={response} />
+            <SendDriverRequestForm
+              user={user}
+              driverVerificationRequest={response}
+            />
           </div>
         </div>
       </div>

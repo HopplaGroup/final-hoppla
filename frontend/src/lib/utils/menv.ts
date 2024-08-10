@@ -12,9 +12,6 @@ export const menv = createEnv({
     KINDE_POST_LOGOUT_REDIRECT_URL: z.string().min(1),
     KINDE_POST_LOGIN_REDIRECT_URL: z.string().min(1),
     PRISMA_USER_CREATION_REDIRECT_URL: z.string().min(1),
-    // PAYPAL
-    PAYPAL_CLIENT_ID: z.string().min(1),
-    PAYPAL_CLIENT_SECRET: z.string().min(1),
     // FILE UPLOAD
     AWS_S3_REGION: z.string().min(1),
     AWS_S3_ACCESS_KEY_ID: z.string().min(1),
@@ -25,8 +22,6 @@ export const menv = createEnv({
   },
 
   client: {
-    // PAYPAL
-    NEXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE: z.string().min(1),
   },
 
@@ -42,9 +37,6 @@ export const menv = createEnv({
     PRISMA_USER_CREATION_REDIRECT_URL:
       process.env.PRISMA_USER_CREATION_REDIRECT_URL,
 
-    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID,
-    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
-    NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
     NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE:
       process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE,
 
@@ -55,6 +47,4 @@ export const menv = createEnv({
 
     BACKEND_URL: process.env.BACKEND_URL,
   },
-  // intended for built time
-  // skipValidation: true
 });
