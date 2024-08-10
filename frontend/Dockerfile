@@ -12,9 +12,6 @@ RUN npm install -g pnpm
 
 WORKDIR /app
 
-ARG BACKEND_URL
-ENV BACKEND_URL=${BACKEND_URL}
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN pnpm build
@@ -33,8 +30,5 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 RUN chown -R appuser:appuser .next
 
 USER appuser
-
-ARG BACKEND_URL
-ENV BACKEND_URL=${BACKEND_URL}
 
 CMD ["node", "server.js"]

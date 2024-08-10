@@ -96,7 +96,7 @@ model DriverVerificationRequest {
 }
 
 enum CarType {
-  SEDAN
+  STANDARD
   MINIVAN
 }
 

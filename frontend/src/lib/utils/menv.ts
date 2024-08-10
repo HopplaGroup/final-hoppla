@@ -17,7 +17,7 @@ export const menv = createEnv({
     AWS_S3_ACCESS_KEY_ID: z.string().min(1),
     AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
     AWS_S3_BUCKET_NAME: z.string().min(1),
-
+    // BACKEND
     BACKEND_URL: z.string().min(1),
   },
 
@@ -47,4 +47,6 @@ export const menv = createEnv({
 
     BACKEND_URL: process.env.BACKEND_URL,
   },
+
+  skipValidation: true,
 });

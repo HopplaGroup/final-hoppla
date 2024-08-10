@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import { useLoading } from "@/lib/providers/loading-provider";
 
 import * as m from "@/paraglide/messages.js";
-import { CreateCarSchema } from "./schema";
+import { CreateRideSchema } from "./schema";
 import {
   Select,
   SelectContent,
@@ -32,27 +32,29 @@ import {
 import { DriverVerificationRequest, User } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { UploadForm } from "@/components/S3UploadForm";
-import { createCar } from "./actions";
-import { CAR_LIST } from "./car-list";
+import { createRide } from "./actions";
 import { Autocomplete } from "@/components/ui/data-input/autocomplete";
+import { Circle, MapPin } from "lucide-react";
+import PLACES from "@/lib/constants/places";
+import { languageTag } from "@/paraglide/runtime";
 
-export function CreateCarForm({ user }: { user: User }) {
+export function CreateRideForm({ user }: { user: User }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [capacityOptions, setCapacityOptions] = useState([3, 4]);
   const { push } = useLoading();
 
-  const form = useForm<z.infer<typeof CreateCarSchema>>({
-    resolver: zodResolver(CreateCarSchema),
+  const form = useForm<z.infer<typeof CreateRideSchema>>({
+    resolver: zodResolver(CreateRideSchema),
     defaultValues: {
-      ownerId: user.id,
+      driverId: user.id,
     },
   });
   console.log(form.formState.errors);
-  async function onSubmit(values: z.infer<typeof CreateCarSchema>) {
+  async function onSubmit(values: z.infer<typeof CreateRideSchema>) {
     if (isSubmitting) return;
     setIsSubmitting(true);
     const toastId = toast.loading("Creating...");
-    const result = await createCar(values);
+    const result = await createRide(values);
 
     if (result.success) {
       toast.success("Car created", {
@@ -92,27 +94,79 @@ export function CreateCarForm({ user }: { user: User }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 text-left mx-auto mb-20"
       >
-        <FormField
-          control={form.control}
-          name="photos"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Car Photo</FormLabel>
-              <FormControl>
-                <UploadForm
-                  defaultUrl={field.value?.[0]}
-                  onSuccessfulUpload={(url) => field.onChange([url])}
-                />
-              </FormControl>
-              <FormDescription>
-                Upload a clear and recent photo of your car for listing.
-              </FormDescription>
-              <FormMessage errorMessage="Car photo is required. Please upload a clear and recent photo." />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-2 gap-5">
+          <FormField
+            control={form.control}
+            name="from"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>From</FormLabel>
+                <FormControl>
+                  <Autocomplete
+                    startContent={<Circle size={18} />}
+                    items={PLACES}
+                    displayValue={(item) => item.name[languageTag()]}
+                    onChange={(place) => field.onChange(place?.osm || "")}
+                    getKey={(item) => item.osm}
+                    showMax={10}
+                    filterItems={(items, query) =>
+                      items.filter(
+                        (item) =>
+                          item.name.en
+                            .toLowerCase()
+                            .startsWith(query.toLowerCase()) ||
+                          item.name.ka
+                            .toLowerCase()
+                            .startsWith(query.toLowerCase())
+                      )
+                    }
+                    placeholder="Departure location"
+                  />
+                </FormControl>
+                <FormDescription>
+                  Please enter the departure location
+                </FormDescription>
+                <FormMessage errorMessage="amazing" />
+              </FormItem>
+            )}
+          />
 
-        <FormField
+          <FormField
+            control={form.control}
+            name="to"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>To</FormLabel>
+                <FormControl>
+                  <Autocomplete
+                    startContent={<MapPin size={18} />}
+                    items={PLACES}
+                    displayValue={(item) => item.name[languageTag()]}
+                    onChange={(place) => field.onChange(place?.osm || "")}
+                    getKey={(item) => item.osm}
+                    showMax={10}
+                    filterItems={(items, query) =>
+                      items.filter(
+                        (item) =>
+                          item.name.en
+                            .toLowerCase()
+                            .startsWith(query.toLowerCase()) ||
+                          item.name.ka
+                            .toLowerCase()
+                            .startsWith(query.toLowerCase())
+                      )
+                    }
+                    placeholder="Destination location"
+                  />
+                </FormControl>
+                <FormDescription>Please enter the destination</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
@@ -122,15 +176,14 @@ export function CreateCarForm({ user }: { user: User }) {
                 <Input {...field} placeholder="My BMW" />
               </FormControl>
               <FormDescription>
-                {`                Provide a name for your car, like "My BMW" or "Family Van."
-`}
+                Provide a name for your car, like "My BMW" or "Family Van."
               </FormDescription>
               <FormMessage errorMessage="Please enter a name for your car." />
             </FormItem>
           )}
-        />
+        /> */}
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="mark"
           render={({ field }) => (
@@ -158,9 +211,9 @@ export function CreateCarForm({ user }: { user: User }) {
               <FormMessage errorMessage="Please select a valid car make." />
             </FormItem>
           )}
-        />
+        /> */}
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="type"
           render={({ field }) => (
@@ -196,9 +249,9 @@ export function CreateCarForm({ user }: { user: User }) {
               <FormMessage errorMessage="Please select a valid car type." />
             </FormItem>
           )}
-        />
+        /> */}
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="capacity"
           render={({ field }) => (
@@ -229,8 +282,8 @@ export function CreateCarForm({ user }: { user: User }) {
               <FormMessage errorMessage="Please select a seating capacity." />
             </FormItem>
           )}
-        />
-
+        /> */}
+        {/* 
         <FormField
           control={form.control}
           name="plate"
@@ -253,7 +306,7 @@ export function CreateCarForm({ user }: { user: User }) {
               <FormMessage errorMessage="Please enter a valid plate number in the format AB-000-AB." />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button disabled={isSubmitting} type="submit">
           {m.kind_gaudy_puma_exhale()}
