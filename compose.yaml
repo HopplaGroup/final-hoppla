@@ -46,6 +46,7 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
       BACKEND_URL: http://backend-app:3000
+      ORS_URL: http://ors-app:8082
     healthcheck:
       test: ["CMD", "wget", "-q0", "http://localhost:3000/api/health"]
       interval: 30s

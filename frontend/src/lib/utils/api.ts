@@ -1,7 +1,7 @@
-import { edenTreaty } from '@elysiajs/eden'
-import type { App } from '../../../../backend/src/index'
-import { menv } from './menv'
+import { edenTreaty } from "@elysiajs/eden";
+import type { App } from "../../../../backend/src/index";
+import { menv } from "./menv";
 
-const api = edenTreaty<App>(menv.BACKEND_URL)
+const api = edenTreaty<App>(menv.BACKEND_URL);
 
-export default api
+export default api;

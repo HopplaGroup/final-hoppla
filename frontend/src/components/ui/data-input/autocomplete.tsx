@@ -25,6 +25,7 @@ interface AutocompleteProps<T> {
   placeholder?: string;
   startContent?: React.ReactNode;
   showMax?: number;
+  disabled?: boolean;
 }
 
 export function Autocomplete<T>({
@@ -38,6 +39,7 @@ export function Autocomplete<T>({
   placeholder = "Select an option",
   startContent,
   showMax,
+  disabled,
 }: AutocompleteProps<T>) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<T | null>(defaultSelected || null);
@@ -51,6 +53,7 @@ export function Autocomplete<T>({
 
   return (
     <_Combobox
+      disabled={disabled}
       value={selected}
       onChange={handleChange}
       onClose={() => setQuery("")}
@@ -62,6 +65,7 @@ export function Autocomplete<T>({
           </div>
         )}
         <ComboboxInput
+          disabled={disabled}
           placeholder={placeholder}
           className={cn(
             "w-full rounded-lg bg-background h-12 border pr-[4.5rem] text-sm/6 text-foreground placeholder:text-foreground/70",
@@ -82,6 +86,7 @@ export function Autocomplete<T>({
         </ComboboxButton>
         {selected && (
           <button
+            disabled={disabled}
             className="group absolute inset-y-0 right-12"
             onClick={() => {
               setSelected(null);

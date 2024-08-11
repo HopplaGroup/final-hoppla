@@ -12,7 +12,16 @@ import { ka, enUS } from "date-fns/locale";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Select } from "./data-input/select";
 import { languageTag } from "@/paraglide/runtime";
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import {
+  DateTimePickerTabs,
+  DateTimePickerToolbar,
+  DigitalClock,
+} from "@mui/x-date-pickers";
+import {
+  DateCalendar,
+  DateTimePicker,
+  LocalizationProvider,
+} from "@mui/x-date-pickers";
 // If you are using date-fns v3.x, please import the v3 adapter
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
@@ -47,7 +56,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     const [popoverOpen, setPopoverOpen] = useState(false);
 
     const locale = l === "ka" ? ka : enUS;
-
+    // const Comp = isHour ? DateTimeCale : DateCalendar;
     return (
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger ref={ref} name={name} asChild>
@@ -77,18 +86,31 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             adapterLocale={locale}
             dateAdapter={AdapterDateFns}
           >
-            <DateCalendar
-              views={["year", "month", "day"]}
-              minDate={startDate}
-              maxDate={endDate}
-              value={value}
-              onChange={(newValue, selectionState) => {
-                if (selectionState === "finish") {
-                  setPopoverOpen(false);
-                }
-                onChange?.(newValue);
-              }}
-            />
+            <div className="flex flex-col sm:flex-row gap-5 h-full">
+              <DateCalendar
+                className="w-full min-w-[300px]"
+                views={["year", "month", "day"]}
+                minDate={startDate}
+                maxDate={endDate}
+                value={value}
+                onChange={(newValue, selectionState) => {
+                  // if (selectionState === "finish") {
+                  //   setPopoverOpen(false);
+                  // }
+                  onChange?.(newValue);
+                }}
+              />
+              {isHour && (
+                <DigitalClock
+                  className="h-full"
+                  value={value}
+                  ampm={false}
+                  onChange={(v) => {
+                    onChange?.(v);
+                  }}
+                />
+              )}
+            </div>
           </LocalizationProvider>
         </PopoverContent>
       </Popover>

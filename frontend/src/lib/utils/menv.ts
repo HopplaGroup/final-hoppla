@@ -19,6 +19,7 @@ export const menv = createEnv({
     AWS_S3_BUCKET_NAME: z.string().min(1),
     // BACKEND
     BACKEND_URL: z.string().min(1),
+    ORS_URL: z.string().min(1),
   },
 
   client: {
@@ -46,6 +47,7 @@ export const menv = createEnv({
     AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
 
     BACKEND_URL: process.env.BACKEND_URL,
+    ORS_URL: process.env.ORS_URL,
   },
 
   skipValidation: true,

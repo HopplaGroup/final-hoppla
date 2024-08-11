@@ -10,6 +10,7 @@ import { getUser } from "@/lib/utils/auth";
 import Footer from "@/components/common/footer/footer";
 import type { Metadata } from "next";
 import * as m from "@/paraglide/messages.js";
+import api from "@/lib/utils/api";
 
 export const dynamic = "force-dynamic";
 

@@ -17,6 +17,7 @@ import { useMask } from "@react-input/mask";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLoading } from "@/lib/providers/loading-provider";
+import { NumericFormat } from "react-number-format";
 
 import * as m from "@/paraglide/messages.js";
 import { CreateRideSchema } from "./schema";
@@ -29,29 +30,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DriverVerificationRequest, User } from "@prisma/client";
-import { Input } from "@/components/ui/input";
-import { UploadForm } from "@/components/S3UploadForm";
-import { createRide } from "./actions";
+import { Car, User } from "@prisma/client";
+import { createRide, getDirections } from "./actions";
 import { Autocomplete } from "@/components/ui/data-input/autocomplete";
 import { Circle, MapPin } from "lucide-react";
 import PLACES from "@/lib/constants/places";
 import { languageTag } from "@/paraglide/runtime";
+import { DatePicker } from "@/components/ui/date-picker";
+import { Input } from "@/components/ui/input";
+import api from "@/lib/utils/api";
 
-export function CreateRideForm({ user }: { user: User }) {
+const PRICE_RANGE = 5;
+
+export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [capacityOptions, setCapacityOptions] = useState([3, 4]);
   const { push } = useLoading();
-
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const form = useForm<z.infer<typeof CreateRideSchema>>({
     resolver: zodResolver(CreateRideSchema),
     defaultValues: {
       driverId: user.id,
     },
   });
-  console.log(form.formState.errors);
+  const [duration, setDuration] = useState(0);
+  const [realPriceValue, setRealPriceValue] = useState(0);
+  const [isPriceLoading, setIsPriceLoading] = useState(false);
+  const [isPriceValidated, setIsPriceValidated] = useState(true);
   async function onSubmit(values: z.infer<typeof CreateRideSchema>) {
-    if (isSubmitting) return;
+    if (isSubmitting || !isPriceValidated) return;
     setIsSubmitting(true);
     const toastId = toast.loading("Creating...");
     const result = await createRide(values);
@@ -88,6 +95,44 @@ export function CreateRideForm({ user }: { user: User }) {
     },
   ];
 
+  const FuelPricePerLitre = 2.5;
+  const FuelConsumptionPerKm = 0.1;
+  // distance in meteres here
+  const getPriceByDistance = (distance: number) => {
+    return Number(
+      (FuelPricePerLitre * (distance / 1000) * FuelConsumptionPerKm).toFixed(2)
+    );
+  };
+
+  useEffect(() => {
+    const { from, to, departure } = form.getValues();
+    if (!from || !to || isPriceLoading) return;
+    setIsPriceLoading(true);
+    console.log(from, to);
+    getDirections({ from, to }).then((res) => {
+      setRealPriceValue(
+        res.success ? getPriceByDistance(res.data.distance) : 0
+      );
+      form.setValue("distance", res.success ? res.data.distance : 0);
+      setDuration(res.success ? res.data.duration : 0);
+      setIsPriceValidated(true);
+      if (departure) {
+        form.setValue(
+          "arrival",
+          new Date(departure.getTime() + duration * 1000)
+        );
+      }
+      setIsPriceLoading(false);
+    });
+  }, [form.watch("from"), form.watch("to")]);
+
+  useEffect(() => {
+    const { departure, arrival } = form.getValues();
+    if (departure && duration) {
+      form.setValue("arrival", new Date(departure.getTime() + duration * 1000));
+    }
+  }, [form.watch("departure")]);
+
   return (
     <Form {...form}>
       <form
@@ -103,6 +148,7 @@ export function CreateRideForm({ user }: { user: User }) {
                 <FormLabel>From</FormLabel>
                 <FormControl>
                   <Autocomplete
+                    disabled={isPriceLoading}
                     startContent={<Circle size={18} />}
                     items={PLACES}
                     displayValue={(item) => item.name[languageTag()]}
@@ -139,6 +185,7 @@ export function CreateRideForm({ user }: { user: User }) {
                 <FormLabel>To</FormLabel>
                 <FormControl>
                   <Autocomplete
+                    disabled={isPriceLoading}
                     startContent={<MapPin size={18} />}
                     items={PLACES}
                     displayValue={(item) => item.name[languageTag()]}
@@ -165,6 +212,168 @@ export function CreateRideForm({ user }: { user: User }) {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="carId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Choose your car</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={(v) => {
+                    setSelectedCar(cars.find((c) => c.id === v) || null);
+                    form.resetField("availableSeats");
+                    field.onChange(v);
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {cars.map(({ id, name }) => (
+                        <SelectItem key={id} value={id}>
+                          {name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>Please enter the departure time</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="availableSeats"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Choose aailable seats</FormLabel>
+              <FormControl>
+                <Select
+                  key={selectedCar?.id}
+                  value={field.value?.toString()}
+                  onValueChange={(v) => {
+                    field.onChange(Number(v));
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Array.from(
+                        { length: selectedCar?.capacity || 0 },
+                        (_, i) => i + 1
+                      ).map((o) => (
+                        <SelectItem key={o} value={o.toString()}>
+                          {o}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>Please enter the departure time</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="departure"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Departure Time</FormLabel>
+              <FormControl>
+                <DatePicker
+                  isHour
+                  placeholder={m.last_ornate_lion_dine()}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Please enter the departure time</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="arrival"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Arrival Time</FormLabel>
+              <FormControl>
+                <DatePicker
+                  isHour
+                  placeholder={m.last_ornate_lion_dine()}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Please enter the departure time</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <FormControl>
+                <NumericFormat
+                  disabled={isPriceLoading}
+                  key={realPriceValue}
+                  decimalScale={2}
+                  customInput={Input}
+                  value={field.value}
+                  onValueChange={(v) => {
+                    const { floatValue } = v;
+                    console.log(floatValue);
+                    if (
+                      floatValue === undefined ||
+                      !(
+                        floatValue <= realPriceValue + PRICE_RANGE &&
+                        floatValue >= Math.max(0, realPriceValue - PRICE_RANGE)
+                      )
+                    ) {
+                      setIsPriceValidated(false);
+                    } else {
+                      setIsPriceValidated(true);
+                    }
+                    field.onChange(Number(floatValue));
+                  }}
+                />
+                {/* <FancyMultiSelect
+                  items={rules}
+                  placeholder="Choose rules..."
+                  displayValue={(rule) => rule.description}
+                  getKey={(rule) => rule.$id}
+                  onChange={(c) => field.onChange(c.map((x) => x.$id))}
+                /> */}
+              </FormControl>
+              <FormDescription>
+                Price should be ebtween{" "}
+                {Math.max(0, realPriceValue - PRICE_RANGE)} -{" "}
+                {realPriceValue + PRICE_RANGE}
+              </FormDescription>
+              {!isPriceValidated ? (
+                <FormMessage>Pls enter in valid range </FormMessage>
+              ) : (
+                <FormMessage />
+              )}
+            </FormItem>
+          )}
+        />
 
         {/* <FormField
           control={form.control}

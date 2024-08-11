@@ -206,6 +206,7 @@ export function CreateCarForm({ user }: { user: User }) {
               <FormLabel>Seating Capacity</FormLabel>
               <FormControl>
                 <Select
+                  key={capacityOptions.join(",")}
                   value={field.value?.toString()}
                   onValueChange={(v) => field.onChange(Number(v))}
                 >

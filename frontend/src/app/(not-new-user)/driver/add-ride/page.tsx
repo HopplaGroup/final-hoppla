@@ -16,11 +16,15 @@ export default async function AddCarPage({
   if (!user) {
     redirect("/");
   }
-  const response = await db.driverVerificationRequest.findUnique({
+  const cars = await db.car.findMany({
     where: {
-      driverId: user.id,
+      ownerId: user.id,
     },
   });
+
+  if (cars.length === 0) {
+    redirect("/driver/add-car");
+  }
 
   return (
     <>
@@ -40,7 +44,7 @@ export default async function AddCarPage({
               user={user}
               driverVerificationRequest={response}
             /> */}
-            <CreateRideForm user={user} />
+            <CreateRideForm cars={cars} user={user} />
           </div>
         </div>
       </div>
