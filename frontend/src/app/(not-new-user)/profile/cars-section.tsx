@@ -15,7 +15,79 @@ export function CarsSection({ cars }: { cars: Car[] }) {
           <TabsTrigger value="cars">Cars</TabsTrigger>
         </TabsList>
         <TabsContent value="rides">
-          <div>TEXT</div>
+          <div className="grid grid-cols-2 gap-4 mx-auto">
+            <div className="mb-2 flex justify-around flex-row items-center border border-solid border-gray-200 rounded-2xl transition-all duration-500 md:flex-row md:max-w-lg h-40 p-1">
+              <div className="flex items-center w-full md:w-28 h-28">
+                <img
+                  src={
+                    "https://www.carandbike.com/_next/image?url=https%3A%2F%2Fimages.carandbike.com%2Fcar-images%2Fbig%2Fhyundai%2Fcreta%2Fhyundai-creta.jpg%3Fv%3D92&w=3840&q=75"
+                  }
+                  alt="Car image"
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-xl">TBILISI - BATUMI</div>
+                <div className="text-sm">Friday 14:00</div>
+                <div className="text-sm">Places 4 / 7</div>
+                <div className="text-xs">Car BMW</div>
+              </div>
+            </div>
+            {/* error */}
+            <div className="mb-2 flex justify-around flex-row items-center border border-solid border-gray-200 rounded-2xl transition-all duration-500 md:flex-row md:max-w-lg h-40 p-1">
+              <div className="flex items-center w-full md:w-28 h-28">
+                <img
+                  src={
+                    "https://www.carandbike.com/_next/image?url=https%3A%2F%2Fimages.carandbike.com%2Fcar-images%2Fbig%2Fhyundai%2Fcreta%2Fhyundai-creta.jpg%3Fv%3D92&w=3840&q=75"
+                  }
+                  alt="Car image"
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-xl">TBILISI - BATUMI</div>
+                <div className="text-sm">Friday 14:00</div>
+                <div className="text-sm">Places 4 / 7</div>
+                <div className="text-xs">Car BMW</div>
+              </div>
+            </div>
+            {/*hehe*/}
+            <div className="mb-2 flex justify-around flex-row items-center border border-solid border-gray-200 rounded-2xl transition-all duration-500 md:flex-row md:max-w-lg h-40 p-1">
+              <div className="flex items-center w-full md:w-28 h-28">
+                <img
+                  src={
+                    "https://www.carandbike.com/_next/image?url=https%3A%2F%2Fimages.carandbike.com%2Fcar-images%2Fbig%2Fhyundai%2Fcreta%2Fhyundai-creta.jpg%3Fv%3D92&w=3840&q=75"
+                  }
+                  alt="Car image"
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-xl">TBILISI - BATUMI</div>
+                <div className="text-sm">Friday 14:00</div>
+                <div className="text-sm">Places 4 / 7</div>
+                <div className="text-xs">Car BMW</div>
+              </div>
+            </div>
+            {}
+            <div className="mb-2 flex justify-around flex-row items-center border border-solid border-gray-200 rounded-2xl transition-all duration-500 md:flex-row md:max-w-lg h-40 p-1">
+              <div className="flex items-center w-full md:w-28 h-28">
+                <img
+                  src={
+                    "https://www.carandbike.com/_next/image?url=https%3A%2F%2Fimages.carandbike.com%2Fcar-images%2Fbig%2Fhyundai%2Fcreta%2Fhyundai-creta.jpg%3Fv%3D92&w=3840&q=75"
+                  }
+                  alt="Car image"
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-xl">TBILISI - BATUMI</div>
+                <div className="text-sm">Friday 14:00</div>
+                <div className="text-sm">Places 4 / 7</div>
+                <div className="text-xs">Car BMW</div>
+              </div>
+            </div>
+          </div>
         </TabsContent>
         <TabsContent value="cars">
           <div className="w-full">
