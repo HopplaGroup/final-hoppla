@@ -67,7 +67,7 @@ export function Hero() {
                 className="md:w-[60px]"
               /> */}
 
-                <Button>Search</Button>
+                {/* <Button>Search</Button> */}
               </div>
             </div>
             <div className="flex animate-pulse items-center justify-center mt-4 gap-2">
