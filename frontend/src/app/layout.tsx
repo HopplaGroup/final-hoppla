@@ -39,17 +39,8 @@ export default async function RootLayout({
       <html lang={languageTag()} suppressHydrationWarning>
         <body className={cn("min-h-screen font-sans antialiased")}>
           <MainProvider user={user}>
-            <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
-              <header>
-                <Navbar />
-              </header>
-              <main className="mt-20">
-                {children} <Toaster />
-              </main>
-              <div>
-                <Footer />
-              </div>
-            </div>
+            {children}
+            <Toaster />
           </MainProvider>
         </body>
       </html>

@@ -13,7 +13,21 @@ export const createRide = createServerAction(
   async (input) => {
     await db.ride.create({
       data: {
-        ...input,
+        // ...input,
+        availableSeats: input.availableSeats,
+        price: input.price,
+        from: input.from,
+        to: input.to,
+        departure: input.departure,
+        duration: input.duration,
+        distance: input.distance,
+        driverId: input.driverId,
+        carId: input.carId,
+        rules: {
+          connect: input.ruleIds
+            ? input.ruleIds.map((id) => ({ id }))
+            : undefined,
+        },
       },
     });
   }

@@ -22,6 +22,8 @@ export default async function AddCarPage({
     },
   });
 
+  const rules = await db.rule.findMany({});
+
   if (cars.length === 0) {
     redirect("/driver/add-car");
   }
@@ -44,7 +46,7 @@ export default async function AddCarPage({
               user={user}
               driverVerificationRequest={response}
             /> */}
-            <CreateRideForm cars={cars} user={user} />
+            <CreateRideForm rules={rules} cars={cars} user={user} />
           </div>
         </div>
       </div>

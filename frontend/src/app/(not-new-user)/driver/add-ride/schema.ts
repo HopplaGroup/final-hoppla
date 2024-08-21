@@ -6,8 +6,9 @@ export const CreateRideSchema = z.object({
   from: z.string(),
   to: z.string(),
   departure: z.date(),
-  arrival: z.date(),
+  duration: z.number(),
   distance: z.number(),
   driverId: z.string(),
   carId: z.string(),
+  ruleIds: z.array(z.string()).optional(),
 });

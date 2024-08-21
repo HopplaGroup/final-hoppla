@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLoading } from "@/lib/providers/loading-provider";
 import { NumericFormat } from "react-number-format";
+import ReactSelect from "react-select";
 
 import * as m from "@/paraglide/messages.js";
 import { CreateRideSchema } from "./schema";
@@ -26,11 +27,10 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Car, User } from "@prisma/client";
+import { Car, Rule, User } from "@prisma/client";
 import { createRide, getDirections } from "./actions";
 import { Autocomplete } from "@/components/ui/data-input/autocomplete";
 import { Circle, MapPin } from "lucide-react";
@@ -38,13 +38,19 @@ import PLACES from "@/lib/constants/places";
 import { languageTag } from "@/paraglide/runtime";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
-import api from "@/lib/utils/api";
 
 const PRICE_RANGE = 5;
 
-export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
+export function CreateRideForm({
+  user,
+  cars,
+  rules,
+}: {
+  user: User;
+  cars: Car[];
+  rules: Rule[];
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [capacityOptions, setCapacityOptions] = useState([3, 4]);
   const { push } = useLoading();
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const form = useForm<z.infer<typeof CreateRideSchema>>({
@@ -53,7 +59,6 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
       driverId: user.id,
     },
   });
-  const [duration, setDuration] = useState(0);
   const [realPriceValue, setRealPriceValue] = useState(0);
   const [isPriceLoading, setIsPriceLoading] = useState(false);
   const [isPriceValidated, setIsPriceValidated] = useState(true);
@@ -64,7 +69,7 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
     const result = await createRide(values);
 
     if (result.success) {
-      toast.success("Car created", {
+      toast.success("Ride created", {
         id: toastId,
       });
       push("/profile");
@@ -97,7 +102,7 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
 
   const FuelPricePerLitre = 2.5;
   const FuelConsumptionPerKm = 0.1;
-  // distance in meteres here
+
   const getPriceByDistance = (distance: number) => {
     return Number(
       (FuelPricePerLitre * (distance / 1000) * FuelConsumptionPerKm).toFixed(2)
@@ -105,33 +110,20 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
   };
 
   useEffect(() => {
-    const { from, to, departure } = form.getValues();
+    const { from, to } = form.getValues();
     if (!from || !to || isPriceLoading) return;
     setIsPriceLoading(true);
-    console.log(from, to);
     getDirections({ from, to }).then((res) => {
       setRealPriceValue(
         res.success ? getPriceByDistance(res.data.distance) : 0
       );
       form.setValue("distance", res.success ? res.data.distance : 0);
-      setDuration(res.success ? res.data.duration : 0);
+      form.setValue("duration", res.success ? res.data.duration : 0);
       setIsPriceValidated(true);
-      if (departure) {
-        form.setValue(
-          "arrival",
-          new Date(departure.getTime() + duration * 1000)
-        );
-      }
+
       setIsPriceLoading(false);
     });
   }, [form.watch("from"), form.watch("to")]);
-
-  useEffect(() => {
-    const { departure, arrival } = form.getValues();
-    if (departure && duration) {
-      form.setValue("arrival", new Date(departure.getTime() + duration * 1000));
-    }
-  }, [form.watch("departure")]);
 
   return (
     <Form {...form}>
@@ -306,25 +298,6 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
 
         <FormField
           control={form.control}
-          name="arrival"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Arrival Time</FormLabel>
-              <FormControl>
-                <DatePicker
-                  isHour
-                  placeholder={m.last_ornate_lion_dine()}
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>Please enter the departure time</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="price"
           render={({ field }) => (
             <FormItem>
@@ -353,13 +326,6 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
                     field.onChange(Number(floatValue));
                   }}
                 />
-                {/* <FancyMultiSelect
-                  items={rules}
-                  placeholder="Choose rules..."
-                  displayValue={(rule) => rule.description}
-                  getKey={(rule) => rule.$id}
-                  onChange={(c) => field.onChange(c.map((x) => x.$id))}
-                /> */}
               </FormControl>
               <FormDescription>
                 Price should be ebtween{" "}
@@ -375,147 +341,43 @@ export function CreateRideForm({ user, cars }: { user: User; cars: Car[] }) {
           )}
         />
 
-        {/* <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Car Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="My BMW" />
-              </FormControl>
-              <FormDescription>
-                Provide a name for your car, like "My BMW" or "Family Van."
-              </FormDescription>
-              <FormMessage errorMessage="Please enter a name for your car." />
-            </FormItem>
-          )}
-        /> */}
-
-        {/* <FormField
-          control={form.control}
-          name="mark"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Car Make</FormLabel>
-              <FormControl>
-                <Autocomplete
-                  items={CAR_LIST}
-                  displayValue={(c) => c}
-                  getKey={(c) => c}
-                  onChange={(c) => field.onChange(c)}
-                  showMax={10}
-                  filterItems={(items, query) =>
-                    items.filter((c) =>
-                      c
-                        .toLocaleLowerCase()
-                        .startsWith(query.toLocaleLowerCase())
-                    )
-                  }
-                />
-              </FormControl>
-              <FormDescription>
-                Select the make of your car, e.g., BMW, Toyota.
-              </FormDescription>
-              <FormMessage errorMessage="Please select a valid car make." />
-            </FormItem>
-          )}
-        /> */}
-
-        {/* <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Car Type</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={(v) => {
-                    if (v === "SEDAN") setCapacityOptions([3, 4]);
-                    else if (v === "MINIVAN") setCapacityOptions([6, 7, 8]);
-                    form.resetField("capacity");
-                    field.onChange(v);
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {CAR_TYPE.map(({ label, value }) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>
-                Choose the type of your car, such as Sedan or Minivan.
-              </FormDescription>
-              <FormMessage errorMessage="Please select a valid car type." />
-            </FormItem>
-          )}
-        /> */}
-
-        {/* <FormField
-          control={form.control}
-          name="capacity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Seating Capacity</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value?.toString()}
-                  onValueChange={(v) => field.onChange(Number(v))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a capacity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {capacityOptions.map((o) => (
-                        <SelectItem key={o} value={o.toString()}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>
-                Specify how many passengers your car can seat.
-              </FormDescription>
-              <FormMessage errorMessage="Please select a seating capacity." />
-            </FormItem>
-          )}
-        /> */}
-        {/* 
         <FormField
           control={form.control}
-          name="plate"
+          name="ruleIds"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Plate Number</FormLabel>
+              <FormLabel>Rules</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  ref={inputRef}
-                  placeholder="AB-000-AB"
-                  onChange={(event) => {
-                    field.onChange(event.target.value.toUpperCase());
+                <ReactSelect
+                  // defaultValue={[colourOptions[2], colourOptions[3]]}
+                  isMulti
+                  name="rules"
+                  options={rules.map((r) => ({
+                    value: r.id,
+                    label: r.description,
+                  }))}
+                  // make heigjht
+                  className="basic-multi-select py-0"
+                  classNamePrefix="select"
+                  onChange={(v) => {
+                    console.log(v);
+                    field.onChange(v.map((x) => x.value));
                   }}
                 />
               </FormControl>
-              <FormDescription>
-                {`Enter your car's plate number in the format AB-000-AB.`}
+              {/* <FormDescription>
+                Price should be ebtween{" "}
+                {Math.max(0, realPriceValue - PRICE_RANGE)} -{" "}
+                {realPriceValue + PRICE_RANGE}
               </FormDescription>
-              <FormMessage errorMessage="Please enter a valid plate number in the format AB-000-AB." />
+              {!isPriceValidated ? (
+                <FormMessage>Pls enter in valid range </FormMessage>
+              ) : (
+                <FormMessage />
+              )} */}
             </FormItem>
           )}
-        /> */}
+        />
 
         <Button disabled={isSubmitting} type="submit">
           {m.kind_gaudy_puma_exhale()}

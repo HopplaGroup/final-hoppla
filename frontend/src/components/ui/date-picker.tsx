@@ -43,7 +43,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
       onChange,
       value,
       startDate = new Date(1902, 4, 5),
-      endDate = new Date(2023, 4, 10),
+      endDate = new Date(2026, 4, 10),
       isHour,
       disabled,
       placeholder = "Pick a date",

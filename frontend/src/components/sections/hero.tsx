@@ -1,150 +1,242 @@
+import Link from "next/link";
 import { Button } from "../ui/actions/button";
 import * as m from "@/paraglide/messages.js";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { menv } from "@/lib/utils/menv";
+import { getUser } from "@/lib/utils/auth";
 
-export function Hero() {
+export async function Hero() {
+  const user = await getUser();
   return (
-    <div className="container relative isolate mt-20">
-      <div className="mx-auto ">
-        <div className="mb-8 flex justify-center">
-          <div className="relative text-center rounded-full px-3 py-1 text-sm leading-6 border">
-            {m.dry_elegant_coyote_trip()}{" "}
-            <a href="#" className="font-semibold text-primary">
-              <span className="absolute inset-0" aria-hidden="true"></span>
-              {m.top_livid_snake_advise()}{" "}
-              <span aria-hidden="true">&rarr;</span>
-            </a>
+    <div className="relative bg-gradient-to-bl from-primary/20 via-transparent">
+      <div className=" py-10 lg:py-14 container">
+        <div className="grid items-center md:grid-cols-2 gap-8 lg:gap-12">
+          <div>
+            <p className="inline-block text-sm font-medium bg-clip-text bg-gradient-to-l from-primary to-orange-500 text-transparent">
+              Hoppla: #1 in transportation
+            </p>
+
+            <div className="mt-4 md:mb-12 max-w-2xl">
+              <h1 className="mb-4 font-semibold text-gray-800 text-4xl lg:text-5xl">
+                Use Hoppla to travel where you want
+              </h1>
+              <p className="text-gray-600">
+                Hoppla connects you to top transportation options in your area,
+                from buses to carpooling, ensuring a smooth and enjoyable travel
+                experience for you.
+              </p>
+            </div>
+
+            <blockquote className="hidden md:block relative max-w-sm">
+              <svg
+                className="absolute top-0 start-0 transform -translate-x-6 -translate-y-8 size-16 text-gray-200"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7.39762 10.3C7.39762 11.0733 7.14888 11.7 6.6514 12.18C6.15392 12.6333 5.52552 12.86 4.76621 12.86C3.84979 12.86 3.09047 12.5533 2.48825 11.94C1.91222 11.3266 1.62421 10.4467 1.62421 9.29999C1.62421 8.07332 1.96459 6.87332 2.64535 5.69999C3.35231 4.49999 4.33418 3.55332 5.59098 2.85999L6.4943 4.25999C5.81354 4.73999 5.26369 5.27332 4.84476 5.85999C4.45201 6.44666 4.19017 7.12666 4.05926 7.89999C4.29491 7.79332 4.56983 7.73999 4.88403 7.73999C5.61716 7.73999 6.21938 7.97999 6.69067 8.45999C7.16197 8.93999 7.39762 9.55333 7.39762 10.3ZM14.6242 10.3C14.6242 11.0733 14.3755 11.7 13.878 12.18C13.3805 12.6333 12.7521 12.86 11.9928 12.86C11.0764 12.86 10.3171 12.5533 9.71484 11.94C9.13881 11.3266 8.85079 10.4467 8.85079 9.29999C8.85079 8.07332 9.19117 6.87332 9.87194 5.69999C10.5789 4.49999 11.5608 3.55332 12.8176 2.85999L13.7209 4.25999C13.0401 4.73999 12.4903 5.27332 12.0713 5.85999C11.6786 6.44666 11.4168 7.12666 11.2858 7.89999C11.5215 7.79332 11.7964 7.73999 12.1106 7.73999C12.8437 7.73999 13.446 7.97999 13.9173 8.45999C14.3886 8.93999 14.6242 9.55333 14.6242 10.3Z"
+                  fill="currentColor"
+                />
+              </svg>
+
+              <div className="relative z-10">
+                <p className="text-xl italic text-gray-800">
+                  Amazing service, I have been using Hoppla for a while now and
+                  it has been a great experience.
+                </p>
+              </div>
+
+              <footer className="mt-3">
+                <div className="flex items-center gap-x-4">
+                  <div className="shrink-0">
+                    <img
+                      className="size-8 rounded-full"
+                      src="https://media.licdn.com/dms/image/D4E03AQGx_aAYIzrvaQ/profile-displayphoto-shrink_200_200/0/1708849583677?e=2147483647&v=beta&t=vtJXRzCOdAbp5mfFH9bmWi4ZHul0HaMtQBmVkAe66WI"
+                      // src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                      alt="Avatar"
+                    />
+                  </div>
+                  <div className="grow">
+                    <div className="font-semibold text-gray-800">
+                      Gaioz Tabatadze
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Traveler at Hoppla
+                    </div>
+                  </div>
+                </div>
+              </footer>
+            </blockquote>
+          </div>
+
+          <div>
+            <form>
+              <div className="lg:max-w-lg lg:mx-auto lg:me-0 ms-auto">
+                <div className="p-4 sm:p-7 flex flex-col bg-white rounded-lg">
+                  <div className="text-center">
+                    <h1 className="block text-2xl font-bold text-gray-800">
+                      Start travel with Hoppla
+                    </h1>
+                    <p className="mt-2 text-sm text-gray-600">
+                      Want to become a driver?{" "}
+                      <Link
+                        className="text-primary decoration-2 hover:underline focus:outline-none focus:underline font-medium"
+                        href="/become-driver"
+                      >
+                        Learn more
+                      </Link>
+                    </p>
+                  </div>
+
+                  <div className="mt-5">
+                    {!user && (
+                      <RegisterLink
+                        authUrlParams={{
+                          connection_id:
+                            menv.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE,
+                        }}
+                        type="button"
+                        className="w-full h-12 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        <svg
+                          className="w-4 h-auto"
+                          width="46"
+                          height="47"
+                          viewBox="0 0 46 47"
+                          fill="none"
+                        >
+                          <path
+                            d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
+                            fill="#4285F4"
+                          ></path>
+                          <path
+                            d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
+                            fill="#34A853"
+                          ></path>
+                          <path
+                            d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
+                            fill="#FBBC05"
+                          ></path>
+                          <path
+                            d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
+                            fill="#EB4335"
+                          ></path>
+                        </svg>
+                        Sign in with Google
+                      </RegisterLink>
+                    )}
+                    {user && (
+                      <Link
+                        href="/profile"
+                        type="button"
+                        className="w-full overflow-hidden min-h-12 py-3 px-4 flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        <img
+                          className="size-10 rounded-full"
+                          src={user.profileImg}
+                          alt=""
+                        />
+                        <div className="flex flex-col">
+                          <div className="font-semibold ">{user.name}</div>
+                          <div className="text-sm text-foreground/70 truncate overflow-hidden">
+                            {user.email}
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                    <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
+                      Or
+                    </div>
+
+                    <div className="mt-1">
+                      <button
+                        type="submit"
+                        className="w-full py-3 h-12 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-primary text-white hover:bg-primary/80 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        Search Rides
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-        <div className="text-center">
-          <h1 className="text-4xl max-w-2xl mx-auto font-bold tracking-tight  sm:text-6xl">
-            {m.away_careful_gorilla_heal()}
-          </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-lg leading-8 ">
-            {m.curly_great_porpoise_favor()}
-          </p>
-          <div className="max-w-3xl mx-auto mt-10">
-            <div className="flex items-center justify-center">
-              <div className="join-md">
-                {/* <Autocomplete
-                startContent={<Circle size={18} />}
-                items={PLACES}
-                displayValue={(item) => item.name.en}
-                getKey={(item) => item.osm}
-                filterItems={(items, query) =>
-                  items.filter((item) =>
-                    item.name.en
-                      .toLocaleLowerCase()
-                      .startsWith(query.toLocaleLowerCase())
-                  )
-                }
-                placeholder="From..."
-              /> */}
-                {/* <Autocomplete
-                startContent={<MapPin size={18} />}
-                items={PLACES}
-                displayValue={(item) => item.name.en}
-                getKey={(item) => item.osm}
-                filterItems={(items, query) =>
-                  items.filter((item) =>
-                    item.name.en
-                      .toLocaleLowerCase()
-                      .startsWith(query.toLocaleLowerCase())
-                  )
-                }
-                placeholder="To..."
-              /> */}
-                {/* <DateTimePickerDemo /> */}
-                {/* <Select
-                // hour
-                startContent={<Users size={18} />}
-                items={new Array(4).fill(0).map((_, i) => ({
-                  value: (i + 1).toString(),
-                  label: (i + 1).toString(),
-                }))}
-                displayValue={(item) => item.label}
-                getKey={(item) => item.value.toString()}
-                placeholder=""
-                className="md:w-[60px]"
-              /> */}
 
-                {/* <Button>Search</Button> */}
-              </div>
-            </div>
-            <div className="flex animate-pulse items-center justify-center mt-4 gap-2">
-              <div className="text-left text-sm">
-                {m.polite_vivid_macaw_mop()}{" "}
-                <span className="font-bold">{m.day_gross_goose_heal()}</span>{" "}
-                {m.loved_frail_camel_advise()}
-              </div>
-            </div>
-          </div>
-          {/* <div className="mt-10 flex flex-col sm:flex-row sm:items-center justify-center gap-3">
-          <Button color="primary" className="font-bold" size="lg">
-            Get started
-          </Button>
-          <Button variant="ghost" className="font-bold" size="lg">
-            See Demo
-          </Button>
-        </div> */}
+        <div className="mt-6 md:mt-12 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
+          A lot of people are already using Hoppla
+        </div>
+
+        <div className="flex flex-wrap gap-x-6 sm:gap-x-12 lg:gap-x-24">
+          <svg
+            className="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-gray-500"
+            viewBox="0 0 86 29"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M11.6008 10.2627V13.2312L18.6907 13.2281C18.4733 14.8653 17.9215 16.0641 17.0826 16.9031C16.0487 17.9378 14.4351 19.0766 11.6008 19.0766C7.23238 19.0766 3.81427 15.5531 3.81427 11.1808C3.81427 6.80853 7.23238 3.28487 11.6008 3.28487C13.9585 3.28487 15.6794 4.21232 16.9503 5.40473L19.0432 3.31011C17.2721 1.6161 14.9144 0.316406 11.6036 0.316406C5.62156 0.316406 0.589844 5.19338 0.589844 11.1808C0.589844 17.1682 5.62156 22.0451 11.6036 22.0451C14.8322 22.0451 17.2694 20.9852 19.1756 18.9979C21.1362 17.0356 21.7451 14.2818 21.7451 12.0546C21.7451 11.3921 21.6949 10.7802 21.5974 10.2627H11.6008ZM71.4046 21.6192V1.11445H68.4101V21.6192H71.4046ZM29.9511 22.0482C33.8151 22.0482 36.9643 19.0797 36.9643 15.0513C36.9643 10.9945 33.8151 8.05451 29.9511 8.05451C26.0857 8.05451 22.9365 10.9945 22.9365 15.0513C22.9365 19.0797 26.0857 22.0482 29.9511 22.0482ZM29.9511 10.8116C32.0691 10.8116 33.8945 12.534 33.8945 15.0513C33.8945 17.5404 32.0691 19.2911 29.9511 19.2911C27.833 19.2911 26.0076 17.5435 26.0076 15.0513C26.0076 12.534 27.833 10.8116 29.9511 10.8116ZM45.0825 22.0482C48.9465 22.0482 52.0957 19.0797 52.0957 15.0513C52.0957 10.9945 48.9465 8.05451 45.0825 8.05451C41.2171 8.05451 38.0679 10.9977 38.0679 15.0513C38.0679 19.0797 41.2171 22.0482 45.0825 22.0482ZM45.0825 10.8116C47.2005 10.8116 49.0259 12.534 49.0259 15.0513C49.0259 17.5404 47.2005 19.2911 45.0825 19.2911C42.9644 19.2911 41.139 17.5435 41.139 15.0513C41.139 12.534 42.9644 10.8116 45.0825 10.8116ZM66.5972 8.48038V21.0387C66.5972 26.2059 63.5512 28.3164 59.9519 28.3164C56.563 28.3164 54.523 26.0482 53.7539 24.1934L56.4265 23.0798C56.903 24.2186 58.0694 25.5624 59.9477 25.5624C62.2525 25.5624 63.6807 24.1397 63.6807 21.4615V20.4552H63.5734C62.8865 21.3037 61.5627 22.0451 59.892 22.0451C56.3958 22.0451 53.1923 18.9977 53.1923 15.0766C53.1923 11.1271 56.3958 8.05451 59.892 8.05451C61.5585 8.05451 62.8837 8.79579 63.5734 9.6192H63.6807V8.48038H66.5972ZM63.8981 15.0766C63.8981 12.6129 62.2553 10.8116 60.1651 10.8116C58.0471 10.8116 56.2732 12.6129 56.2732 15.0766C56.2732 17.5152 58.0471 19.2911 60.1651 19.2911C62.2553 19.2911 63.8981 17.5152 63.8981 15.0766ZM83.0747 17.3542L85.4575 18.9442C84.6883 20.083 82.835 22.0451 79.6315 22.0451C75.6602 22.0451 72.6935 18.9726 72.6935 15.0483C72.6935 10.8874 75.6853 8.05143 79.2887 8.05143C82.9172 8.05143 84.6911 10.941 85.2721 12.5026L85.5898 13.2976L76.2426 17.1713C76.9589 18.5751 78.0708 19.2912 79.6315 19.2912C81.1949 19.2912 82.2804 18.5215 83.0747 17.3542ZM75.7382 14.8369L81.9864 12.2407C81.6436 11.3668 80.6097 10.758 79.3918 10.758C77.8326 10.758 75.6602 12.1366 75.7382 14.8369Z"
+              fill="currentColor"
+            />
+          </svg>
+          <svg
+            className="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-28 text-gray-500"
+            viewBox="0 0 151 34"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#clip0_3753_27919)">
+              <path
+                d="M150.059 16.1144V13.4753H146.783V9.37378L146.673 9.40894L143.596 10.3464H143.538V13.4519H138.682V11.7175C138.682 10.9207 138.869 10.2996 139.221 9.8894C139.572 9.47925 140.088 9.27417 140.721 9.27417C141.189 9.27417 141.682 9.39136 142.15 9.60229L142.268 9.64917V6.88237L142.221 6.85894C141.775 6.70073 141.166 6.6187 140.416 6.6187C139.467 6.6187 138.6 6.82964 137.838 7.24448C137.076 7.64292 136.479 8.24058 136.068 8.99058C135.646 9.74058 135.436 10.6078 135.436 11.557V13.4554H133.162V16.0921H135.447V27.2015H138.717V16.0921H143.577V23.1468C143.577 26.0531 144.943 27.5296 147.655 27.5296C148.1 27.5296 148.569 27.4734 149.038 27.3773C149.524 27.2718 149.858 27.1664 150.045 27.0609L150.092 27.0374V24.3773L149.96 24.4664C149.784 24.5835 149.561 24.6855 149.304 24.7558C149.046 24.8261 148.823 24.873 148.657 24.873C148.024 24.873 147.555 24.7089 147.267 24.3726C146.969 24.0386 146.821 23.4468 146.821 22.6148V16.1226H150.079L150.072 16.1062L150.059 16.1144ZM125.813 24.88C124.626 24.88 123.689 24.4851 123.024 23.7082C122.364 22.9289 122.028 21.8167 122.028 20.4035C122.028 18.9457 122.364 17.8019 123.028 17.0097C123.689 16.2222 124.617 15.8214 125.789 15.8214C126.925 15.8214 127.816 16.2035 128.472 16.9582C129.129 17.7175 129.457 18.8496 129.457 20.3238C129.457 21.8167 129.152 22.964 128.543 23.7304C127.933 24.4921 127.019 24.8789 125.824 24.8789L125.813 24.88ZM125.964 13.1449C123.703 13.1449 121.9 13.8082 120.616 15.1183C119.339 16.4308 118.685 18.2425 118.685 20.5089C118.685 22.6652 119.318 24.3937 120.575 25.6535C121.829 26.9191 123.536 27.5753 125.646 27.5753C127.839 27.5753 129.607 26.8957 130.886 25.5773C132.175 24.2507 132.815 22.4531 132.815 20.2417C132.815 18.055 132.206 16.3089 130.999 15.0621C129.792 13.8035 128.1 13.1683 125.96 13.1683L125.964 13.1449ZM113.397 13.1683C111.85 13.1683 110.58 13.5621 109.6 14.3402C108.625 15.123 108.124 16.1449 108.124 17.3871C108.124 18.0363 108.234 18.6058 108.447 19.098C108.658 19.5832 108.986 20.0121 109.425 20.373C109.858 20.7246 110.526 21.0996 111.417 21.4839C112.167 21.7886 112.718 22.0464 113.074 22.2574C113.425 22.4531 113.674 22.6558 113.8 22.8515C113.941 23.039 114.011 23.3085 114.011 23.625C114.011 24.5554 113.322 25.0031 111.902 25.0031C111.372 25.0031 110.77 24.8929 110.111 24.675C109.447 24.4593 108.83 24.1476 108.275 23.7468L108.134 23.6531V26.7937L108.181 26.8171C108.65 27.0281 109.228 27.2156 109.916 27.3562C110.601 27.5085 111.228 27.5789 111.767 27.5789C113.443 27.5789 114.791 27.1804 115.775 26.4023C116.759 25.6148 117.263 24.5625 117.263 23.2804C117.263 22.3546 116.994 21.5578 116.461 20.9191C115.933 20.2792 115.019 19.6957 113.738 19.18C112.727 18.7699 112.074 18.43 111.793 18.1722C111.535 17.9191 111.414 17.5628 111.414 17.1128C111.414 16.7144 111.579 16.3933 111.912 16.1355C112.248 15.8718 112.716 15.7406 113.302 15.7406C113.847 15.7406 114.404 15.8226 114.966 15.9925C115.517 16.166 116.004 16.391 116.408 16.6675L116.545 16.7613V13.7613L116.498 13.7378C116.117 13.5738 115.623 13.4367 115.021 13.3277C114.424 13.214 113.881 13.1636 113.41 13.1636L113.397 13.1683ZM99.582 24.8941C98.3984 24.8941 97.4609 24.5027 96.8047 23.7222C96.1367 22.9488 95.8027 21.8355 95.8027 20.4175C95.8027 18.9644 96.1379 17.816 96.8035 17.0273C97.4598 16.2398 98.3902 15.839 99.5574 15.839C100.694 15.839 101.596 16.221 102.247 16.9757C102.894 17.7375 103.231 18.8695 103.231 20.3437C103.231 21.8343 102.915 22.9804 102.305 23.748C101.708 24.5097 100.794 24.8964 99.5867 24.8964L99.582 24.8941ZM99.7508 13.166C97.4773 13.166 95.6727 13.8269 94.3953 15.1371C93.1098 16.4496 92.4617 18.2601 92.4617 20.5277C92.4617 22.6839 93.0945 24.4113 94.3402 25.6722C95.5965 26.9378 97.3004 27.5941 99.4086 27.5941C101.612 27.5941 103.37 26.9144 104.659 25.5902C105.941 24.2613 106.592 22.4636 106.592 20.2523C106.592 18.0644 105.983 16.3183 104.787 15.0726C103.58 13.8128 101.886 13.1777 99.7484 13.1777L99.7508 13.166ZM87.5164 15.8824V13.4917H84.282V27.2378H87.5164V20.2066C87.5164 19.0113 87.7859 18.0269 88.3215 17.2828C88.8488 16.5421 89.552 16.1812 90.4074 16.1812C90.7004 16.1812 91.0285 16.2281 91.3895 16.3218C91.741 16.4156 91.9941 16.5093 92.1395 16.6265L92.2801 16.7203V13.4625L92.2285 13.439C91.9238 13.3031 91.502 13.2375 90.9629 13.2375C90.1543 13.2375 89.4277 13.5 88.8043 14.0109C88.2535 14.4656 87.8586 15.0843 87.5562 15.8578H87.4977L87.527 15.8812L87.5164 15.8824ZM78.4695 13.1636C76.9812 13.1636 75.657 13.4742 74.532 14.1011C73.3977 14.7339 72.5281 15.6246 71.9305 16.773C71.3445 17.9097 71.0398 19.2398 71.0398 20.7222C71.0398 22.023 71.3352 23.2113 71.907 24.2636C72.4859 25.3183 73.3016 26.1386 74.3328 26.7128C75.357 27.2789 76.5477 27.5683 77.8648 27.5683C79.4023 27.5683 80.7125 27.2636 81.7672 26.6542L81.8141 26.6308V23.6636L81.6734 23.7609C81.1965 24.1124 80.6656 24.3878 80.0914 24.5871C79.5195 24.7863 78.9992 24.8871 78.5445 24.8871C77.2719 24.8871 76.2547 24.4886 75.5141 23.7093C74.7641 22.9124 74.3891 21.8109 74.3891 20.4281C74.3891 19.0218 74.7875 17.8968 75.5562 17.0765C76.3297 16.2328 77.3469 15.8109 78.5914 15.8109C79.6461 15.8109 80.6855 16.1742 81.6652 16.8773L81.8059 16.971V13.8539L81.7672 13.8304C81.398 13.6195 80.8965 13.4554 80.2672 13.3218C79.6508 13.1929 79.0437 13.1296 78.4648 13.1296L78.4695 13.1636ZM68.8203 13.4578H65.5906V27.2156H68.825V13.4578H68.8203ZM67.2266 7.61011C66.6945 7.61011 66.2305 7.79058 65.8484 8.14917C65.4664 8.51011 65.2719 8.96245 65.2719 9.49683C65.2719 10.0242 65.4676 10.4695 65.8461 10.821C66.2211 11.1726 66.6898 11.346 67.2289 11.346C67.768 11.346 68.2367 11.1703 68.6176 10.8187C69.002 10.4671 69.1965 10.0218 69.1965 9.49448C69.1965 8.97886 69.009 8.53355 68.634 8.15855C68.259 7.80698 67.7902 7.61948 67.2277 7.61948L67.2266 7.61011ZM59.1535 12.4593V27.2249H62.4582V8.05425H57.8879L52.0953 22.3019L46.4586 8.0519H41.7078V27.2378H44.8133V12.4781H44.9188L50.8719 27.2414H53.2098L59.0691 12.4792H59.1805L59.1629 12.4722L59.1535 12.4593ZM16.884 18.4242H32.0949V33.648H16.8605L16.8816 18.4347L16.884 18.4242ZM0.0828125 18.4335H15.2914V33.648H0.078125L0.0828125 18.4347V18.4335ZM16.8852 1.63237H32.0961V16.8433H16.8758L16.8852 1.62769V1.63237ZM0.0828125 1.63003H15.2914V16.8433H0.078125L0.0828125 1.62769V1.63003Z"
+                fill="currentColor"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_3753_27919">
+                <rect
+                  width="150"
+                  height="32.8125"
+                  fill="white"
+                  transform="translate(0.0820312 0.835449)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="110"
+            height="33"
+            fill="currentColor"
+            className="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-gray-500 mt-2"
+            viewBox="0 0 110 33"
+          >
+            <g fill="currentColor" clipPath="url(#clip0)">
+              <path
+                fillRule="evenodd"
+                d="M67.776 25.783c-6.323 4.676-15.521 7.167-23.455 7.167-11.114 0-21.079-4.1-28.667-10.923-.575-.536-.077-1.264.651-.843 8.163 4.752 18.243 7.589 28.668 7.589 7.013 0 14.755-1.457 21.884-4.485 1.073-.421 1.954.729.92 1.495z"
+                clipRule="evenodd"
+              ></path>
+              <path
+                fillRule="evenodd"
+                d="M70.42 22.756c-.804-1.035-5.365-.499-7.396-.23-.613.076-.728-.46-.153-.844 3.64-2.567 9.581-1.8 10.271-.958.69.843-.192 6.822-3.603 9.658-.536.422-1.034.192-.804-.383.766-1.916 2.49-6.17 1.686-7.243z"
+                clipRule="evenodd"
+              ></path>
+              <path d="M63.139 3.67V1.177c0-.383.268-.613.613-.613h11.115c.345 0 .651.268.651.613v2.108c0 .345-.306.805-.843 1.571l-5.749 8.202c2.146-.038 4.408.268 6.324 1.341.421.23.536.614.575.959v2.644c0 .383-.383.805-.805.575-3.411-1.801-7.972-1.993-11.728.038-.383.192-.805-.191-.805-.575v-2.529c0-.383 0-1.073.422-1.686l6.669-9.543H63.79c-.344 0-.651-.269-.651-.614zm-40.51 15.445h-3.373c-.306-.039-.575-.269-.613-.575V1.217c0-.345.307-.614.652-.614h3.142c.345 0 .575.269.613.575V3.44h.077C23.932 1.255 25.503.22 27.573.22c2.108 0 3.45 1.035 4.369 3.22.805-2.185 2.683-3.22 4.676-3.22 1.418 0 2.95.575 3.909 1.916 1.073 1.457.843 3.565.843 5.443v10.96c0 .346-.306.614-.651.614h-3.335c-.345-.038-.613-.307-.613-.613V9.342c0-.729.077-2.568-.077-3.258-.268-1.15-.996-1.495-1.992-1.495-.805 0-1.687.537-2.032 1.418-.345.882-.306 2.338-.306 3.335v9.198c0 .345-.307.613-.652.613H28.34c-.345-.038-.613-.307-.613-.613V9.342c0-1.917.307-4.791-2.07-4.791-2.414 0-2.337 2.76-2.337 4.79v9.199c-.038.306-.307.575-.69.575zM85.099.22c5.021 0 7.742 4.293 7.742 9.773 0 5.289-2.99 9.505-7.741 9.505-4.906 0-7.589-4.293-7.589-9.658C77.473 4.436 80.194.22 85.1.22zm0 3.564c-2.49 0-2.644 3.411-2.644 5.52 0 2.107-.038 6.63 2.606 6.63 2.606 0 2.76-3.641 2.76-5.864 0-1.457-.077-3.22-.499-4.6-.383-1.226-1.15-1.686-2.222-1.686zm14.22 15.33h-3.373c-.345-.038-.614-.306-.614-.613V1.14a.662.662 0 01.652-.575h3.143c.306 0 .536.23.613.498v2.645h.077c.958-2.376 2.261-3.488 4.599-3.488 1.494 0 2.989.537 3.947 2.031.882 1.38.882 3.718.882 5.404v10.923c-.039.307-.307.537-.652.537h-3.373c-.306-.039-.574-.269-.613-.537V9.15c0-1.916.23-4.676-2.108-4.676-.804 0-1.571.537-1.954 1.38-.46 1.073-.537 2.108-.537 3.296V18.5a.702.702 0 01-.69.614zm-41.622-.038a.693.693 0 01-.805.077c-1.111-.92-1.341-1.38-1.955-2.261-1.84 1.878-3.18 2.453-5.557 2.453-2.836 0-5.059-1.764-5.059-5.251 0-2.76 1.495-4.6 3.603-5.519 1.84-.805 4.407-.958 6.362-1.188v-.422c0-.804.076-1.763-.422-2.452-.421-.614-1.188-.882-1.878-.882-1.303 0-2.453.652-2.72 2.031-.078.307-.27.614-.576.614l-3.257-.345c-.269-.077-.575-.269-.499-.69.767-3.986 4.331-5.174 7.55-5.174 1.648 0 3.795.421 5.098 1.686 1.648 1.533 1.495 3.603 1.495 5.826v5.25c0 1.571.651 2.261 1.264 3.143.23.307.268.69 0 .881-.728.575-1.954 1.648-2.644 2.223zm-3.411-8.24v-.728c-2.453 0-5.02.537-5.02 3.411 0 1.456.766 2.453 2.069 2.453.958 0 1.801-.575 2.338-1.533.651-1.188.613-2.3.613-3.603zm-41.698 8.317c-1.112-.92-1.342-1.38-1.955-2.261-1.84 1.878-3.181 2.453-5.557 2.453-2.836 0-5.06-1.764-5.06-5.251 0-2.76 1.496-4.6 3.603-5.519 1.84-.805 4.408-.958 6.362-1.188v-.422c0-.804.077-1.763-.421-2.452-.422-.614-1.188-.882-1.878-.882-1.303 0-2.453.652-2.721 2.031-.077.307-.268.614-.575.614L1.128 5.93C.86 5.854.553 5.662.63 5.24 1.397 1.255 4.96.067 8.18.067c1.648 0 3.794.421 5.098 1.686 1.647 1.533 1.494 3.603 1.494 5.826v5.25c0 1.571.652 2.261 1.265 3.143.23.307.268.69 0 .881-.728.575-1.955 1.648-2.644 2.223a.693.693 0 01-.805.077zm-2.568-8.317v-.728c-2.453 0-5.02.537-5.02 3.411 0 1.456.766 2.453 2.069 2.453.958 0 1.801-.575 2.338-1.533.651-1.188.613-2.3.613-3.603z"></path>
+            </g>
+            <defs>
+              <clipPath id="clip0">
+                <path fill="#fff" d="M0 0H109.272V33H0z"></path>
+              </clipPath>
+            </defs>
+          </svg>
         </div>
       </div>
     </div>
-  );
-}
-
-export function HeroTwo() {
-  return (
-    <>
-      <div className="relative overflow-hidden">
-        <div className="container mt-xl">
-          <div className="max-w-2xl text-center mx-auto">
-            <h1 className="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl">
-              Designed for you to get more{" "}
-              <span className="text-primary">simple</span>
-            </h1>
-            <p className="mt-3 text-lg text-gray-800">
-              Build your business here. Take it anywhere.
-            </p>
-          </div>
-
-          <div className="mt-10 relative max-w-5xl mx-auto">
-            <div className="w-full object-cover h-96 sm:h-[480px] bg-[url('https://profile-images.xing.com/images/a3964f7a8525aa2dafe2da45d095e55c-1/luka-gorgadze.1024x1024.jpg')] bg-no-repeat bg-center bg-cover rounded-xl"></div>
-
-            <div className="absolute inset-0 size-full">
-              <div className="flex flex-col justify-center items-center size-full">
-                <a
-                  className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  <svg
-                    className="flex-shrink-0 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                  Play the overview
-                </a>
-              </div>
-            </div>
-
-            <div className="absolute bottom-12 -start-20 -z-[1] size-48 bg-gradient-to-b from-orange-500 to-white p-px rounded-lg">
-              <div className="bg-white size-48 rounded-lg"></div>
-            </div>
-
-            <div className="absolute -top-12 -end-20 -z-[1] size-48 bg-gradient-to-t from-primary to-cyan-400 p-px rounded-full">
-              <div className="bg-white size-48 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
   );
 }

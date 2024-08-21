@@ -129,8 +129,8 @@ model Ride {
   from      String
   to        String
   departure DateTime
-  arrival   DateTime
   distance  Float
+  duration  Float
 
   driver     User   @relation("RideDriver", fields: [driverId], references: [id])
   driverId   String
@@ -148,8 +148,7 @@ model Rule {
 
   description String
   price       Float
-  ride        Ride   @relation(fields: [rideId], references: [id])
-  rideId      String
+  rides       Ride[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
