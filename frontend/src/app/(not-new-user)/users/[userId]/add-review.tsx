@@ -14,12 +14,18 @@ import {
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import { useCreateUserReview } from "@/lib/hooks";
+import { useUser } from "@/lib/providers/user-provider";
 
 export default function AddReview({ revieweeId }: { revieweeId: string }) {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  // i also want to update rating attribute to user and count again users rating based on new
+  // i also want to make opmtimistic updates possible with some loading jest
+  // also just make reviews list as component as well because i am using on different pages as well
+  // i also want to test zod validation and how to write better forms
+  // and error handling as well with this
   const { mutate } = useCreateUserReview({
-    // optimisticUpdate: true,
+    optimisticUpdate: true,
   });
 
   const handleRating = (rate: number) => {

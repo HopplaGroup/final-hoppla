@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronLeft,
   Image,
+  LoaderCircle,
   Mail,
   MessageCircle,
   Phone,
@@ -16,6 +17,7 @@ import {
   User,
 } from "lucide-react";
 import AddReview from "./add-review";
+import { useUser } from "@/lib/providers/user-provider";
 
 type UserPageProps = {
   params: { userId: string };
@@ -30,7 +32,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
       id: userId,
     },
   });
-
+  const { user: loggedUser } = useUser();
   const { data: userReviews, isLoading: isUserReviewsLoading } =
     useFindManyUserReview({
       where: {
@@ -66,13 +68,21 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                 <div key={review.id} className=" bg-white shadow-sm rounded-lg">
                   <div>
                     <div className="p-5">
+                      {review.$optimistic && (
+                        <LoaderCircle className="animate-spin mb-3" />
+                      )}
+
                       <div className="bg-gray-100 rounded-lg p-3">
                         {`"${review.comment}"`}
                       </div>
                     </div>
                     <div className="flex justify-between border-t border-t-gray-200 p-5">
                       <div>
-                        <h3 className="font-medium">{review.author.name}</h3>
+                        <h3 className="font-medium">
+                          {review.$optimistic
+                            ? loggedUser?.name
+                            : review.author.name}
+                        </h3>
                         <div className="flex items-center gap-2">
                           <span className="font-semibold">{review.rating}</span>{" "}
                           <Stars className="text-primary" size={18} />
@@ -80,8 +90,11 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                       </div>
                       <div>
                         <img
-                          src={review.author.profileImg}
-                          // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
+                          src={
+                            review.$optimistic
+                              ? loggedUser?.profileImg
+                              : review.author.profileImg
+                          }
                           className="size-10 rounded-md object-cover"
                           alt=""
                         />
