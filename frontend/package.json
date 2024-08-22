@@ -4,10 +4,7 @@
   "private": true,
   "packageManager": "pnpm@9.1.1",
   "scripts": {
-    "db:push": "prisma db push",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "postinstall": "pnpm dlx prisma generate",
+    "postinstall": "zenstack generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
