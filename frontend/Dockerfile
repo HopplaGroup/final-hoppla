@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma
+COPY schema.zmodel ./
 RUN pnpm install --frozen-lockfile --prefer-frozen-lockfile
 
 FROM base AS builder
