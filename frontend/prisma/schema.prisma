@@ -43,7 +43,7 @@ enum CarType {
 
 /// @@auth
 /// @@allow('create,read', true)
-/// @@allow('update,delete', auth().name == 'luka')
+/// @@allow('update,delete', auth() == this)
 model User {
   isNewUser                 Boolean                    @default(true)
   id                        String                     @id() @default(cuid())
@@ -123,6 +123,9 @@ model Rule {
   updatedAt   DateTime @updatedAt()
 }
 
+/// @@allow('read', true)
+/// @@allow('create', auth() != null)
+/// @@allow('update,delete', auth() == author)
 model UserReview {
   id         String   @id() @default(cuid())
   comment    String

@@ -1,6 +1,6 @@
 "use client";
 import { Logo } from "@/components/common/logo";
-import { useFindUniqueUser } from "@/lib/hooks";
+import { useFindManyUserReview, useFindUniqueUser } from "@/lib/hooks";
 import {
   Bookmark,
   Calendar,
@@ -15,6 +15,7 @@ import {
   Text,
   User,
 } from "lucide-react";
+import AddReview from "./add-review";
 
 type UserPageProps = {
   params: { userId: string };
@@ -24,61 +25,82 @@ type UserPageProps = {
 export default function UserPage({ params, searchParams }: UserPageProps) {
   const { userId } = params;
 
-  const { data, error, isLoading } = useFindUniqueUser({
+  const { data: user, isLoading: isUserLoading } = useFindUniqueUser({
     where: {
       id: userId,
     },
   });
 
-  if (error) return <div>Error: {error.message}</div>;
+  const { data: userReviews, isLoading: isUserReviewsLoading } =
+    useFindManyUserReview({
+      where: {
+        revieweeId: userId,
+      },
+      include: {
+        author: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
   return (
     <div className="grid grid-cols-[400px,1fr]">
-      <div className="min-h-screen bg-gray-100 p-10">
-        <div className="mx-2 pb-4">
-          <Logo />
-        </div>
-        <div className="flex items-center gap-2 font-semibold">
-          <ChevronLeft size={30} /> <span>Go Back</span>
-        </div>
-        <div className="mt-4 bg-white shadow-sm rounded-lg p-5">
-          <div className="flex items-center justify-center gap-2 font-medium">
-            <Plus size={22} /> Add Review
+      <div className="h-screen bg-gray-100 p-10 grid grid-rows-[auto,1fr]">
+        <div>
+          <div className="mx-2 pb-4">
+            <Logo />
           </div>
-        </div>
-        <div className="mt-4 bg-white shadow-sm rounded-lg">
-          <div>
-            <div className="p-5">
-              <div className="bg-gray-100 rounded-lg p-3">
-                {`"This driver is trully amazing and funny person"`}
-              </div>
-            </div>
-            <div className="flex justify-between border-t border-t-gray-200 p-5">
-              <div>
-                <h3 className="font-medium">Misho Dzuliashvili</h3>
-                <p className="flex items-center gap-2">
-                  <span className="font-semibold">4.5</span>{" "}
-                  <Stars className="text-primary" size={18} />
-                </p>
-              </div>
-              <div>
-                <img
-                  src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
-                  className="size-10 rounded-md object-cover"
-                  alt=""
-                />
-              </div>
-            </div>
+          <div className="flex items-center gap-2 font-semibold">
+            <ChevronLeft size={30} /> <span>Go Back</span>
           </div>
+          <AddReview revieweeId={userId} />
         </div>
+
+        {isUserReviewsLoading ? (
+          <UserReviewsSkeleton />
+        ) : (
+          userReviews && (
+            <div className="overflow-auto space-y-4 mt-4">
+              {userReviews.map((review) => (
+                <div key={review.id} className=" bg-white shadow-sm rounded-lg">
+                  <div>
+                    <div className="p-5">
+                      <div className="bg-gray-100 rounded-lg p-3">
+                        {`"${review.comment}"`}
+                      </div>
+                    </div>
+                    <div className="flex justify-between border-t border-t-gray-200 p-5">
+                      <div>
+                        <h3 className="font-medium">{review.author.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">{review.rating}</span>{" "}
+                          <Stars className="text-primary" size={18} />
+                        </div>
+                      </div>
+                      <div>
+                        <img
+                          src={review.author.profileImg}
+                          // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
+                          className="size-10 rounded-md object-cover"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
       </div>
       <div className="py-10 pl-20 pr-10 h-screen overflow-auto">
-        {isLoading ? (
+        {isUserLoading ? (
           <UserProfileSkeleton />
-        ) : data ? (
+        ) : user ? (
           <>
             <h3 className="mt-5 font-semibold">User Profile</h3>
-            <h2 className="mt-2 font-bold text-3xl">{data.name}</h2>
+            <h2 className="mt-2 font-bold text-3xl">{user.name}</h2>
             <div className="flex items-center gap-5">
               <h4 className=" flex items-center gap-2 mt-4">
                 <Bookmark size={22} /> <span>Save to Bookmarks</span>
@@ -99,7 +121,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                     Phone
                   </dt>
                   <dd className="text-gray-700 sm:col-span-2">
-                    {data.mobileNumber}
+                    {user.mobileNumber}
                   </dd>
                 </div>
 
@@ -108,14 +130,14 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                     <Mail size={22} />
                     E-Mail
                   </dt>
-                  <dd className="text-gray-700 sm:col-span-2">{data.email}</dd>
+                  <dd className="text-gray-700 sm:col-span-2">{user.email}</dd>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                   <dt className="font-medium text-gray-900  flex items-center gap-2">
                     <User size={22} /> Sex
                   </dt>
-                  <dd className="text-gray-700 sm:col-span-2">{data.sex}</dd>
+                  <dd className="text-gray-700 sm:col-span-2">{user.sex}</dd>
                 </div>
 
                 {/* rating, bio, birthDate */}
@@ -125,7 +147,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                   </dt>
                   <dd className="text-gray-700 sm:col-span-2">
                     {new Date().getFullYear() -
-                      new Date(data.birthDate).getFullYear()}{" "}
+                      new Date(user.birthDate).getFullYear()}{" "}
                     years old
                   </dd>
                 </div>
@@ -133,13 +155,13 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                   <dt className="font-medium text-gray-900  flex items-center gap-2">
                     <Stars size={22} /> Rating
                   </dt>
-                  <dd className="text-gray-700 sm:col-span-2">{data.rating}</dd>
+                  <dd className="text-gray-700 sm:col-span-2">{user.rating}</dd>
                 </div>
                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                   <dt className="font-medium text-gray-900  flex items-start gap-2">
                     <Text size={22} /> Bio
                   </dt>
-                  <dd className="text-gray-700 sm:col-span-2">{data.bio}</dd>
+                  <dd className="text-gray-700 sm:col-span-2">{user.bio}</dd>
                 </div>
                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                   <dt className="font-medium text-gray-900 flex items-start gap-2">
@@ -149,7 +171,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                     <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-lg px-2 py-2 font-semibold">
                       <img
                         // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
-                        src={data.profileImg}
+                        src={user.profileImg}
                         className="size-40 rounded-lg object-cover"
                         alt=""
                       />
@@ -180,6 +202,36 @@ const UserProfileSkeleton = () => (
       <div key={index} className="flex gap-4 mb-4">
         <div className="h-6 w-1/4 bg-gray-200 rounded"></div>
         <div className="h-6 w-2/3 bg-gray-200 rounded"></div>
+      </div>
+    ))}
+  </div>
+);
+
+const UserReviewsSkeleton = () => (
+  <div className="animate-pulse">
+    {[...Array(1)].map((_, index) => (
+      <div key={index} className="mt-4 bg-white shadow-sm rounded-lg">
+        <div>
+          <div className="p-5">
+            <div className="bg-gray-100 rounded-lg p-3"></div>
+          </div>
+          <div className="flex justify-between border-t border-t-gray-200 p-5">
+            <div>
+              <h3 className="font-medium">
+                <div className="h-6 w-32 bg-gray-200 rounded"></div>
+              </h3>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="font-semibold">
+                  <div className="h-6 w-12 bg-gray-200 rounded"></div>
+                </span>{" "}
+                <Stars className="text-primary" size={18} />
+              </div>
+            </div>
+            <div>
+              <div className="size-10 rounded-md object-cover bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
       </div>
     ))}
   </div>

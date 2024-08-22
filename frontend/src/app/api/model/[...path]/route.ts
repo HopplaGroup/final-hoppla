@@ -1,9 +1,11 @@
+import { getUser } from "@/lib/utils/auth";
 import db from "@/lib/utils/db";
 import { enhance } from "@zenstackhq/runtime";
 import { NextRequestHandler } from "@zenstackhq/server/next";
 
 async function getPrisma() {
-  return enhance(db, {});
+  const user = await getUser();
+  return enhance(db, { user });
 }
 
 const handler = NextRequestHandler({ getPrisma, useAppDir: true });

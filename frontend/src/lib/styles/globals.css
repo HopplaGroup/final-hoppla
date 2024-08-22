@@ -188,6 +188,10 @@
     }
 }
 
+svg.star-svg {
+    display: inline;
+}
+
 table {
     width: 100%;
 }

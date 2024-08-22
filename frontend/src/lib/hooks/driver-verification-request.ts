@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, DriverVerificationRequest } from "@prisma/client";
+import type { Prisma, DriverVerificationRequest } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -321,7 +321,7 @@ export function useSuspenseCountDriverVerificationRequest<TArgs extends Prisma.D
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DriverVerificationRequest', `${endpoint}/driverVerificationRequest/count`, args, options, fetch);
 }
-import type { DriverVerificationRequestStatus } from '@prisma/client';
+import type { DriverVerificationRequestStatus } from '@zenstackhq/runtime/models';
 
 export function useCheckDriverVerificationRequest<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; licencePhotos?: string; selfie?: string; status?: DriverVerificationRequestStatus; driverId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

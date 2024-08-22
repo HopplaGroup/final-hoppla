@@ -75,6 +75,7 @@
     "react-number-format": "^5.4.0",
     "react-resizable-panels": "^2.0.21",
     "react-select": "^5.8.0",
+    "react-simple-star-rating": "^5.1.7",
     "server-only": "^0.0.1",
     "sharp": "^0.33.3",
     "tailwind-merge": "^2.3.0",

@@ -368,8 +368,10 @@ const metadata = {
                 }, authorId: {
                     name: "authorId",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'author',
+                    defaultValueProvider: $default$UserReview$authorId,
                 }, reviewee: {
                     name: "reviewee",
                     type: "User",
@@ -408,4 +410,7 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$UserReview$authorId(user: any): unknown {
+    return user?.id;
+}
 export default metadata;

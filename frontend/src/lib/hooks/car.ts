@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, Car } from "@prisma/client";
+import type { Prisma, Car } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -321,7 +321,7 @@ export function useSuspenseCountCar<TArgs extends Prisma.CarCountArgs, TQueryFnD
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Car', `${endpoint}/car/count`, args, options, fetch);
 }
-import type { CarType } from '@prisma/client';
+import type { CarType } from '@zenstackhq/runtime/models';
 
 export function useCheckCar<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; name?: string; type?: CarType; plate?: string; mark?: string; capacity?: number; isVerified?: boolean; photos?: string; ownerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

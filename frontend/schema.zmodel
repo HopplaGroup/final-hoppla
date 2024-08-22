@@ -83,7 +83,7 @@ model User {
 
   @@auth
   @@allow('create,read', true)
-  @@allow('update,delete', auth().name == "luka")
+  @@allow('update,delete', auth() == this)
 }
 
 enum DriverVerificationRequestStatus {
@@ -173,11 +173,15 @@ model UserReview {
   rating     Float
 
   author     User     @relation("ReviewAuthor", fields: [authorId], references: [id])
-  authorId   String
+  authorId   String   @default(auth().id)
 
   reviewee   User     @relation("ReviewReviewee", fields: [revieweeId], references: [id])
   revieweeId String
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@allow('read', true)
+  @@allow('create', auth() != null)
+  @@allow('update,delete', auth() == author)
 }
