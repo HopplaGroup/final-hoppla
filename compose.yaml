@@ -1,23 +1,23 @@
 services:
   # --BACKEND-------------------------------------
-  backend-app:
-    container_name: backend-app
-    build:
-      context: ./backend
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-      NOMINATIM_URL: http://nominatim:8080
-      ORS_URL: http://ors-app:8082
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+  # backend-app:
+  #   container_name: backend-app
+  #   build:
+  #     context: ./backend
+  #   restart: always
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   environment:
+  #     DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+  #     NOMINATIM_URL: http://nominatim:8080
+  #     ORS_URL: http://ors-app:8082
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
   # --NGINX-------------------------------------
   nginx:
     image: nginx:latest
