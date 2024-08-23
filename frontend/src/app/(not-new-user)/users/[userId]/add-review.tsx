@@ -14,27 +14,51 @@ import {
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import { useCreateUserReview } from "@/lib/hooks";
-import { useUser } from "@/lib/providers/user-provider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+import { z } from "zod";
+import { UserReviewCreateSchema } from "@zenstackhq/runtime/zod/models";
 
 export default function AddReview({ revieweeId }: { revieweeId: string }) {
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
-  // i also want to update rating attribute to user and count again users rating based on new
-  // i also want to make opmtimistic updates possible with some loading jest
-  // also just make reviews list as component as well because i am using on different pages as well
-  // i also want to test zod validation and how to write better forms
-  // and error handling as well with this
-  const { mutate } = useCreateUserReview({
+  const { mutate, isPending } = useCreateUserReview({
     optimisticUpdate: true,
   });
+  const [open, setOpen] = useState(false);
 
-  const handleRating = (rate: number) => {
-    setRating(rate);
-  };
+  const form = useForm<z.infer<typeof UserReviewCreateSchema>>({
+    resolver: zodResolver(UserReviewCreateSchema),
+    defaultValues: {
+      revieweeId,
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof UserReviewCreateSchema>) {
+    form.reset();
+    setOpen(false);
+    mutate({
+      data: {
+        rating: values.rating,
+        comment: values.comment,
+        revieweeId: values.revieweeId,
+      },
+    });
+  }
 
   return (
     <>
-      <AlertDialog>
+      <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger className="w-full">
           <div className="mt-4 bg-white shadow-sm rounded-lg p-5">
             <div className="flex items-center justify-center gap-2 font-medium">
@@ -43,38 +67,53 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
           </div>
         </AlertDialogTrigger>
         <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Add Review</AlertDialogTitle>
-            <AlertDialogDescription>
-              <div className="w-full">
-                <Rating allowFraction onClick={handleRating} />
-              </div>
-              <div className="mt-4">
-                <textarea
-                  value={review}
-                  onChange={(e) => setReview(e.target.value)}
-                  className="w-full p-3 rounded-lg border border-gray-200"
-                  placeholder="Write a review..."
-                />
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                mutate({
-                  data: {
-                    rating,
-                    comment: review,
-                    revieweeId: revieweeId,
-                  },
-                });
-              }}
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Add Review</AlertDialogTitle>
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="rating"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel>Rating</FormLabel> */}
+                        <FormControl>
+                          <div>
+                            <Rating
+                              allowFraction
+                              initialValue={field.value}
+                              onClick={(v) => field.onChange(v)}
+                            />
+                          </div>
+                        </FormControl>
+                        {/* <FormDescription>This is the rating .</FormDescription> */}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="comment"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel>Comment</FormLabel> */}
+                        <FormControl>
+                          <Input placeholder="comment" {...field} />
+                        </FormControl>
+                        {/* <FormDescription>This is the comment .</FormDescription> */}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button type="submit">Submit</Button>
+              </AlertDialogFooter>
+            </form>
+          </Form>
         </AlertDialogContent>
       </AlertDialog>
     </>
