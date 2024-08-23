@@ -30,9 +30,6 @@ const metadata = {
                 }, birthDate: {
                     name: "birthDate",
                     type: "DateTime",
-                }, rating: {
-                    name: "rating",
-                    type: "Float",
                 }, profileImg: {
                     name: "profileImg",
                     type: "String",

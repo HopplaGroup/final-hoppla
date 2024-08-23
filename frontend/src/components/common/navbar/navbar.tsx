@@ -24,13 +24,15 @@ export function Navbar({}: NavbarProps) {
     >
       <div className="container">
         <div className="flex h-20 items-center justify-between">
-          <div className="items-center gap-2 hidden md:flex">
+          <div className="flex items-center gap-6">
             <NavbarLogo />
-            {NAV_ITEMS.slice(1).map(({ href, label }) => (
-              <Button key={href} href={href} variant="ghost">
-                {label}
-              </Button>
-            ))}
+            <div className="items-center gap-2 hidden md:flex">
+              {NAV_ITEMS.slice(1).map(({ href, label }) => (
+                <Button key={href} href={href} variant="ghost">
+                  {label}
+                </Button>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-1">
@@ -51,13 +53,5 @@ export function Navbar({}: NavbarProps) {
 }
 
 function NavbarLogo() {
-  return (
-    <Button
-      href="/"
-      variant="ghost"
-      className="font-bold text-xl relative -left-4"
-    >
-      <Logo />
-    </Button>
-  );
+  return <Logo />;
 }

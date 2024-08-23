@@ -11,7 +11,7 @@ export const PhoneInput = React.forwardRef<
   {
     disabled?: boolean;
     name?: string;
-    value: string;
+    value?: string;
     onChange?: (value: string) => void;
     onBlur?: React.FocusEventHandler<HTMLInputElement>;
     placeholder?: string;

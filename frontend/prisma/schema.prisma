@@ -48,12 +48,12 @@ model User {
   isNewUser                 Boolean                    @default(true)
   id                        String                     @id() @default(cuid())
   email                     String                     @unique()
+  /// @length(min: 3, max: 50)
   name                      String
   mobileNumber              String
   idNumber                  String
   sex                       UserSex
   birthDate                 DateTime
-  rating                    Float
   profileImg                String
   bio                       String
   role                      UserRole                   @default(CUSTOMER)

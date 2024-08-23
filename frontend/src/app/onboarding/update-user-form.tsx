@@ -6,21 +6,16 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/actions/button";
-import { UpdateUserSchema } from "./schema";
-import { updateUser } from "./actions";
 import { PhoneInput } from "@/components/ui/data-input/phone-input";
 import { DatePicker } from "@/components/ui/date-picker";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { useLoading } from "@/lib/providers/loading-provider";
-import { FolderPen } from "lucide-react";
 import * as m from "@/paraglide/messages.js";
 import {
   Select,
@@ -30,10 +25,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useUpdateUser } from "@/lib/hooks";
+import { UserUpdateSchema } from "@zenstackhq/runtime/zod/models";
+import { zodPhoneSchema } from "@/lib/utils/phone-schema";
+const RefinedUserUpdateSchema = UserUpdateSchema.pick({
+  name: true,
+  sex: true,
+  birthDate: true,
+  bio: true,
+})
+  .required()
+  .extend({
+    mobileNumber: zodPhoneSchema,
+  });
 
-export function UpdateUserForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+export function UpdateUserForm({ userId }: { userId: string }) {
+  const { mutate, isPending } = useUpdateUser();
   const { push } = useLoading();
 
   const sexOptions = [
@@ -51,8 +59,8 @@ export function UpdateUserForm() {
     },
   ];
 
-  const form = useForm<z.infer<typeof UpdateUserSchema>>({
-    resolver: zodResolver(UpdateUserSchema),
+  const form = useForm<z.infer<typeof RefinedUserUpdateSchema>>({
+    resolver: zodResolver(RefinedUserUpdateSchema),
     defaultValues: {
       name: "",
       sex: "OTHER",
@@ -62,22 +70,32 @@ export function UpdateUserForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof UpdateUserSchema>) {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  function onSubmit(values: z.infer<typeof RefinedUserUpdateSchema>) {
     const toastId = toast.loading(m.ideal_long_ant_rest());
-    const result = await updateUser(values);
-    if (result.success) {
-      toast.success(m.this_tidy_mammoth_trust(), {
-        id: toastId,
-      });
-      push("/profile");
-    } else {
-      toast.error(m.known_every_emu_bless(), {
-        id: toastId,
-      });
-      setIsSubmitting(false);
-    }
+    mutate(
+      {
+        where: {
+          id: userId,
+        },
+        data: {
+          ...values,
+          isNewUser: false,
+        },
+      },
+      {
+        onSuccess: () => {
+          toast.success(m.this_tidy_mammoth_trust(), {
+            id: toastId,
+          });
+          push("/profile");
+        },
+        onError: () => {
+          toast.error(m.known_every_emu_bless(), {
+            id: toastId,
+          });
+        },
+      }
+    );
   }
 
   return (
@@ -86,39 +104,41 @@ export function UpdateUserForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 text-left mx-auto mb-20"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{m.sour_pretty_tortoise_devour()}</FormLabel>
-              <FormControl>
-                <Input
-                  // startContent={<FolderPen size={18} />}
-                  placeholder={m.soft_mean_mayfly_clap()}
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>{m.polite_safe_vole_stab()}</FormDescription>
-              <FormMessage errorMessage={m.clear_just_donkey_prosper()} />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{m.sour_pretty_tortoise_devour()}</FormLabel>
+                <FormControl>
+                  <Input
+                    // startContent={<FolderPen size={18} />}
+                    placeholder={m.soft_mean_mayfly_clap()}
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription>{m.polite_safe_vole_stab()}</FormDescription> */}
+                <FormMessage errorMessage={m.clear_just_donkey_prosper()} />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="mobileNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{m.flaky_full_guppy_lend()}</FormLabel>
-              <FormControl>
-                <PhoneInput {...field} />
-              </FormControl>
-              <FormDescription>{m.new_neat_porpoise_fetch()}</FormDescription>
-              <FormMessage errorMessage={m.teal_top_starfish_pout()} />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="mobileNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{m.flaky_full_guppy_lend()}</FormLabel>
+                <FormControl>
+                  <PhoneInput {...field} />
+                </FormControl>
+                {/* <FormDescription>{m.new_neat_porpoise_fetch()}</FormDescription> */}
+                <FormMessage errorMessage={m.teal_top_starfish_pout()} />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="birthDate"
@@ -131,7 +151,7 @@ export function UpdateUserForm() {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>{m.big_weak_stingray_kiss()}</FormDescription>
+              {/* <FormDescription>{m.big_weak_stingray_kiss()}</FormDescription> */}
               <FormMessage errorMessage={m.acidic_sweet_guppy_blend()} />
             </FormItem>
           )}
@@ -156,16 +176,37 @@ export function UpdateUserForm() {
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormDescription>
+              {/* <FormDescription>
                 {m.smart_green_albatross_type()}
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage errorMessage={m.actual_royal_mole_bake()} />
             </FormItem>
           )}
         />
-        <Button disabled={isSubmitting} type="submit">
-          {m.kind_gaudy_puma_exhale()}
-        </Button>
+        <div className="col-span-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            By creating an account, you agree to our{" "}
+            <a href="#" className="text-gray-700 underline dark:text-gray-200">
+              terms and conditions{" "}
+            </a>
+            and
+            <a href="#" className="text-gray-700 underline dark:text-gray-200">
+              {" "}
+              privacy policy{" "}
+            </a>
+            .
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button disabled={isPending} type="submit">
+            {m.kind_gaudy_puma_exhale()}
+          </Button>
+          <Button disabled={isPending} type="button" variant="ghost">
+            <LogoutLink className="w-full h-full flex items-center justify-center">
+              {m.extra_lucky_rook_trust()}
+            </LogoutLink>
+          </Button>
+        </div>
       </form>
     </Form>
   );

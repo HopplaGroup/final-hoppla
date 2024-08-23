@@ -65,7 +65,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
     <UserReviewsSkeleton />
   ) : (
     userReviews && (
-      <div className="overflow-auto space-y-4 mt-4">
+      <div className="space-y-4 mt-4">
         {userReviews.map((review) => (
           <ReviewCard review={review} key={review.id} />
         ))}
@@ -90,7 +90,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
             <Logo />
           </div>
         </div>
-        <div className="hidden lg:block">{reviews}</div>
+        <div className="hidden lg:block h-full overflow-auto">{reviews}</div>
       </div>
       <div className="py-2 px-6 lg:py-10 lg:pl-20 lg:pr-10 lg:h-screen lg:overflow-auto">
         {isUserLoading ? (

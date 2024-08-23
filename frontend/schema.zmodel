@@ -40,13 +40,13 @@ model User {
 
   id                        String                     @id @default(cuid())
   email                     String                     @unique
-  name                      String
+  name                      String                     @length(min: 3, max: 50)
 
   mobileNumber              String
   idNumber                  String
   sex                       UserSex
   birthDate                 DateTime
-  rating                    Float // Hmm, maybe we should calculate this on the fly
+  // rating                    Float // Hmm, maybe we should calculate this on the fly
   profileImg                String
   bio                       String
   role                      UserRole                   @default(CUSTOMER)

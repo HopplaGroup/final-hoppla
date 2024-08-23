@@ -140,7 +140,7 @@ export async function Hero() {
                           src={user.profileImg}
                           alt=""
                         />
-                        <div className="flex flex-col">
+                        <div className="flex flex-col w-[140px] sm:w-full">
                           <div className="font-semibold ">{user.name}</div>
                           <div className="text-sm text-foreground/70 truncate overflow-hidden">
                             {user.email}
