@@ -48,8 +48,8 @@ export const createUser = async () => {
           birthDate: new Date(),
           idNumber: "",
           mobileNumber: "",
-          rating: 0,
-          sex: "OTHER"
+          // rating: 0,
+          sex: "OTHER",
         },
       });
     }
