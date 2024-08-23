@@ -30,7 +30,7 @@ services:
       - ./data/nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - next-app
-      - backend-app
+      # - backend-app
     restart: always
   # --FRONTEND-------------------------------------
   next-app:
@@ -45,7 +45,7 @@ services:
       - frontend.env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-      BACKEND_URL: http://backend-app:3000
+      # BACKEND_URL: http://backend-app:3000
       ORS_URL: http://ors-app:8082
     healthcheck:
       test: ["CMD", "wget", "-q0", "http://localhost:3000/api/health"]
