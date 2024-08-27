@@ -1,14 +1,13 @@
 services:
   # --UNAMI-------------------------------------
-
   umami:
     image: ghcr.io/umami-software/umami:postgresql-latest
     environment:
-      DATABASE_URL: postgresql://umami:umami@unami-db:5432/umami
+      DATABASE_URL: postgresql://umami:umami@umami-db:5432/umami
       DATABASE_TYPE: postgresql
-      APP_SECRET: ${UNAMI_SECRET}
+      APP_SECRET: ${UMAMI_SECRET}
     depends_on:
-      unami-db:
+      umami-db:
         condition: service_healthy
     restart: always
     healthcheck:
@@ -16,14 +15,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  unami-db:
+  umami-db:
     image: postgres:15-alpine
     environment:
       POSTGRES_DB: umami
       POSTGRES_USER: umami
       POSTGRES_PASSWORD: umami
     volumes:
-      - ./data/unami-db:/var/lib/postgresql/data
+      - ./data/umami-db:/var/lib/postgresql/data
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
@@ -61,7 +60,7 @@ services:
       - ./data/nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - next-app
-      - unami
+      - umami
       # - backend-app
     restart: always
   # --FRONTEND-------------------------------------
