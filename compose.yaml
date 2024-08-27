@@ -61,6 +61,7 @@ services:
       - ./data/nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - next-app
+      - unami
       # - backend-app
     restart: always
   # --FRONTEND-------------------------------------
