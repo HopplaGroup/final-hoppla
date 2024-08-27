@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { getUser } from "@/lib/utils/auth";
 import type { Metadata } from "next";
 import * as m from "@/paraglide/messages.js";
+import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,11 @@ export default async function RootLayout({
             <Toaster />
           </MainProvider>
         </body>
+        <Script
+          defer
+          src="https://umami.hoppla.ge/script.js"
+          data-website-id="830aaf27-d46b-4952-9620-6d29c00e2617"
+        />
       </html>
     </LanguageProvider>
   );
