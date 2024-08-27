@@ -10,6 +10,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "resolutions": {
+    "@radix-ui/react-focus-scope": "1.0.4"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
     "@aws-sdk/client-s3": "^3.623.0",
@@ -41,11 +44,13 @@
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@react-input/mask": "^1.2.5",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.48.0",
+    "@tanstack/react-table": "^8.19.3",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/uuid": "^10.0.0",
     "@uploadthing/react": "^6.5.3",
@@ -70,6 +75,7 @@
     "react-easy-crop": "^5.0.8",
     "react-hook-form": "^7.51.4",
     "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.2.1",
     "react-image-crop": "^11.0.6",
     "react-imask": "^7.6.1",
     "react-international-phone": "^4.3.0",

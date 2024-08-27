@@ -67,7 +67,7 @@
 
 @layer base {
     * {
-        @apply border-border;
+        @apply border-gray-200;
         font-family: "Poppins", sans-serif;
         /* font-family: "BPG Banner", sans-serif; */
     }

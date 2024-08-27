@@ -171,14 +171,21 @@ const metadata = {
                 }, capacity: {
                     name: "capacity",
                     type: "Int",
-                }, isVerified: {
-                    name: "isVerified",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, status: {
+                    name: "status",
+                    type: "CarStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, photos: {
                     name: "photos",
                     type: "String",
                     isArray: true,
+                }, licensePhotos: {
+                    name: "licensePhotos",
+                    type: "String",
+                    isArray: true,
+                }, fuelType: {
+                    name: "fuelType",
+                    type: "CarFuelType",
                 }, owner: {
                     name: "owner",
                     type: "User",
@@ -189,8 +196,10 @@ const metadata = {
                 }, ownerId: {
                     name: "ownerId",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'owner',
+                    defaultValueProvider: $default$Car$ownerId,
                 }, rides: {
                     name: "rides",
                     type: "Ride",
@@ -257,8 +266,10 @@ const metadata = {
                 }, driverId: {
                     name: "driverId",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'driver',
+                    defaultValueProvider: $default$Ride$driverId,
                 }, passengers: {
                     name: "passengers",
                     type: "User",
@@ -407,6 +418,14 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$Car$ownerId(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Ride$driverId(user: any): unknown {
+    return user?.id;
+}
+
 function $default$UserReview$authorId(user: any): unknown {
     return user?.id;
 }

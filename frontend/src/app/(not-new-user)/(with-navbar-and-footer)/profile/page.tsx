@@ -1,76 +1,32 @@
-import { UploadForm } from "@/components/S3UploadForm";
-import { Button } from "@/components/ui/actions/button";
+import { Milestone, Plus, Sparkles, Wallet } from "lucide-react";
+import AddCar from "./add-car";
+import Cars from "./cars";
 import { getUser } from "@/lib/utils/auth";
-import { UserImage } from "./user-image";
-import { redirect } from "next/navigation";
-import db from "@/lib/utils/db";
-import { CarsSection } from "./cars-section";
+import { Stats } from "./stats";
 
-export default async function DashboardPage() {
+export default async function ProfileGeneralPage() {
   const user = await getUser();
 
-  if (!user) redirect("/");
-
-  const driverVerificationRequest =
-    await db.driverVerificationRequest.findUnique({
-      where: {
-        driverId: user.id,
-      },
-    });
-
-  const cars = await db.car.findMany({
-    where: {
-      ownerId: user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
   return (
-    <section className="relative pt-28 pb-20">
-      <img
-        src="https://pagedone.io/asset/uploads/1705471739.png"
-        alt="cover-image"
-        className="w-full absolute top-0 left-0 z-0 h-60"
-      />
-      <div className="container">
-        <div className="flex items-center justify-center relative z-10 mb-2.5">
-          <UserImage user={user} />
-        </div>
-        <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
-          <div className="flex items-center gap-5">
-            {(driverVerificationRequest?.status === "PENDING" ||
-              !driverVerificationRequest) && (
-              <Button variant="outline" href="/send-driver-request">
-                {driverVerificationRequest
-                  ? "Edit Driver Request"
-                  : "Send Driver Request"}
-              </Button>
-            )}
-            {driverVerificationRequest?.status === "REJECTED" &&
-              "U are rejected"}
-            {driverVerificationRequest?.status === "APPROVED" &&
-              "U are approved"}
-          </div>
-          <div className="flex items-center gap-4">
-            {/* <Button variant="outline">Message</Button> */}
+    <div>
+      <Stats userId={user!.id} />
+      <div className="">
+        <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+          My Cars
+        </h1>
 
-            <Button>Book a Session</Button>
+        <p className="mt-4 leading-relaxed text-gray-500 max-w-xl lg:max-w-3xl">
+          The table below shows all the rides you have created as a driver you
+          can see them as well on specific pages.
+        </p>
+
+        <div className="mt-4">
+          <div className="mt-5 grid lg:grid-cols-2 xl:grid-cols-4 gap-4">
+            <AddCar />
+            <Cars userId={user!.id} />
           </div>
         </div>
-        <div className="sm:mt-[-60px]">
-          <h3 className="text-center font-manrope font-bold text-3xl leading-10 text-gray-900 mb-3">
-            {user.name}
-          </h3>
-          <p className="font-normal text-base leading-7 text-gray-500 text-center mb-8">
-            {user.bio}
-          </p>
-        </div>
       </div>
-      <div className="container">
-        <CarsSection cars={cars} />
-      </div>
-    </section>
+    </div>
   );
 }

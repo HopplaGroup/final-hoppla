@@ -27,7 +27,7 @@ const navigation = {
 
 const TwoColumnFooter = () => {
   return (
-    <footer aria-labelledby="footer-heading" className="container mb-10">
+    <footer aria-labelledby="footer-heading" className="container mb-10 mt-10">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>

@@ -103,14 +103,14 @@ export function Autocomplete<T>({
         transition
         className={clsx(
           "w-[var(--input-width)] mt-1.5 bg-background rounded-lg border p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
-          "transition duration-100 z-50 ease-in data-[leave]:data-[closed]:opacity-0"
+          "transition duration-100 z-[1111] ease-in data-[leave]:data-[closed]:opacity-0"
         )}
       >
         {filteredItems.map((item) => (
           <ComboboxOption
             key={getKey(item)}
             value={item}
-            className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-foreground/10"
+            className="group flex cursor-pointer pointer-events-auto items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-foreground/10"
           >
             <CheckIcon className="invisible size-4 fill-foreground group-data-[selected]:visible" />
             <div className="text-sm/6 text-foreground">

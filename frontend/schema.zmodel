@@ -46,7 +46,6 @@ model User {
   idNumber                  String
   sex                       UserSex
   birthDate                 DateTime
-  // rating                    Float // Hmm, maybe we should calculate this on the fly
   profileImg                String
   bio                       String
   role                      UserRole                   @default(CUSTOMER)
@@ -86,6 +85,10 @@ model DriverVerificationRequest {
 
   createdAt     DateTime                        @default(now())
   updatedAt     DateTime                        @updatedAt
+
+  @@allow('create', auth() != null)
+  @@allow('read', true)
+  @@allow('update,delete', auth() == driver)
 }
 
 enum CarType {
@@ -93,24 +96,46 @@ enum CarType {
   MINIVAN
 }
 
+enum CarStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CarFuelType {
+  GASOLINE
+  DIESEL
+  ELECTRIC
+  HYBRID
+  HYDROGEN
+  CNG
+  LPG
+  ETHANOL
+}
+
 model Car {
-  id         String   @id @default(cuid())
+  id            String      @id @default(cuid())
 
-  name       String
-  type       CarType
-  plate      String   @unique
-  mark       String   @allow("read", false)
-  // year       Int
-  capacity   Int
-  isVerified Boolean  @default(false)
-  photos     String[]
+  name          String
+  type          CarType
+  plate         String      @unique
+  mark          String
 
-  owner      User     @relation(fields: [ownerId], references: [id])
-  ownerId    String
-  rides      Ride[]
+  capacity      Int
+  status        CarStatus   @default(PENDING)
+  photos        String[]    @length(min: 1)
+  licensePhotos String[] // front and back
+  fuelType      CarFuelType
+  owner         User        @relation(fields: [ownerId], references: [id])
+  ownerId       String      @default(auth().id)
+  rides         Ride[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@allow('create', auth() != null)
+  @@allow('read', true)
+  @@allow('update,delete', auth() == owner)
 }
 
 model Ride {
@@ -126,7 +151,7 @@ model Ride {
   duration       Float
 
   driver         User     @relation("RideDriver", fields: [driverId], references: [id])
-  driverId       String
+  driverId       String   @default(auth().id)
   passengers     User[]   @relation("RidePassenger")
   rules          Rule[]
   car            Car      @relation(fields: [carId], references: [id])
@@ -134,6 +159,10 @@ model Ride {
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@allow('create', auth() != null)
+  @@allow('read', true)
+  @@allow('update,delete', auth() == driver)
 }
 
 model Rule {
@@ -145,6 +174,8 @@ model Rule {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@allow('read', true)
 }
 
 model UserReview {

@@ -41,6 +41,18 @@ enum CarType {
   MINIVAN
 }
 
+enum CarStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CarFuelType {
+  GASOLINE
+  DIESEL
+  ELECTRIC
+}
+
 /// @@auth
 /// @@allow('create,read', true)
 /// @@allow('update,delete', auth() == this)
@@ -67,6 +79,9 @@ model User {
   updatedAt                 DateTime                   @updatedAt()
 }
 
+/// @@allow('create', auth() != null)
+/// @@allow('read', true)
+/// @@allow('update,delete', auth() == driver)
 model DriverVerificationRequest {
   id            String                          @id() @default(cuid())
   licencePhotos String[]
@@ -78,23 +93,31 @@ model DriverVerificationRequest {
   updatedAt     DateTime                        @updatedAt()
 }
 
+/// @@allow('create', auth() != null)
+/// @@allow('read', true)
+/// @@allow('update,delete', auth() == owner)
 model Car {
-  id         String   @id() @default(cuid())
-  name       String
-  type       CarType
-  plate      String   @unique()
-  /// @allow('read', false)
-  mark       String
-  capacity   Int
-  isVerified Boolean  @default(false)
-  photos     String[]
-  owner      User     @relation(fields: [ownerId], references: [id])
-  ownerId    String
-  rides      Ride[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt()
+  id            String      @id() @default(cuid())
+  name          String
+  type          CarType
+  plate         String      @unique()
+  mark          String
+  capacity      Int
+  status        CarStatus   @default(PENDING)
+  /// @length(min: 1)
+  photos        String[]
+  licensePhotos String[]
+  fuelType      CarFuelType
+  owner         User        @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  rides         Ride[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt()
 }
 
+/// @@allow('create', auth() != null)
+/// @@allow('read', true)
+/// @@allow('update,delete', auth() == driver)
 model Ride {
   id             String   @id() @default(cuid())
   availableSeats Int
@@ -114,6 +137,7 @@ model Ride {
   updatedAt      DateTime @updatedAt()
 }
 
+/// @@allow('read', true)
 model Rule {
   id          String   @id() @default(cuid())
   description String

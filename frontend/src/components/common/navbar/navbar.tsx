@@ -4,6 +4,7 @@ import AuthBlock from "./auth-block";
 import { Logo } from "../logo";
 import { LanguageSwitcher } from "../language-switcher";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 type NavbarProps = {};
 
@@ -28,9 +29,13 @@ export function Navbar({}: NavbarProps) {
             <NavbarLogo />
             <div className="items-center gap-2 hidden md:flex">
               {NAV_ITEMS.slice(1).map(({ href, label }) => (
-                <Button key={href} href={href} variant="ghost">
+                <Link
+                  key={href}
+                  href={href}
+                  className="font-medium px-2 py-2 text-base hover:underline"
+                >
                   {label}
-                </Button>
+                </Link>
               ))}
             </div>
           </div>

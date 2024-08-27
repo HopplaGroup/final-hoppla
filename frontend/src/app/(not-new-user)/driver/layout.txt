@@ -1,2 +1,0 @@
-// if not driver redirect to driver verification-request sending page
-export

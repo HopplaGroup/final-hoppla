@@ -6,18 +6,24 @@ import db from "./db";
 
 export const getUser = cache(async () => {
   try {
-    const { getUser: _getKindeUser } = getKindeServerSession();
-    const kindeUser = await _getKindeUser();
-    if (!kindeUser) {
-      throw new Error("Kinde user not found");
+    let email = "";
+    if (process.env.AUTH_TESTER_EMAIL) {
+      email = process.env.AUTH_TESTER_EMAIL;
+    } else {
+      const { getUser: _getKindeUser } = getKindeServerSession();
+      const kindeUser = await _getKindeUser();
+      if (!kindeUser) {
+        throw new Error("Kinde user not found");
+      }
+      email = kindeUser.email || "";
     }
     const dbUser = await db.user.findUnique({
-      where: { email: kindeUser.email || "" },
+      where: { email },
     });
 
     return dbUser;
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     return null;
   }
 });

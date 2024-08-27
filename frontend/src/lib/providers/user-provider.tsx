@@ -2,6 +2,7 @@
 
 import { User } from "@prisma/client";
 import React, { createContext, useContext } from "react";
+import { useFindUniqueUser } from "../hooks";
 
 type UserContextType = {
   user: User | null;
@@ -23,7 +24,19 @@ type UserProviderProps = {
 };
 
 export function UserProvider({ children, user }: UserProviderProps) {
+  // const { data } = useFindUniqueUser(
+  //   {
+  //     where: {
+  //       id: user?.id,
+  //     },
+  //   },
+  //   {
+  //     enabled: !!user,
+  //   }
+  // );
   return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user: (user || null) as User | null }}>
+      {children}
+    </UserContext.Provider>
   );
 }

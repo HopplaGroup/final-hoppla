@@ -32,7 +32,7 @@ export default async function RootLayout({
   return (
     <LanguageProvider>
       <html lang={languageTag()} suppressHydrationWarning>
-        <body className={cn("min-h-screen font-sans antialiased")}>
+        <body className={cn("min-h-screen font-sans antialiased bg-gray-100")}>
           <MainProvider user={user}>
             {/* <RealtimeComponent /> */}
             {children}
