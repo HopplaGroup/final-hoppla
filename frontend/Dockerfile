@@ -1,4 +1,4 @@
-FROM node:22 AS base
+FROM node:22.6.0 AS base
 FROM base AS deps
 RUN npm install -g pnpm
 WORKDIR /app
