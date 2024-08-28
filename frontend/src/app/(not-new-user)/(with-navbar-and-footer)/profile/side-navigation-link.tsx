@@ -19,10 +19,10 @@ export function SidebarNavigationLink({
 }: SidebarNavigationLink) {
   // this linke can be active as well
   const pathname = usePathname();
-  console.log({
-    pathname,
-    href,
-  });
+  // console.log({
+  //   pathname,
+  //   href,
+  // });
   const isActive =
     (pathname.includes(href) && href !== "/profile") ||
     (href === "/profile" && pathname === `/${languageTag()}/profile`);

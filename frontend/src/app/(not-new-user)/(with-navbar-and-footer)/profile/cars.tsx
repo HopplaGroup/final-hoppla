@@ -24,9 +24,9 @@ export default function Cars({ userId }: { userId: string }) {
     return (
       <div className="h-36 bg-gray-200 rounded-xl border-2 border-dashed  animate-pulse"></div>
     );
-  console.log({
-    cars,
-  });
+  // console.log({
+  //   cars,
+  // });
   return cars?.map((car) => <CarCard key={car.id} car={car} />);
 }
 

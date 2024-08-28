@@ -51,6 +51,11 @@ enum CarFuelType {
   GASOLINE
   DIESEL
   ELECTRIC
+  HYBRID
+  HYDROGEN
+  CNG
+  LPG
+  ETHANOL
 }
 
 /// @@auth
@@ -79,8 +84,8 @@ model User {
   updatedAt                 DateTime                   @updatedAt()
 }
 
-/// @@allow('create', auth() != null)
-/// @@allow('read', true)
+/// @@allow('create', auth() != null && this.status == 'PENDING')
+/// @@allow('read', auth() == driver)
 /// @@allow('update,delete', auth() == driver)
 model DriverVerificationRequest {
   id            String                          @id() @default(cuid())
@@ -100,12 +105,14 @@ model Car {
   id            String      @id() @default(cuid())
   name          String
   type          CarType
-  plate         String      @unique()
+  /// @regex('^[A-Z]{2}-\d{3}-[A-Z]{2}$')
+  plate         String
   mark          String
   capacity      Int
   status        CarStatus   @default(PENDING)
   /// @length(min: 1)
   photos        String[]
+  /// @length(min: 2, max: 2)
   licensePhotos String[]
   fuelType      CarFuelType
   owner         User        @relation(fields: [ownerId], references: [id])

@@ -34,10 +34,10 @@ export const UploadForm = ({
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [imageUrl, setImageUrl] = useState<string>(
-    defaultUrl || "/assets/upload-img.png"
+    !!defaultUrl ? defaultUrl : "/assets/upload-img.png"
   );
   const [anotherImageUrl, setAnotherImageUrl] = useState<string>("");
-
+  // when successful message its deleayed somohe and
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [showCropper, setShowCropper] = useState(false);
@@ -115,7 +115,7 @@ export const UploadForm = ({
 
     setUploading(true);
     const toastId = toast.loading(m.only_dry_frog_belong());
-
+    const prevImageUrl = imageUrl;
     try {
       const croppedImageBlob = await getCroppedImg(
         anotherImageUrl,
@@ -124,16 +124,15 @@ export const UploadForm = ({
       const formData = new FormData();
       formData.append("file", croppedImageBlob, "cropped_image.jpg");
       formData.append("category", folderName || "misc");
-
+      const newImage = URL.createObjectURL(croppedImageBlob);
+      setImageUrl(newImage);
       const response = await fetch("/api/s3-upload", {
         method: "POST",
         body: formData,
       });
       const data = await response.json();
-
       if (data.success) {
         await make?.(data.fileUrl);
-        setImageUrl(data.fileUrl);
         toast.success(m.mushy_loose_barbel_intend(), { id: toastId });
         onSuccessfulUpload?.(data.fileUrl);
         setShowCropper(false);
@@ -141,7 +140,8 @@ export const UploadForm = ({
         toast.error(m.away_livid_cowfish_empower(), { id: toastId });
       }
     } catch (error) {
-      console.log(error);
+      setImageUrl(prevImageUrl);
+      // console.log(error);
       toast.error(m.away_livid_cowfish_empower(), { id: toastId });
     } finally {
       setUploading(false);
@@ -155,22 +155,20 @@ export const UploadForm = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-center">Edit the image</DialogTitle>
-            <DialogDescription>
-              <div className="relative">
-                <div className="h-[300px] rounded-lg overflow-hidden mt-2">
-                  <Cropper
-                    image={anotherImageUrl}
-                    crop={crop}
-                    zoom={zoom}
-                    cropShape="rect"
-                    cropSize={cropSize}
-                    onCropChange={setCrop}
-                    onZoomChange={setZoom}
-                    onCropComplete={onCropComplete}
-                  />
-                </div>
+            <div className="relative">
+              <div className="h-[300px] rounded-lg overflow-hidden mt-2">
+                <Cropper
+                  image={anotherImageUrl}
+                  crop={crop}
+                  zoom={zoom}
+                  cropShape="rect"
+                  cropSize={cropSize}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
+                />
               </div>
-            </DialogDescription>
+            </div>
           </DialogHeader>
           <DialogFooter className="gap-2">
             <Button

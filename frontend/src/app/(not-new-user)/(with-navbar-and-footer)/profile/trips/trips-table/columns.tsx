@@ -15,7 +15,7 @@ export type Row = Prisma.RideGetPayload<{
 export const columns: ColumnDef<Row>[] = [
   {
     accessorKey: "from",
-    header: "Route",
+    header: "From",
     cell: ({ row }) => {
       return (
         PLACES.find((place) => place.osm === row.getValue("from"))?.name?.[

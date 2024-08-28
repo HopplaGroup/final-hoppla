@@ -5,7 +5,7 @@
   "packageManager": "pnpm@9.1.1",
   "scripts": {
     "postinstall": "zenstack generate",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

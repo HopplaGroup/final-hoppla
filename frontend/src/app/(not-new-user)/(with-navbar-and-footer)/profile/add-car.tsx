@@ -18,9 +18,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useCreateCar } from "@/lib/hooks";
+import { useCreateCar, useFindUniqueCar } from "@/lib/hooks";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { CarCreateSchema } from "@zenstackhq/runtime/zod/models";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,11 +41,18 @@ import {
 
 const FormSchema = CarCreateSchema.extend({
   photos: z.array(z.string()).nonempty(),
-  licencePhotos: z.tuple([z.string(), z.string()]),
+  licencePhotos: z.tuple([
+    z.object({
+      value: z.string().min(1),
+    }),
+    z.object({
+      value: z.string().min(1),
+    }),
+  ]),
 });
 
 export default function AddCar() {
-  const { mutate, isPending } = useCreateCar({
+  const { mutate } = useCreateCar({
     optimisticUpdate: true,
   });
   const [open, setOpen] = useState(false);
@@ -54,8 +61,22 @@ export default function AddCar() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      licencePhotos: [undefined, undefined],
+      licencePhotos: [
+        {
+          value: "",
+        },
+        {
+          value: "",
+        },
+      ],
     },
+  });
+
+  const { control } = form;
+
+  const { fields, update } = useFieldArray<z.infer<typeof FormSchema>>({
+    control,
+    name: "licencePhotos",
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
@@ -70,7 +91,7 @@ export default function AddCar() {
         type: values.type,
         photos: values.photos,
         fuelType: values.fuelType,
-        licensePhotos: values.licensePhotos,
+        licensePhotos: values.licencePhotos.map((p) => p.value),
       },
     });
   }
@@ -129,6 +150,8 @@ export default function AddCar() {
     },
   ];
 
+  console.log(form.getValues());
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger>
@@ -156,16 +179,24 @@ export default function AddCar() {
                       <div className="grid md:grid-cols-2 gap-4">
                         <UploadForm
                           className="w-full"
-                          defaultUrl={field.value[0]}
+                          folderName="car-licence"
+                          defaultUrl={field.value[0].value}
                           onSuccessfulUpload={(url) => {
-                            field.onChange([url, field.value[1]]);
+                            update(0, { value: url });
+                            if (form.formState.errors.licencePhotos) {
+                              form.trigger("licencePhotos");
+                            }
                           }}
                         />
                         <UploadForm
                           className="w-full"
-                          defaultUrl={field.value[1]}
+                          folderName="car-licence"
+                          defaultUrl={field.value[1].value}
                           onSuccessfulUpload={(url) => {
-                            field.onChange([field.value[0], url]);
+                            update(1, { value: url });
+                            if (form.formState.errors.licencePhotos) {
+                              form.trigger("licencePhotos");
+                            }
                           }}
                         />
                       </div>
@@ -186,6 +217,7 @@ export default function AddCar() {
                     <FormControl>
                       <UploadForm
                         defaultUrl={field.value?.[0]}
+                        folderName="car-photos"
                         onSuccessfulUpload={(url) => field.onChange([url])}
                       />
                     </FormControl>
@@ -254,10 +286,15 @@ export default function AddCar() {
                       <Select
                         value={field.value}
                         onValueChange={(v) => {
-                          if (v === "SEDAN") setCapacityOptions([3, 4]);
-                          else if (v === "MINIVAN")
+                          if (v === "STANDARD") {
+                            setCapacityOptions([3, 4]);
+                          } else if (v === "MINIVAN") {
                             setCapacityOptions([6, 7, 8]);
+                          }
                           form.resetField("capacity");
+                          if (form.formState.errors.capacity) {
+                            form.trigger("capacity");
+                          }
                           field.onChange(v);
                         }}
                       >
@@ -326,12 +363,17 @@ export default function AddCar() {
                     <FormLabel>Seating Capacity</FormLabel>
                     <FormControl>
                       <Select
-                        key={capacityOptions.join(",")}
-                        value={field.value?.toString()}
-                        onValueChange={(v) => field.onChange(Number(v))}
+                        onValueChange={(v) => {
+                          field.onChange(v ? Number(v) : undefined);
+                        }}
+                        disabled={!form.getValues("type")}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a capacity" />
+                          {field.value ? (
+                            <SelectValue placeholder="Select a capacity" />
+                          ) : (
+                            " Select a capacity"
+                          )}
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
@@ -364,7 +406,8 @@ export default function AddCar() {
                         ref={inputRef}
                         placeholder="AB-000-AB"
                         onChange={(event) => {
-                          field.onChange(event.target.value.toUpperCase());
+                          const uPlate = event.target.value.toUpperCase();
+                          field.onChange(uPlate);
                         }}
                       />
                     </FormControl>

@@ -27,9 +27,5 @@ async function getData(): Promise<Row[]> {
 export default async function RidesTable() {
   const data = await getData();
 
-  return (
-    <div className="w-full">
-      <DataTable columns={columns} data={data} />
-    </div>
-  );
+  return <DataTable columns={columns} data={data} />;
 }

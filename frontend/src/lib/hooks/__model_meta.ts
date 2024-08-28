@@ -125,8 +125,10 @@ const metadata = {
                 }, driverId: {
                     name: "driverId",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'driver',
+                    defaultValueProvider: $default$DriverVerificationRequest$driverId,
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
@@ -220,9 +222,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, plate: {
-                    name: "plate",
-                    fields: ["plate"]
                 },
             }
             ,
@@ -418,6 +417,10 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$DriverVerificationRequest$driverId(user: any): unknown {
+    return user?.id;
+}
+
 function $default$Car$ownerId(user: any): unknown {
     return user?.id;
 }

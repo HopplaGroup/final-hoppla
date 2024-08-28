@@ -75,19 +75,19 @@ enum DriverVerificationRequestStatus {
 model DriverVerificationRequest {
   id            String                          @id @default(cuid())
 
-  licencePhotos String[]
-  // licenceNumber String
+  licencePhotos String[]                        @length(min: 2, max: 2)
+
   selfie        String
   status        DriverVerificationRequestStatus
 
   driver        User                            @relation(fields: [driverId], references: [id])
-  driverId      String                          @unique
+  driverId      String                          @unique @default(auth().id)
 
   createdAt     DateTime                        @default(now())
   updatedAt     DateTime                        @updatedAt
 
-  @@allow('create', auth() != null)
-  @@allow('read', true)
+  @@allow('create', auth() != null && this.status == "PENDING")
+  @@allow('read', auth() == driver)
   @@allow('update,delete', auth() == driver)
 }
 
@@ -118,13 +118,13 @@ model Car {
 
   name          String
   type          CarType
-  plate         String      @unique
+  plate         String      @regex('^[A-Z]{2}-\\d{3}-[A-Z]{2}$')
   mark          String
 
   capacity      Int
   status        CarStatus   @default(PENDING)
   photos        String[]    @length(min: 1)
-  licensePhotos String[] // front and back
+  licensePhotos String[]    @length(min: 2, max: 2)
   fuelType      CarFuelType
   owner         User        @relation(fields: [ownerId], references: [id])
   ownerId       String      @default(auth().id)

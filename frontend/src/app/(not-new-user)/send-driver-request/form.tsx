@@ -51,7 +51,7 @@ export function SendDriverRequestForm({
       driverId: user.id,
     },
   });
-  console.log(form.formState.errors);
+  // console.log(form.formState.errors);
   async function onSubmit(
     values: z.infer<typeof CreateDriverVerifciationRequestSchema>
   ) {

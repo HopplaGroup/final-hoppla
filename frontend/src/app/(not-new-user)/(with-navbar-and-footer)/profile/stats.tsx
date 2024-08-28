@@ -26,10 +26,10 @@ export function Stats({ userId }: { userId: string }) {
   });
 
   let totalEarnings = 0;
-
+  // console.log(userRides);
   if (userRides) {
     totalEarnings = userRides.reduce(
-      (acc, ride) => acc + ride.price + ride._count.passengers,
+      (acc, ride) => acc + ride.price * ride._count.passengers,
       0
     );
   }

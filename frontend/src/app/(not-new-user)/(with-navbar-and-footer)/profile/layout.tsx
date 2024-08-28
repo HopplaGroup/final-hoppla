@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/utils/auth";
 import { cn } from "@/lib/utils/cn";
-import { Home, Milestone, Settings, Ticket } from "lucide-react";
+import { AlertTriangle, Home, Milestone, Settings, Ticket } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -21,7 +21,36 @@ export default async function ProfileLayout({ children }: LayoutProps) {
       <MobileNavigation />
       <div className="grid md:grid-cols-[300px,1fr]  gap-6 mt-5">
         <SidebarNavigation />
-        <div>{children}</div>
+        <div>
+          <div
+            role="alert"
+            className="rounded border-s-4 border-s-primary/20 bg-red-50 p-4 mb-5 border-solid"
+          >
+            <div className="flex items-center gap-2 text-primary">
+              <AlertTriangle size={24} />
+
+              <strong className="block font-medium">
+                You are not verified as driver
+              </strong>
+            </div>
+
+            <p className="mt-2 text-sm text-primary max-w-xl lg:max-w-3xl">
+              Your account is not verified as driver. So, the rides you create
+              will not be visible to other users. Please verify your account to
+              become a driver and get all the feautres of the app.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/send-driver-verification"
+                className="text-primary underline"
+              >
+                Verify now
+              </Link>
+            </div>
+          </div>
+
+          <div>{children}</div>
+        </div>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ const searchSchema = z.object({
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const search = searchSchema.safeParse(searchParams);
-  console.log(search);
+  // console.log(search);
   if (!search.success) {
     return <div>Invalid search params</div>;
   }
