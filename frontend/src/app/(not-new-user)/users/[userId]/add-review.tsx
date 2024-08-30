@@ -30,13 +30,14 @@ import { Input } from "@/components/ui/input";
 
 import { z } from "zod";
 import { UserReviewCreateSchema } from "@zenstackhq/runtime/zod/models";
+import { useUser } from "@/lib/providers/user-provider";
 
 export default function AddReview({ revieweeId }: { revieweeId: string }) {
   const { mutate, isPending } = useCreateUserReview({
     optimisticUpdate: true,
   });
   const [open, setOpen] = useState(false);
-
+  const { user: loggedUser } = useUser();
   const form = useForm<z.infer<typeof UserReviewCreateSchema>>({
     resolver: zodResolver(UserReviewCreateSchema),
     defaultValues: {
@@ -52,6 +53,7 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
         rating: values.rating,
         comment: values.comment,
         revieweeId: values.revieweeId,
+        authorId: loggedUser?.id,
       },
     });
   }

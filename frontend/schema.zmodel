@@ -160,6 +160,9 @@ model Ride {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
+  @@deny('update', future().passengers?[id == this.driverId])
+  @@deny('create', passengers?[id == auth().id])
+
   @@allow('create', auth() != null)
   @@allow('read', true)
   @@allow('update,delete', auth() == driver)
@@ -175,6 +178,7 @@ model Rule {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@allow('update', auth() != null)
   @@allow('read', true)
 }
 
@@ -193,6 +197,9 @@ model UserReview {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
+  @@unique([authorId, revieweeId])
+
+  @@deny("create", auth() == reviewee)
   @@allow('read', true)
   @@allow('create', auth() != null)
   @@allow('update,delete', auth() == author)

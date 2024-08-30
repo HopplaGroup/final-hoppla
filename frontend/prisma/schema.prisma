@@ -89,6 +89,7 @@ model User {
 /// @@allow('update,delete', auth() == driver)
 model DriverVerificationRequest {
   id            String                          @id() @default(cuid())
+  /// @length(min: 2, max: 2)
   licencePhotos String[]
   selfie        String
   status        DriverVerificationRequestStatus
@@ -122,6 +123,8 @@ model Car {
   updatedAt     DateTime    @updatedAt()
 }
 
+/// @@deny('update', future().passengers?[id == this.driverId])
+/// @@deny('create', passengers?[id == auth().id])
 /// @@allow('create', auth() != null)
 /// @@allow('read', true)
 /// @@allow('update,delete', auth() == driver)
@@ -144,6 +147,7 @@ model Ride {
   updatedAt      DateTime @updatedAt()
 }
 
+/// @@allow('update', auth() != null)
 /// @@allow('read', true)
 model Rule {
   id          String   @id() @default(cuid())
@@ -154,6 +158,7 @@ model Rule {
   updatedAt   DateTime @updatedAt()
 }
 
+/// @@deny('create', auth() == reviewee)
 /// @@allow('read', true)
 /// @@allow('create', auth() != null)
 /// @@allow('update,delete', auth() == author)
@@ -167,4 +172,6 @@ model UserReview {
   revieweeId String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt()
+
+  @@unique([authorId, revieweeId])
 }

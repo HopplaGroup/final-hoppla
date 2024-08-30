@@ -405,6 +405,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, authorId_revieweeId: {
+                    name: "authorId_revieweeId",
+                    fields: ["authorId", "revieweeId"]
                 },
             }
             ,

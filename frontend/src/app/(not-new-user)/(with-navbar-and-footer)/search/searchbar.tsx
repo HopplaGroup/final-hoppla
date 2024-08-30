@@ -22,37 +22,48 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
+import { useState } from "react";
 
-export default function SearchBar() {
-  const [orderBy, setOrderBy] = useQueryState("orderBy", {
-    shallow: false,
-  });
-  const [fromOsm, setFromOsm] = useQueryState("fromOsm");
-  const [toOsm, setToOsm] = useQueryState("toOsm");
-  const [departureDate, setDepartureDate] = useQueryState(
-    "departureDate",
-    parseAsIsoDateTime.withDefault(new Date())
-  );
-  const [availableSeats, setAvailableSeats] = useQueryState(
-    "availableSeats",
-    parseAsInteger
-  );
+export default function SearchBar({
+  from,
+  to,
+  departure,
+  availableSeats,
+  setFrom,
+  setTo,
+  setDeparture,
+  setAvailableSeats,
+}: {
+  from: string | null;
+  to: string | null;
+  departure: Date | null;
+  availableSeats: number | null;
+  setFrom: (from: string | null) => void;
+  setTo: (to: string | null) => void;
+  setDeparture: (departure: Date | null) => void;
+  setAvailableSeats: (availableSeats: number | null) => void;
+}) {
+  const [_from, _setFrom] = useState(from);
+  const [_to, _setTo] = useState(to);
+  const [_departure, _setDeparture] = useState(departure);
+  const [_availableSeats, _setAvailableSeats] = useState(availableSeats);
 
-  const { push } = useLoading();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const search = () => {
-    push(pathname + "?" + searchParams.toString());
+    console.log("wow");
+    setFrom(_from);
+    setTo(_to);
+    setDeparture(_departure);
+    setAvailableSeats(_availableSeats);
   };
 
   return (
-    <div className="join-md grid md:grid-cols-5">
+    <div className="join-md grid md:grid-cols-4">
       <Autocomplete
         startContent={<Circle size={18} />}
         items={PLACES}
-        defaultSelected={PLACES.find((place) => place.osm === fromOsm)}
+        defaultSelected={PLACES.find((place) => place.osm === _from)}
         displayValue={(item) => item.name[languageTag()]}
-        onChange={(place) => setFromOsm(place?.osm || null)}
+        onChange={(place) => _setFrom(place?.osm || null)}
         getKey={(item) => item.osm}
         showMax={10}
         filterItems={(items, query) =>
@@ -67,9 +78,9 @@ export default function SearchBar() {
       <Autocomplete
         startContent={<MapPin size={18} />}
         items={PLACES}
-        defaultSelected={PLACES.find((place) => place.osm === toOsm)}
+        defaultSelected={PLACES.find((place) => place.osm === _to)}
         displayValue={(item) => item.name[languageTag()]}
-        onChange={(place) => setToOsm(place?.osm || null)}
+        onChange={(place) => _setTo(place?.osm || null)}
         getKey={(item) => item.osm}
         showMax={10}
         filterItems={(items, query) =>
@@ -82,32 +93,10 @@ export default function SearchBar() {
         placeholder="Destination location"
       />
       <DatePicker
-        value={departureDate || undefined}
-        onChange={(newDate) => setDepartureDate(newDate || null)}
+        value={_departure || undefined}
+        onChange={(newDate) => _setDeparture(newDate || null)}
       />
 
-      <Select
-        // key={selectedCar?.id}
-
-        value={availableSeats?.toString()}
-        onValueChange={(v) => {
-          setAvailableSeats(v ? Number(v) : null);
-        }}
-      >
-        <SelectTrigger className="w-full join-item">
-          am
-          <SelectValue placeholder="Select a seats" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {Array.from({ length: 8 }, (_, i) => i + 1).map((o) => (
-              <SelectItem key={o} value={o.toString()}>
-                {o}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
       <Button onClick={search}>Search</Button>
     </div>
   );
