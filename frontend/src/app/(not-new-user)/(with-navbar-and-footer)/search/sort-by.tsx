@@ -1,60 +1,45 @@
 "use client";
-import { parseAsInteger, useQueryState, useQueryStates } from "nuqs";
+import { defaultSortBy, sortByOptions } from "@/lib/constants/search";
+import { languageTag } from "@/paraglide/runtime";
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+  useQueryStates,
+} from "nuqs";
 
-const SORT_BY_OPTIONS = [
-  {
-    value: "price",
-    direction: "desc",
-    label: "Price",
-  },
-  // {
-  //   value: "departure",
-  //   label: "Departure",
-  // },
-  {
-    value: "createdAt",
-    label: "Created At",
-  },
-];
-
-export default function SortBy() {
-  const [orderBy, setOrderBy] = useQueryState("orderBy", {
-    shallow: false,
-  });
-
-  const [_, setPage] = useQueryState(
-    "page",
-    parseAsInteger.withDefault(1).withOptions({ shallow: false })
+export default function SortBy({ search }: { search: any }) {
+  const [orderBy, setOrderBy] = useQueryState(
+    "sortBy",
+    parseAsString.withDefault(defaultSortBy)
   );
 
-  const [orderByDirection, setOrderByDirection] =
-    useQueryState("orderByDirection");
+  const [_, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
   return (
-    <div className="space-x-2">
-      <label>Sort by</label>
-      <select
-        value={orderBy || "createdAt"}
-        onChange={(e) => {
-          setPage(1);
-          setOrderBy(e.target.value);
-        }}
-        className="form-select"
-      >
-        {SORT_BY_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
+    <div className="">
+      <div className="text-xl font-semibold mb-2">Sort By</div>
+      <div className="grid space-y-2">
+        {sortByOptions.map((option) => (
+          <label
+            key={option.value}
+            className="max-w-xs flex items-center p-3 h-14 w-full bg-white border-2 border-dashed rounded-lg text-sm focus:border-primary focus:ring-primary"
+          >
+            <input
+              type="radio"
+              className="shrink-0 mt-0.5  rounded-full text-primary focus:ring-primary disabled:opacity-50 disabled:pointer-events-none "
+              value={option.value}
+              checked={orderBy === option.value}
+              onChange={(e) => {
+                setPage(1);
+                setOrderBy(e.target.value);
+                search();
+              }}
+            />
+            <span className="text-sm  ms-3">{option.label[languageTag()]}</span>
+          </label>
         ))}
-      </select>
-      {/* <select
-        value={orderByDirection || "desc"}
-        onChange={(e) => setOrderByDirection(e.target.value)}
-        className="form-select"
-      >
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-      </select> */}
+      </div>
     </div>
   );
 }

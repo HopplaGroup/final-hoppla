@@ -1,4 +1,9 @@
 import PLACES from "@/lib/constants/places";
+import {
+  defaultSortBy,
+  validSortFields,
+  validSortOrders,
+} from "@/lib/constants/search";
 import db from "@/lib/utils/db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,12 +20,7 @@ export async function GET(request: NextRequest) {
   const rulesTmp = searchParams.get("rules");
   const rules = rulesTmp ? rulesTmp.split(",") : [];
 
-  const [sortField, sortOrder] = (sortBy || "driverAverageRating:desc").split(
-    ":"
-  );
-
-  const validSortFields = ["price", "driverAverageRating", "departure"];
-  const validSortOrders = ["asc", "desc"];
+  const [sortField, sortOrder] = (sortBy || defaultSortBy).split(":");
 
   const orderByField = validSortFields.includes(sortField)
     ? sortField

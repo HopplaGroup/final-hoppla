@@ -33,6 +33,7 @@ export default function SearchBar({
   setTo,
   setDeparture,
   setAvailableSeats,
+  search,
 }: {
   from: string | null;
   to: string | null;
@@ -40,30 +41,18 @@ export default function SearchBar({
   availableSeats: number | null;
   setFrom: (from: string | null) => void;
   setTo: (to: string | null) => void;
-  setDeparture: (departure: Date | null) => void;
+  setDeparture: (departure: Date) => void;
   setAvailableSeats: (availableSeats: number | null) => void;
+  search: () => void;
 }) {
-  const [_from, _setFrom] = useState(from);
-  const [_to, _setTo] = useState(to);
-  const [_departure, _setDeparture] = useState(departure);
-  const [_availableSeats, _setAvailableSeats] = useState(availableSeats);
-
-  const search = () => {
-    console.log("wow");
-    setFrom(_from);
-    setTo(_to);
-    setDeparture(_departure);
-    setAvailableSeats(_availableSeats);
-  };
-
   return (
     <div className="join-md grid md:grid-cols-4">
       <Autocomplete
         startContent={<Circle size={18} />}
         items={PLACES}
-        defaultSelected={PLACES.find((place) => place.osm === _from)}
+        defaultSelected={PLACES.find((place) => place.osm === from)}
         displayValue={(item) => item.name[languageTag()]}
-        onChange={(place) => _setFrom(place?.osm || null)}
+        onChange={(place) => setFrom(place?.osm || null)}
         getKey={(item) => item.osm}
         showMax={10}
         filterItems={(items, query) =>
@@ -78,9 +67,9 @@ export default function SearchBar({
       <Autocomplete
         startContent={<MapPin size={18} />}
         items={PLACES}
-        defaultSelected={PLACES.find((place) => place.osm === _to)}
+        defaultSelected={PLACES.find((place) => place.osm === to)}
         displayValue={(item) => item.name[languageTag()]}
-        onChange={(place) => _setTo(place?.osm || null)}
+        onChange={(place) => setTo(place?.osm || null)}
         getKey={(item) => item.osm}
         showMax={10}
         filterItems={(items, query) =>
@@ -93,8 +82,8 @@ export default function SearchBar({
         placeholder="Destination location"
       />
       <DatePicker
-        value={_departure || undefined}
-        onChange={(newDate) => _setDeparture(newDate || null)}
+        value={departure || undefined}
+        onChange={(newDate) => newDate && setDeparture(newDate)}
       />
 
       <Button onClick={search}>Search</Button>
