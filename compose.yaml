@@ -5,11 +5,9 @@ services:
         container_name: mailserver
         hostname: mail.hoppla.ge
         ports:
-            - "25:25" # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
-            - "143:143" # IMAP4 (explicit TLS => STARTTLS)
-            - "465:465" # ESMTP (implicit TLS)
-            - "587:587" # ESMTP (explicit TLS => STARTTLS)
-            - "993:993" # IMAP4 (implicit TLS)
+            - "25:25"
+            - "587:587"
+            - "465:465"
         volumes:
             - ./data/dms/mail-data/:/var/mail/
             - ./data/dms/mail-state/:/var/mail-state/
@@ -19,10 +17,12 @@ services:
         restart: always
         stop_grace_period: 1m
         environment:
-            - ENABLE_RSPAMD=1
-            - ENABLE_CLAMAV=1
+            # - ENABLE_RSPAMD=1
+            # - ENABLE_CLAMAV=1
             - ENABLE_FAIL2BAN=1
             - SSL_TYPE=letsencrypt
+            - PERMIT_DOCKER=network
+            - SPOOF_PROTECTION=0
         cap_add:
             - NET_ADMIN
         healthcheck:
