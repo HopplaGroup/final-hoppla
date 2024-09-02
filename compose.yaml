@@ -14,6 +14,8 @@ services:
             - ./data/dms/mail-logs/:/var/log/mail/
             - ./data/dms/config/:/tmp/docker-mailserver/
             - /etc/localtime:/etc/localtime:ro
+            # - /etc/letsencrypt:/etc/letsencrypt
+            - ./data/nginx/certs/:/etc/letsencrypt/live/:ro
         restart: always
         stop_grace_period: 1m
         environment:
@@ -23,6 +25,8 @@ services:
             - SSL_TYPE=letsencrypt
             - PERMIT_DOCKER=network
             - SPOOF_PROTECTION=0
+            - VIRTUAL_HOST=mail.hoppla.ge
+            - LETSENCRYPT_HOST=mail.hoppla.ge
         cap_add:
             - NET_ADMIN
         healthcheck:
