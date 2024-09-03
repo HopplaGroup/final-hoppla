@@ -8,6 +8,7 @@ services:
             - "25:25"
             - "587:587"
             - "465:465"
+            - "993:993"
         volumes:
             - ./data/dms/mail-data/:/var/mail/
             - ./data/dms/mail-state/:/var/mail-state/
