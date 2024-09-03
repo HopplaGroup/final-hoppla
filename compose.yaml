@@ -14,15 +14,16 @@ services:
             - ./data/dms/mail-logs/:/var/log/mail/
             - ./data/dms/config/:/tmp/docker-mailserver/
             - /etc/localtime:/etc/localtime:ro
-            # - /etc/letsencrypt:/etc/letsencrypt
-            - ./data/nginx/certs/:/etc/letsencrypt/live/:ro
+            - ./data/nginx/certs:/etc/letsencrypt/live:ro
         restart: always
         stop_grace_period: 1m
         environment:
             # - ENABLE_RSPAMD=1
             # - ENABLE_CLAMAV=1
             - ENABLE_FAIL2BAN=1
-            - SSL_TYPE=letsencrypt
+            - SSL_TYPE=manual
+            - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
+            - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
             - PERMIT_DOCKER=network
             - SPOOF_PROTECTION=0
             - VIRTUAL_HOST=mail.hoppla.ge
@@ -33,6 +34,21 @@ services:
             test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
             timeout: 3s
             retries: 0
+        # --NGINX-------------------------------------
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./data/nginx/certs:/etc/nginx/certs:ro
+        depends_on:
+            - next-app
+            - umami
+            # - backend-app
+        restart: always
     # --UNAMI-------------------------------------
     umami:
         image: ghcr.io/umami-software/umami:postgresql-latest
@@ -86,21 +102,7 @@ services:
     #     timeout: 10s
     #     retries: 3
     #     start_period: 40s
-    # --NGINX-------------------------------------
-    nginx:
-        image: nginx:latest
-        container_name: nginx
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./data/nginx/certs:/etc/nginx/certs:ro
-        depends_on:
-            - next-app
-            - umami
-            # - backend-app
-        restart: always
+
     # --FRONTEND-------------------------------------
     next-app:
         container_name: next-app
