@@ -19,16 +19,12 @@ services:
         restart: always
         stop_grace_period: 1m
         environment:
-            # - ENABLE_RSPAMD=1
-            # - ENABLE_CLAMAV=1
             - ENABLE_FAIL2BAN=1
             - SSL_TYPE=manual
             - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
             - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
             - PERMIT_DOCKER=network
             - SPOOF_PROTECTION=0
-            - VIRTUAL_HOST=mail.hoppla.ge
-            - LETSENCRYPT_HOST=mail.hoppla.ge
         cap_add:
             - NET_ADMIN
         healthcheck:
