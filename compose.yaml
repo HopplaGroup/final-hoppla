@@ -22,9 +22,9 @@ services:
             # - ENABLE_RSPAMD=1
             # - ENABLE_CLAMAV=1
             - ENABLE_FAIL2BAN=1
-            - SSL_TYPE=none
-            - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
-            - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
+            # - SSL_TYPE=none
+            # - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
+            # - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
             - PERMIT_DOCKER=network
             - SPOOF_PROTECTION=0
             - VIRTUAL_HOST=mail.hoppla.ge
