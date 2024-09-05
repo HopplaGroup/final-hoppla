@@ -8,44 +8,51 @@ import { getUser } from "@/lib/utils/auth";
 import type { Metadata } from "next";
 import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
+import { sendEmailToDriverThatCarIsFull } from "@/lib/functions/emails/templates";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    metadataBase: new URL("https://hoppla.ge"),
-    title: m.weird_salty_baboon_slide(),
-    description: m.long_suave_tern_intend(),
-    openGraph: {
-      locale: languageTag(),
-      images: "/assets/opengraph-image.jpg",
-    },
-  };
+    return {
+        metadataBase: new URL("https://hoppla.ge"),
+        title: m.weird_salty_baboon_slide(),
+        description: m.long_suave_tern_intend(),
+        openGraph: {
+            locale: languageTag(),
+            images: "/assets/opengraph-image.jpg",
+        },
+    };
 }
 
 export default async function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  const user = await getUser();
-
-  return (
-    <LanguageProvider>
-      <html lang={languageTag()} suppressHydrationWarning>
-        <body className={cn("min-h-screen font-sans antialiased bg-gray-100")}>
-          <MainProvider user={user}>
-            {/* <RealtimeComponent /> */}
-            {children}
-            <Toaster />
-          </MainProvider>
-        </body>
-        <Script
-          defer
-          src="https://umami.hoppla.ge/script.js"
-          data-website-id="830aaf27-d46b-4952-9620-6d29c00e2617"
-        />
-      </html>
-    </LanguageProvider>
-  );
+    const user = await getUser();
+    // if (user) {
+    //     await sendEmailToDriverThatCarIsFull({ to: [user] });
+    // }
+    return (
+        <LanguageProvider>
+            <html lang={languageTag()} suppressHydrationWarning>
+                <body
+                    className={cn(
+                        "min-h-screen font-sans antialiased bg-gray-100"
+                    )}
+                >
+                    <MainProvider user={user}>
+                        {/* <RealtimeComponent /> */}
+                        {children}
+                        <Toaster />
+                    </MainProvider>
+                </body>
+                <Script
+                    defer
+                    src="https://umami.hoppla.ge/script.js"
+                    data-website-id="830aaf27-d46b-4952-9620-6d29c00e2617"
+                />
+            </html>
+        </LanguageProvider>
+    );
 }
