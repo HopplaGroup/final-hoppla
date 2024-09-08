@@ -20,6 +20,8 @@ import * as d from "date-fns";
 import { defaultSortBy } from "@/lib/constants/search";
 import { useMemo, useState } from "react";
 import RulesFilter from "./rules-filter";
+import { RideResponse } from "./response-ride-type";
+import PLACES from "@/lib/constants/places";
 type SearchPageProps = {
     searchParams: { [key: string]: string | string[] | undefined };
 };
@@ -113,7 +115,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                 </div>
                 <div>
                     <div className="grid grid-cols-2 gap-2">
-                        {data?.rides.map((ride: any) => (
+                        {data?.rides.map((ride: RideResponse) => (
                             <div
                                 key={ride.id}
                                 className="bg-white border-2 border-dashed rounded-md"
@@ -153,9 +155,11 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                                             <div className="grow pt-0.5 pb-8">
                                                 <h3 className="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
                                                     {
-                                                        ride.from.name[
-                                                            languageTag()
-                                                        ]
+                                                        PLACES.find(
+                                                            (place) =>
+                                                                place.osm ===
+                                                                ride.from
+                                                        )?.name[languageTag()]
                                                     }
                                                 </h3>
                                                 <p className="mt-1 text-sm text-gray-600 dark:text-neutral-400">
@@ -190,9 +194,11 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                                             <div className="grow pt-0.5">
                                                 <h3 className="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
                                                     {
-                                                        ride.to.name[
-                                                            languageTag()
-                                                        ]
+                                                        PLACES.find(
+                                                            (place) =>
+                                                                place.osm ===
+                                                                ride.to
+                                                        )?.name[languageTag()]
                                                     }
                                                 </h3>
                                                 <p className="mt-1 text-sm text-gray-600 dark:text-neutral-400">
@@ -206,15 +212,15 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                                 <div className="flex items-center border-t pt-5 p-5">
                                     <img
                                         className="w-10 h-10 rounded-full mr-4"
-                                        src={ride.driverProfileImage}
+                                        src={ride.driver.profileImg}
                                         alt="Avatar"
                                     />
                                     <div className="text-sm">
                                         <p className="font-semibold leading-none">
-                                            {ride.driverName}
+                                            {ride.driver.name}
                                         </p>
                                         <p className="flex items-center gap-1 font-semibold">
-                                            {ride.driverAverageRating}{" "}
+                                            {ride.driver.averageRating}{" "}
                                             <Stars
                                                 className="text-primary"
                                                 size={17}

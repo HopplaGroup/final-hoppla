@@ -3,15 +3,23 @@ const metadata = {
     models: {
         user: {
             name: 'User', fields: {
-                isNewUser: {
-                    name: "isNewUser",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
-                }, id: {
+                id: {
                     name: "id",
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, isNewUser: {
+                    name: "isNewUser",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, email: {
                     name: "email",
                     type: "String",
@@ -24,21 +32,27 @@ const metadata = {
                 }, idNumber: {
                     name: "idNumber",
                     type: "String",
-                }, sex: {
-                    name: "sex",
-                    type: "UserSex",
                 }, birthDate: {
                     name: "birthDate",
                     type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, profileImg: {
                     name: "profileImg",
                     type: "String",
                 }, bio: {
                     name: "bio",
                     type: "String",
+                }, sex: {
+                    name: "sex",
+                    type: "UserSex",
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, role: {
                     name: "role",
                     type: "UserRole",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, status: {
+                    name: "status",
+                    type: "UserStatus",
                     attributes: [{ "name": "@default", "args": [] }],
                 }, driverVerificationRequest: {
                     name: "driverVerificationRequest",
@@ -52,12 +66,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'driver',
-                }, ridesAsPassenger: {
-                    name: "ridesAsPassenger",
-                    type: "Ride",
+                }, passengerRides: {
+                    name: "passengerRides",
+                    type: "RidePassenger",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'passengers',
+                    backLink: 'passenger',
                 }, cars: {
                     name: "cars",
                     type: "Car",
@@ -76,14 +90,42 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'reviewee',
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, reportsSubmitted: {
+                    name: "reportsSubmitted",
+                    type: "Report",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'submitter',
+                }, reportsReceived: {
+                    name: "reportsReceived",
+                    type: "Report",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'reported',
+                }, notifications: {
+                    name: "notifications",
+                    type: "UserNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
+                }, myFavourites: {
+                    name: "myFavourites",
+                    type: "UserUserFavorite",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
+                }, favouritesOfMine: {
+                    name: "favouritesOfMine",
+                    type: "UserUserFavorite",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'favorite',
+                }, a: {
+                    name: "a",
+                    type: "UserFavoritedNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
                 },
             }
             , uniqueConstraints: {
@@ -98,6 +140,296 @@ const metadata = {
             ,
         }
         ,
+        userUserFavorite: {
+            name: 'UserUserFavorite', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'myFavourites',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'user',
+                    defaultValueProvider: $default$UserUserFavorite$userId,
+                }, favorite: {
+                    name: "favorite",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'favouritesOfMine',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "favoriteId" },
+                }, favoriteId: {
+                    name: "favoriteId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'favorite',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId_favoriteId: {
+                    name: "userId_favoriteId",
+                    fields: ["userId", "favoriteId"]
+                },
+            }
+            ,
+        }
+        ,
+        report: {
+            name: 'Report', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, submitterId: {
+                    name: "submitterId",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'submitter',
+                    defaultValueProvider: $default$Report$submitterId,
+                }, submitter: {
+                    name: "submitter",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'reportsSubmitted',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "submitterId" },
+                }, reportedId: {
+                    name: "reportedId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'reported',
+                }, reported: {
+                    name: "reported",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'reportsReceived',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reportedId" },
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                }, status: {
+                    name: "status",
+                    type: "ReportStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        userNotification: {
+            name: 'UserNotification', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, readAt: {
+                    name: "readAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'notifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, type: {
+                    name: "type",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            , discriminator: "type",
+        }
+        ,
+        rideCancelledNotification: {
+            name: 'RideCancelledNotification', baseTypes: ['UserNotification'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "UserNotification",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "UserNotification",
+                }, readAt: {
+                    name: "readAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "UserNotification",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "UserNotification",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "UserNotification",
+                }, type: {
+                    name: "type",
+                    type: "String",
+                    inheritedFrom: "UserNotification",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                }, rideId: {
+                    name: "rideId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ride',
+                }, ride: {
+                    name: "ride",
+                    type: "Ride",
+                    isDataModel: true,
+                    backLink: 'a',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rideId" },
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        userFavoritedNotification: {
+            name: 'UserFavoritedNotification', baseTypes: ['UserNotification'], fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    inheritedFrom: "UserNotification",
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                    inheritedFrom: "UserNotification",
+                }, readAt: {
+                    name: "readAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    inheritedFrom: "UserNotification",
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                    inheritedFrom: "UserNotification",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'a',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                    inheritedFrom: "UserNotification",
+                }, type: {
+                    name: "type",
+                    type: "String",
+                    inheritedFrom: "UserNotification",
+                }, favouritedBy: {
+                    name: "favouritedBy",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'a',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "favouritedById" },
+                }, favouritedById: {
+                    name: "favouritedById",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'favouritedBy',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
         driverVerificationRequest: {
             name: 'DriverVerificationRequest', fields: {
                 id: {
@@ -105,6 +437,14 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, licencePhotos: {
                     name: "licencePhotos",
                     type: "String",
@@ -129,14 +469,6 @@ const metadata = {
                     isForeignKey: true,
                     relationField: 'driver',
                     defaultValueProvider: $default$DriverVerificationRequest$driverId,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 },
             }
             , uniqueConstraints: {
@@ -158,6 +490,14 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -208,14 +548,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'car',
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 },
             }
             , uniqueConstraints: {
@@ -234,6 +566,14 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, availableSeats: {
                     name: "availableSeats",
                     type: "Int",
@@ -269,19 +609,18 @@ const metadata = {
                     isForeignKey: true,
                     relationField: 'driver',
                     defaultValueProvider: $default$Ride$driverId,
-                }, passengers: {
-                    name: "passengers",
-                    type: "User",
+                }, ridePassengers: {
+                    name: "ridePassengers",
+                    type: "RidePassenger",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'ridesAsPassenger',
-                }, rules: {
-                    name: "rules",
-                    type: "Rule",
+                    backLink: 'ride',
+                }, rideRules: {
+                    name: "rideRules",
+                    type: "RideRule",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'rides',
-                    isRelationOwner: true,
+                    backLink: 'ride',
                 }, car: {
                     name: "car",
                     type: "Car",
@@ -294,6 +633,30 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'car',
+                }, a: {
+                    name: "a",
+                    type: "RideCancelledNotification",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ride',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        ridePassenger: {
+            name: 'RidePassenger', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
@@ -302,6 +665,82 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, passenger: {
+                    name: "passenger",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'passengerRides',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "passengerId" },
+                }, passengerId: {
+                    name: "passengerId",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'passenger',
+                    defaultValueProvider: $default$RidePassenger$passengerId,
+                }, ride: {
+                    name: "ride",
+                    type: "Ride",
+                    isDataModel: true,
+                    backLink: 'ridePassengers',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rideId" },
+                }, rideId: {
+                    name: "rideId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ride',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        rideRule: {
+            name: 'RideRule', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, rule: {
+                    name: "rule",
+                    type: "Rule",
+                    isDataModel: true,
+                    backLink: 'ruleRides',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "ruleId" },
+                }, ruleId: {
+                    name: "ruleId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'rule',
+                }, ride: {
+                    name: "ride",
+                    type: "Ride",
+                    isDataModel: true,
+                    backLink: 'rideRules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rideId" },
+                }, rideId: {
+                    name: "rideId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ride',
                 },
             }
             , uniqueConstraints: {
@@ -320,19 +759,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                }, price: {
-                    name: "price",
-                    type: "Float",
-                }, rides: {
-                    name: "rides",
-                    type: "Ride",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'rules',
-                    isRelationOwner: true,
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
@@ -341,6 +767,18 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                }, price: {
+                    name: "price",
+                    type: "Float",
+                }, ruleRides: {
+                    name: "ruleRides",
+                    type: "RideRule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rule',
                 },
             }
             , uniqueConstraints: {
@@ -359,6 +797,14 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, comment: {
                     name: "comment",
                     type: "String",
@@ -391,14 +837,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'reviewee',
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 },
             }
             , uniqueConstraints: {
@@ -416,10 +854,19 @@ const metadata = {
     }
     ,
     deleteCascade: {
+        user: ['UserFavoritedNotification'],
     }
     ,
     authModel: 'User'
 };
+function $default$UserUserFavorite$userId(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Report$submitterId(user: any): unknown {
+    return user?.id;
+}
+
 function $default$DriverVerificationRequest$driverId(user: any): unknown {
     return user?.id;
 }
@@ -429,6 +876,10 @@ function $default$Car$ownerId(user: any): unknown {
 }
 
 function $default$Ride$driverId(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RidePassenger$passengerId(user: any): unknown {
     return user?.id;
 }
 

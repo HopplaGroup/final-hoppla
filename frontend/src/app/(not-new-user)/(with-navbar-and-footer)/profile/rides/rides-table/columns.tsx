@@ -10,7 +10,11 @@ import { Calendar, Car, Clock, Coins, Users, Waypoints } from "lucide-react";
 export type Row = Prisma.RideGetPayload<{
     include: {
         car: true;
-        passengers: true;
+        ridePassengers: {
+            include: {
+                passenger: true;
+            };
+        };
     };
 }>;
 

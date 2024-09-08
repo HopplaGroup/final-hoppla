@@ -321,9 +321,9 @@ export function useSuspenseCountUser<TArgs extends Prisma.UserCountArgs, TQueryF
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('User', `${endpoint}/user/count`, args, options, fetch);
 }
-import type { UserSex, UserRole } from '@zenstackhq/runtime/models';
+import type { UserSex, UserRole, UserStatus } from '@zenstackhq/runtime/models';
 
-export function useCheckUser<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { isNewUser?: boolean; id?: string; email?: string; name?: string; mobileNumber?: string; idNumber?: string; sex?: UserSex; profileImg?: string; bio?: string; role?: UserRole }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckUser<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; isNewUser?: boolean; email?: string; name?: string; mobileNumber?: string; idNumber?: string; profileImg?: string; bio?: string; sex?: UserSex; role?: UserRole; status?: UserStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('User', `${endpoint}/user/check`, args, options, fetch);
 }

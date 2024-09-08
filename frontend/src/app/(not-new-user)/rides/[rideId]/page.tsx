@@ -3,19 +3,19 @@ import { Ride } from "./ride";
 import { redirect } from "next/navigation";
 
 type RidesPageProps = {
-  params: { rideId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+    params: { rideId: string };
+    searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default async function RidesPage({
-  params,
-  searchParams,
+    params,
+    searchParams,
 }: RidesPageProps) {
-  const { rideId } = params;
-  const user = await getUser();
-  if (!user) {
-    redirect("/");
-  }
+    const { rideId } = params;
+    const user = await getUser();
+    if (!user) {
+        redirect("/");
+    }
 
-  return <Ride rideId={rideId} userId={user.id} />;
+    return <Ride rideId={rideId} userId={user.id} />;
 }

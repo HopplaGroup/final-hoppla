@@ -1,5 +1,5 @@
 import Image from "next/image";
-import mariami from "../../../public/assets/mari.webp";
+import mariami from "../../../public/assets/mari2.webp";
 import ilia from "../../../public/assets/ilia.webp";
 import gaioz from "../../../public/assets/gaioz.jpg";
 

@@ -44,7 +44,7 @@ export function Navbar({}: NavbarProps) {
                         <Button
                             variant="ghost"
                             className="flex items-center gap-2 font-semibold"
-                            href={"/driver/add-ride"}
+                            href={"/add-ride"}
                         >
                             <Plus />{" "}
                             <span className="hidden md:inline">

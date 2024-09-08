@@ -1,7 +1,14 @@
 export * from './user';
+export * from './user-user-favorite';
+export * from './report';
+export * from './user-notification';
+export * from './ride-cancelled-notification';
+export * from './user-favorited-notification';
 export * from './driver-verification-request';
 export * from './car';
 export * from './ride';
+export * from './ride-passenger';
+export * from './ride-rule';
 export * from './rule';
 export * from './user-review';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';

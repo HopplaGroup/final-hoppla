@@ -2,15 +2,15 @@ import { getUser } from "@/lib/utils/auth";
 import { redirect } from "next/navigation";
 
 export default async function NotNewUserLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const user = await getUser();
+    const user = await getUser();
 
-  if (user && user.isNewUser) {
-    redirect("/onboarding");
-  }
+    if (user && user.isNewUser) {
+        redirect("/onboarding");
+    }
 
-  return children;
+    return children;
 }
