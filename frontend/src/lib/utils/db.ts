@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { menv } from "./menv";
+import { sendEmailToDriverThatCarIsFull } from "../functions/emails/templates";
 
 const prismaClientSingleton = () => {
     const prismaClient = new PrismaClient();
@@ -22,6 +23,36 @@ const prismaClientSingleton = () => {
                             },
                         });
                     }
+                    return result;
+                },
+            },
+            ridePassenger: {
+                create: async ({ args, query }) => {
+                    const ride = await prismaClient.ride.findUnique({
+                        where: { id: args.data.rideId },
+                        include: {
+                            _count: { select: { ridePassengers: true } },
+                            driver: true,
+                        },
+                    });
+                    if (
+                        ride &&
+                        ride.availableSeats <= ride._count.ridePassengers
+                    ) {
+                        throw new Error(
+                            "This ride is full and cannot accept more passengers."
+                        );
+                    }
+                    const result = await query(args);
+                    if (
+                        ride &&
+                        ride.availableSeats === ride._count.ridePassengers + 1
+                    ) {
+                        await sendEmailToDriverThatCarIsFull({
+                            to: [ride.driver],
+                        });
+                    }
+
                     return result;
                 },
             },

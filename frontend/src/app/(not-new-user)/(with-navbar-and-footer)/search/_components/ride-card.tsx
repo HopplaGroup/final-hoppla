@@ -38,7 +38,9 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
 
                     <div className="absolute flex right-[24px]  top-[80px] items-center">
                         <SVGSeat className="fill-gray-500 w-8 h-8 " />
-                        <div className="">3</div>
+                        <div className="">
+                            {ride.availableSeats - ride.passengers.length}
+                        </div>
                     </div>
 
                     {/* <span className="text-gray-400">Today</span> */}
@@ -182,12 +184,10 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
                         </div>
                     </div>
                 </div>
-                {/*//! below is below line */}
                 <div className="flex w-full relative  items-center border-t pt-5 p-5">
-                    {/* {ride.car.type} */}
-                    {/* // TODO: MISHO ES QENI */}
-                    <SVGCarStandard className="fill-gray-500" />
-
+                    {ride.car.type === "STANDARD" && (
+                        <SVGCarStandard className="fill-gray-500" />
+                    )}
                     <img
                         className="w-10 bg-gray-400 h-10 rounded-full mr-4"
                         src={ride.driver.profileImg}
@@ -225,29 +225,6 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
                                     </div>
                                 </div>
                             ))}
-
-                        {/* HERE SHOULD BE CALCULATED PRICE IF IT IS BELOW <10 or something or good in average price range or greater */}
-                        {/* <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger className="flex absolute right-[32px] ">
-                  <div className=" w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-green-500 hover:bg-gray-500 transition-colors duration-300 ease-in-out"></div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="flex items-center justify-center w-2 h-2 rounded-full bg-red-500"></div>
-                    <p>High Price</p>
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="flex items-center justify-center w-2 h-2 rounded-full bg-orange-500"></div>
-                    <p>Suspicious Price</p>
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="flex items-center justify-center w-2 h-2 rounded-full bg-green-500"></div>
-                    <p>Good Price</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider> */}
                     </div>
                 </div>
             </Link>

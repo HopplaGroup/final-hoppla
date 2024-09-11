@@ -1,6 +1,6 @@
 export type RideResponse = {
     id: string;
-    availableSeats: string;
+    availableSeats: number;
     price: string;
     from: string;
     to: string;

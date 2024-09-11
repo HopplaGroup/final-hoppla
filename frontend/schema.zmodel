@@ -29,9 +29,8 @@ enum UserRole {
 }
 
 enum RideStatus {
-  PENDING
-  ONGOING
-  COMPLETED
+  ACTIVE
+  CANCELLED
 }
 
 enum DriverVerificationRequestStatus {
@@ -79,6 +78,7 @@ abstract model Base {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
+  @@deny('all', auth().status == "BLOCKED")
   @@allow('all', auth().role == "ADMIN")
 }
 
@@ -96,6 +96,7 @@ model User extends Base {
   sex                       UserSex                     @default(OTHER)
   role                      UserRole                    @default(USER)
   status                    UserStatus                  @default(ACTIVE)
+  balance                   Float                       @default(0)
 
   driverVerificationRequest DriverVerificationRequest?
 
@@ -120,9 +121,9 @@ model User extends Base {
 
   @@auth
 
-  @@allow('create', isNewUser == true && role == "USER" && status == "ACTIVE")
+  @@allow('create', isNewUser == true && role == "USER" && status == "ACTIVE" && balance == 0)
   @@allow('read', true)
-  @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false)
+  @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance)
   @@allow('delete', auth() == this)
 
   a                         UserFavoritedNotification[] @ignore
@@ -222,6 +223,8 @@ model Car extends Base {
   @@allow('delete', auth() == owner)
 }
 
+
+
 model Ride extends Base {
   availableSeats Int
 
@@ -235,13 +238,14 @@ model Ride extends Base {
   driver         User                        @relation("RideDriver", fields: [driverId], references: [id])
   driverId       String                      @default(auth().id)
   ridePassengers RidePassenger[]
+  status         RideStatus                  @default(ACTIVE)
   rideRules      RideRule[]
   car            Car                         @relation(fields: [carId], references: [id])
   carId          String
 
-  @@allow('create', auth() == driver && car.owner == auth())
+  @@allow('create', auth() == driver && car.owner == auth() && status == "ACTIVE")
   @@allow('read', true)
-  @@allow('update', auth() == driver && car.owner == auth())
+  @@allow('update', auth() == driver && car.owner == auth() && future().status == status)
   @@allow('delete', auth() == driver)
 
   a              RideCancelledNotification[] @ignore
@@ -253,8 +257,8 @@ model RidePassenger extends Base {
   ride        Ride   @relation(fields: [rideId], references: [id])
   rideId      String
 
-  // ride.availableSeats - ride.passengers.length > 0
-  @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED")
+  @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
+  && ride.departure > now())
   @@allow('read', true)
   @@allow('update', auth() == passenger && future().passenger == passenger && future().ride == ride && ride.driver != auth())
   @@allow('delete', auth() == passenger)
@@ -296,6 +300,7 @@ model UserReview extends Base {
 
   @@unique([authorId, revieweeId])
 
+  //  somoeone only can review if he/she has taken a ride with the driver
   @@allow('create', auth() == author && auth() != reviewee)
   @@allow('read', true)
   @@allow('update', false)

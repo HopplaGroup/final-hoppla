@@ -58,6 +58,10 @@ export async function GET(request: NextRequest) {
     let rulesCondition = Prisma.sql``;
 
     // skip the rides if there ones driver not verified
+    // ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
+    // time not working correctly
+    // is temstamp utc or local here ::timestamp
+
     if (rules.length > 0) {
         rulesCondition = Prisma.sql`AND (
       SELECT COUNT(*)
@@ -66,6 +70,7 @@ export async function GET(request: NextRequest) {
         AND ridetorule."ruleId" IN (${Prisma.join(rules)})
     ) = ${rules.length}`;
     }
+
     try {
         const whereClause = Prisma.sql`
        WHERE (${from}::text IS NULL OR ride."from" = ${from})
@@ -73,6 +78,8 @@ export async function GET(request: NextRequest) {
             AND (${departure}::text IS NULL OR (
             ride."departure" >= ${departure}::timestamp
             AND ride."departure" < (${departure}::timestamp + INTERVAL '1 day')))
+            AND car.status = 'APPROVED'
+            AND dr.status = 'APPROVED'
             ${rulesCondition}
             `;
 
@@ -82,6 +89,8 @@ export async function GET(request: NextRequest) {
                 SELECT ride.id
                 FROM "Ride" ride
                 LEFT JOIN "RideRule" ridetorule ON ride.id = ridetorule."rideId"
+                LEFT JOIN "Car" car ON ride."carId" = car.id
+                LEFT JOIN "DriverVerificationRequest" dr ON ride."driverId" = dr."driverId"
                 ${whereClause}
                 GROUP BY ride.id
                 HAVING (${availableSeats}::int IS NULL OR (
@@ -93,8 +102,6 @@ export async function GET(request: NextRequest) {
             ) AS filtered_rides
            `;
 
-        // retrun driver as well
-        // driver, passengers and car
         const rides = await db.$queryRaw`
           SELECT ride.id as id,
           ride."availableSeats",
@@ -137,6 +144,7 @@ export async function GET(request: NextRequest) {
           LEFT JOIN "Car" car ON ride."carId" = car.id
           LEFT JOIN "RidePassenger" ridepassenger ON ride.id = ridepassenger."rideId"
           LEFT JOIN "User" passenger ON ridepassenger."passengerId" = passenger.id
+          LEFT JOIN "DriverVerificationRequest" dr ON ride."driverId" = dr."driverId"
           ${whereClause}
           GROUP BY ride.id, driver.id, car.id
           HAVING (${availableSeats}::int IS NULL OR (
@@ -154,6 +162,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             rides: (rides as any).map((ride: any) => ({
                 ...ride,
+                departure: new Date(ride.departure),
             })),
             totalCount: (totalCount as any)[0].count.toString(),
         });

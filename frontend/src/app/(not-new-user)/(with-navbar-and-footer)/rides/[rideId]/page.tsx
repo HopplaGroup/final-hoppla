@@ -13,9 +13,6 @@ export default async function RidesPage({
 }: RidesPageProps) {
     const { rideId } = params;
     const user = await getUser();
-    if (!user) {
-        redirect("/");
-    }
 
-    return <Ride rideId={rideId} userId={user.id} />;
+    return <Ride rideId={rideId} userId={user?.id} />;
 }

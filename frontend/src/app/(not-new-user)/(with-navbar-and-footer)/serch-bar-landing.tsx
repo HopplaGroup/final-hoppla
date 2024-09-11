@@ -20,7 +20,7 @@ import { useMemo } from "react";
 export default function SearchBarLanding() {
     const [fromOsm, setFromOsm] = useQueryState("from");
     const [toOsm, setToOsm] = useQueryState("to");
-    const date = useMemo(() => new Date(), []);
+    const date = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
     const [departureDate, setDepartureDate] = useQueryState(
         "departure",
         parseAsIsoDateTime.withDefault(date)

@@ -313,6 +313,7 @@ export function CreateRideForm({
                             <FormLabel>Departure Time</FormLabel>
                             <FormControl>
                                 <DatePicker
+                                    startDate={new Date()}
                                     isHour
                                     placeholder={m.last_ornate_lion_dine()}
                                     {...field}

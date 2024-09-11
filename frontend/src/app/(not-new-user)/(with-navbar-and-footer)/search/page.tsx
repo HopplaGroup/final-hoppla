@@ -35,7 +35,10 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
         "page",
         parseAsInteger.withDefault(1)
     );
-    const defaultDeparture = useMemo(() => new Date(), []);
+    const defaultDeparture = useMemo(
+        () => new Date(new Date().setHours(0, 0, 0, 0)),
+        []
+    );
     const [departure, setDeparture] = useQueryState(
         "departure",
         parseAsIsoDateTime.withDefault(defaultDeparture)
@@ -100,8 +103,8 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     search={search}
                 />
             </div>
-            <div className="grid grid-cols-[300px,1fr] gap-5 mt-5">
-                <div>
+            <div className="grid lg:grid-cols-[300px,1fr] gap-5 mt-5">
+                <div className="w-full">
                     <SortBy search={search} />
                     <RulesFilter search={search} />
                 </div>
@@ -110,6 +113,11 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                         {data?.rides.map((ride: RideResponse) => (
                             <RideCard key={ride.id} ride={ride} />
                         ))}
+                        {data?.rides.length === 0 && (
+                            <div className="text-xl mt-4 font-semibold">
+                                No rides found
+                            </div>
+                        )}
                     </div>
                     {/* <h1>Search results</h1> */}
                     {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
