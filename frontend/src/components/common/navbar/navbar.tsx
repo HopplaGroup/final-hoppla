@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { href: "/contact", label: "Contact" },
 ];
 
+// TODO: NAVBARS RO AKLIKEB CONTEXT MENUZE, LEPTOPIS ZOMAZE, DATAMASHOBS IQET AQET
 export function Navbar({}: NavbarProps) {
   const isDriver = true;
   //TODO: Here add user info, to check if it is driver or not
@@ -54,6 +55,7 @@ export function Navbar({}: NavbarProps) {
               </Button>
             )}
             <AuthBlock />
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
