@@ -54,6 +54,10 @@ const metadata = {
                     name: "status",
                     type: "UserStatus",
                     attributes: [{ "name": "@default", "args": [] }],
+                }, balance: {
+                    name: "balance",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, driverVerificationRequest: {
                     name: "driverVerificationRequest",
                     type: "DriverVerificationRequest",
@@ -615,6 +619,10 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'ride',
+                }, status: {
+                    name: "status",
+                    type: "RideStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, rideRules: {
                     name: "rideRules",
                     type: "RideRule",
@@ -697,6 +705,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, passengerId_rideId: {
+                    name: "passengerId_rideId",
+                    fields: ["passengerId", "rideId"]
                 },
             }
             ,
@@ -747,6 +758,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, ruleId_rideId: {
+                    name: "ruleId_rideId",
+                    fields: ["ruleId", "rideId"]
                 },
             }
             ,

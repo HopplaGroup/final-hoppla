@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
     useCreateRidePassenger,
+    useDeleteRidePassenger,
     useFindManyUserReview,
     useFindUniqueRide,
     useUpdateRide,
@@ -98,6 +99,8 @@ export function Ride({
 
     const { mutate: createPassenger, isPending: isBookingRide } =
         useCreateRidePassenger();
+    const { mutate: removePassenger, isPending: isRemovingPassenger } =
+        useDeleteRidePassenger({});
 
     const router = useRouter();
 
@@ -107,6 +110,19 @@ export function Ride({
             data: {
                 passengerId: userId,
                 rideId: rideId,
+            },
+        });
+    }
+
+    function cancelRide() {
+        if (!userId) return;
+
+        removePassenger({
+            where: {
+                passengerId_rideId: {
+                    passengerId: userId,
+                    rideId: rideId,
+                },
             },
         });
     }
@@ -355,21 +371,36 @@ export function Ride({
                                             ({ passenger }) => (
                                                 <li
                                                     key={passenger.id}
-                                                    className="py-3 pr-4 flex items-center border-b border-gray-300"
+                                                    className="py-3 pr-4 flex items-center justify-between border-b border-gray-300"
                                                 >
-                                                    <img
-                                                        src={
-                                                            passenger.profileImg
-                                                        }
-                                                        className="w-10 h-10 rounded-full mr-3 object-cover"
-                                                        alt=""
-                                                    />
-                                                    <Link
-                                                        href={`/users/${passenger.id}`}
-                                                        className="text-primary font-semibold"
-                                                    >
-                                                        {passenger.name}
-                                                    </Link>
+                                                    <div>
+                                                        <img
+                                                            src={
+                                                                passenger.profileImg
+                                                            }
+                                                            className="w-10 h-10 rounded-full mr-3 object-cover"
+                                                            alt=""
+                                                        />
+                                                        <Link
+                                                            href={`/users/${passenger.id}`}
+                                                            className="text-primary font-semibold"
+                                                        >
+                                                            {passenger.name}
+                                                        </Link>
+                                                    </div>
+
+                                                    {passenger.id ===
+                                                        userId && (
+                                                        <Button
+                                                            disabled={
+                                                                isRemovingPassenger
+                                                            }
+                                                            onClick={cancelRide}
+                                                            className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                    )}
                                                 </li>
                                             )
                                         )}

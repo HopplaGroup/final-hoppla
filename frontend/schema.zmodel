@@ -196,7 +196,7 @@ model DriverVerificationRequest extends Base {
   driverId      String                          @unique @default(auth().id)
 
   @@allow('create', auth() == driver && status == "PENDING")
-  @@allow('read', auth() == driver)
+  @@allow('read', true)
   @@allow('update', auth() == driver && future().driver == driver && future().status == "PENDING")
   @@allow('delete', false)
 }
@@ -257,8 +257,9 @@ model RidePassenger extends Base {
   ride        Ride   @relation(fields: [rideId], references: [id])
   rideId      String
 
+  @@unique([passengerId, rideId])
   @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
-  && ride.departure > now())
+  && ride.departure > now() && ride.status == "ACTIVE")
   @@allow('read', true)
   @@allow('update', auth() == passenger && future().passenger == passenger && future().ride == ride && ride.driver != auth())
   @@allow('delete', auth() == passenger)
@@ -271,6 +272,7 @@ model RideRule extends Base {
   ride   Ride   @relation(fields: [rideId], references: [id])
   rideId String
 
+  @@unique([ruleId, rideId])
   @@allow('create',  auth() == ride.driver)
   @@allow('read', true)
   @@allow('update', false)
@@ -300,8 +302,7 @@ model UserReview extends Base {
 
   @@unique([authorId, revieweeId])
 
-  //  somoeone only can review if he/she has taken a ride with the driver
-  @@allow('create', auth() == author && auth() != reviewee)
+  @@allow('create', auth() == author && auth() != reviewee )
   @@allow('read', true)
   @@allow('update', false)
   @@allow('delete', auth() == author)

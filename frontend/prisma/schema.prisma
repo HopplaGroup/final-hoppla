@@ -24,9 +24,8 @@ enum UserRole {
 }
 
 enum RideStatus {
-  PENDING
-  ONGOING
-  COMPLETED
+  ACTIVE
+  CANCELLED
 }
 
 enum DriverVerificationRequestStatus {
@@ -69,11 +68,12 @@ enum ReportStatus {
   DISMISSED
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@auth
-/// @@allow('create', isNewUser == true && role == 'USER' && status == 'ACTIVE')
+/// @@allow('create', isNewUser == true && role == 'USER' && status == 'ACTIVE' && balance == 0)
 /// @@allow('read', true)
-/// @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false)
+/// @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance)
 /// @@allow('delete', auth() == this)
 model User {
   id                        String                      @id() @default(cuid())
@@ -96,6 +96,7 @@ model User {
   sex                       UserSex                     @default(OTHER)
   role                      UserRole                    @default(USER)
   status                    UserStatus                  @default(ACTIVE)
+  balance                   Float                       @default(0)
   driverVerificationRequest DriverVerificationRequest?
   ridesAsDriver             Ride[]                      @relation("RideDriver")
   passengerRides            RidePassenger[]
@@ -114,6 +115,7 @@ model User {
   @@index([status])
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() != null && userId == auth().id && favoriteId != auth().id)
 /// @@allow('read', true)
@@ -131,6 +133,7 @@ model UserUserFavorite {
   @@unique([userId, favoriteId])
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() != null && submitterId == auth().id && reportedId != auth().id && status == 'PENDING')
 /// @@allow('read', auth() == submitter)
@@ -151,6 +154,7 @@ model Report {
   status      ReportStatus @default(PENDING)
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@delegate(type)
 /// @@allow('create', false)
@@ -170,6 +174,7 @@ model UserNotification {
   delegate_aux_userFavoritedNotification UserFavoritedNotification?
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', false)
 /// @@allow('read', auth() == user)
@@ -183,6 +188,7 @@ model RideCancelledNotification {
   delegate_aux_userNotification UserNotification @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', false)
 /// @@allow('read', auth() == user)
@@ -195,9 +201,10 @@ model UserFavoritedNotification {
   delegate_aux_userNotification UserNotification @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == driver && status == 'PENDING')
-/// @@allow('read', auth() == driver)
+/// @@allow('read', true)
 /// @@allow('update', auth() == driver && future().driver == driver && future().status == 'PENDING')
 /// @@allow('delete', false)
 model DriverVerificationRequest {
@@ -213,6 +220,7 @@ model DriverVerificationRequest {
   driverId      String                          @unique()
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == owner && status == 'PENDING')
 /// @@allow('read', true)
@@ -241,10 +249,11 @@ model Car {
   rides         Ride[]
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() == driver && car.owner == auth())
+/// @@allow('create', auth() == driver && car.owner == auth() && status == 'ACTIVE')
 /// @@allow('read', true)
-/// @@allow('update', auth() == driver && car.owner == auth())
+/// @@allow('update', auth() == driver && car.owner == auth() && future().status == status)
 /// @@allow('delete', auth() == driver)
 model Ride {
   id             String                      @id() @default(cuid())
@@ -262,14 +271,16 @@ model Ride {
   driver         User                        @relation("RideDriver", fields: [driverId], references: [id])
   driverId       String
   ridePassengers RidePassenger[]
+  status         RideStatus                  @default(ACTIVE)
   rideRules      RideRule[]
   car            Car                         @relation(fields: [carId], references: [id])
   carId          String
   a              RideCancelledNotification[] @ignore()
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == 'APPROVED' && ride.car.status == 'APPROVED')
+/// @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == 'APPROVED' && ride.car.status == 'APPROVED' && ride.departure > now() && ride.status == 'ACTIVE')
 /// @@allow('read', true)
 /// @@allow('update', auth() == passenger && future().passenger == passenger && future().ride == ride && ride.driver != auth())
 /// @@allow('delete', auth() == passenger)
@@ -281,8 +292,11 @@ model RidePassenger {
   passengerId String
   ride        Ride     @relation(fields: [rideId], references: [id])
   rideId      String
+
+  @@unique([passengerId, rideId])
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == ride.driver)
 /// @@allow('read', true)
@@ -296,8 +310,11 @@ model RideRule {
   ruleId    String
   ride      Ride     @relation(fields: [rideId], references: [id])
   rideId    String
+
+  @@unique([ruleId, rideId])
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', false)
 /// @@allow('read', true)
@@ -312,6 +329,7 @@ model Rule {
   ruleRides   RideRule[]
 }
 
+/// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == author && auth() != reviewee)
 /// @@allow('read', true)

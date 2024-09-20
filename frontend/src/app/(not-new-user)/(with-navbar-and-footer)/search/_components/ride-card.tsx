@@ -27,7 +27,7 @@ const formatDuration = (seconds: number) => {
 
 const RideCard: React.FC<RideCardProps> = ({ ride }) => {
     return (
-        <div className="bg-white border-2 border-dashed rounded-md hover:border-primary">
+        <div className="bg-white hover:outline hover:outline-1 hover:outline-primary shadow-md rounded-md">
             <Link href={`/rides/${ride.id}`}>
                 <div className="p-5 relative">
                     <div className="absolute right-[24px] top-[24px] ">

@@ -85,9 +85,9 @@ export default function ContentWithReviews({
         <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr]">
             <div className="bg-gray-100 p-4 lg:p-10 lg:h-screen lg:grid lg:grid-rows-[auto,1fr]">
                 <div className="hidden lg:block">
-                    <div className="mx-2 pb-4">
+                    {/* <div className="mx-2 pb-4">
                         <Logo />
-                    </div>
+                    </div> */}
                     <GoBackButton />
                     {userId &&
                         user &&
@@ -97,9 +97,9 @@ export default function ContentWithReviews({
 
                 <div className="flex items-center justify-between lg:hidden">
                     <GoBackButton />
-                    <div className="mx-2 pb-4">
-                        <Logo />
-                    </div>
+                    {/* <div className="mx-2 pb-4">
+            <Logo />
+          </div> */}
                 </div>
                 <div className="hidden lg:block h-full overflow-auto">
                     {reviews}

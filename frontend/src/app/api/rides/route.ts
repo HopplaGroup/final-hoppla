@@ -57,11 +57,6 @@ export async function GET(request: NextRequest) {
 
     let rulesCondition = Prisma.sql``;
 
-    // skip the rides if there ones driver not verified
-    // ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
-    // time not working correctly
-    // is temstamp utc or local here ::timestamp
-
     if (rules.length > 0) {
         rulesCondition = Prisma.sql`AND (
       SELECT COUNT(*)
@@ -80,8 +75,11 @@ export async function GET(request: NextRequest) {
             AND ride."departure" < (${departure}::timestamp + INTERVAL '1 day')))
             AND car.status = 'APPROVED'
             AND dr.status = 'APPROVED'
+            AND ride.status = 'ACTIVE'
+            AND ride."departure" > NOW()
             ${rulesCondition}
             `;
+        // TODO: will this work NOW()
 
         const totalCount = await db.$queryRaw`
           SELECT COUNT(*) as count

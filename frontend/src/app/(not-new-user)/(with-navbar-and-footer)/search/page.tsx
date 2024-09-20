@@ -109,14 +109,16 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     <RulesFilter search={search} />
                 </div>
                 <div>
+                    <div className="text-xl mb-2 font-semibold">
+                        Available Rides
+                    </div>
                     <div className="grid gap-2">
-                        {data?.rides.map((ride: RideResponse) => (
-                            <RideCard key={ride.id} ride={ride} />
-                        ))}
-                        {data?.rides.length === 0 && (
-                            <div className="text-xl mt-4 font-semibold">
-                                No rides found
-                            </div>
+                        {data != null && data.rides.length > 0 ? (
+                            data.rides.map((ride: RideResponse) => (
+                                <RideCard key={ride.id} ride={ride} />
+                            ))
+                        ) : (
+                            <div>No result</div>
                         )}
                     </div>
                     {/* <h1>Search results</h1> */}

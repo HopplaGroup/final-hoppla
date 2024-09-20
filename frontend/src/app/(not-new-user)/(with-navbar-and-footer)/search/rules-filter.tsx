@@ -16,7 +16,7 @@ export default function RulesFilter({ search }: { search: any }) {
                 {rules?.map((rule) => (
                     <label
                         key={rule.id}
-                        className="min-w-[100px] max-w-[300px] inline-flex  items-center p-3 h-14 w-full bg-white border-2 border-dashed rounded-lg text-sm focus:border-primary focus:ring-primary"
+                        className="min-w-[100px] max-w-[300px] inline-flex  items-center p-3 h-14 w-full bg-white  shadow-sm rounded-lg text-sm border focus:border-primary focus:ring-primary"
                     >
                         <input
                             type="checkbox"

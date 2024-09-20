@@ -321,8 +321,9 @@ export function useSuspenseCountRide<TArgs extends Prisma.RideCountArgs, TQueryF
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Ride', `${endpoint}/ride/count`, args, options, fetch);
 }
+import type { RideStatus } from '@zenstackhq/runtime/models';
 
-export function useCheckRide<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; availableSeats?: number; from?: string; to?: string; driverId?: string; carId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRide<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; availableSeats?: number; from?: string; to?: string; driverId?: string; status?: RideStatus; carId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Ride', `${endpoint}/ride/check`, args, options, fetch);
 }

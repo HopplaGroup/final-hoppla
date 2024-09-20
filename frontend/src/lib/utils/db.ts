@@ -26,7 +26,29 @@ const prismaClientSingleton = () => {
                     return result;
                 },
             },
+            userReview: {
+                create: async ({ args, query }) => {
+                    // USER will review if had at least one ride with the driver and then create review
+                    // TODO: author.ridesAsDriver?[ridePassengers?[passengerId == auth().id]]
+                    const result = await query(args);
+                    return result;
+                },
+            },
+            ride: {
+                update: async ({ args, query }) => {
+                    // TODO:
+                    // driver can cancel ride and also admin can cancel ride
+                    // if car status updated as cancelled, send email to all passengers
+                    // we should return all money which is paid by passengers
+                    // send email to all passengers and driver that the ride is cancelled
+                },
+            },
             ridePassenger: {
+                delete: async ({ args, query }) => {
+                    // TODO:
+                    // if ride is full and one passenger cancelled, send email to driver that car is not full anymore
+                    // also the money should be returned to the passenger account balance
+                },
                 create: async ({ args, query }) => {
                     const ride = await prismaClient.ride.findUnique({
                         where: { id: args.data.rideId },

@@ -23,7 +23,7 @@ export default function SortBy({ search }: { search: any }) {
                 {sortByOptions.map((option) => (
                     <label
                         key={option.value}
-                        className="min-w-[100px] max-w-[300px] inline-flex items-center p-3 h-14 w-full bg-white border-2 border-dashed rounded-lg text-sm focus:border-primary focus:ring-primary"
+                        className="min-w-[100px] max-w-[300px] inline-flex items-center p-3 h-14 w-full bg-white border shadow-sm rounded-lg text-sm focus:border-primary focus:ring-primary"
                     >
                         <input
                             type="radio"

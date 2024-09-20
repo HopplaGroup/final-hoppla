@@ -40,6 +40,7 @@ import { Input } from "@/components/ui/input";
 import { RideCreateSchema } from "@zenstackhq/runtime/zod/models";
 import { useCreateRide } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils/cn";
 
 const PRICE_RANGE = 5;
 
@@ -59,7 +60,10 @@ export function CreateRideForm({
     const [selectedCar, setSelectedCar] = useState<Car | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
-        defaultValues: {},
+        defaultValues: {
+            distance: 0,
+            duration: 0,
+        },
     });
 
     const [bestPriceValue, setBestPriceValue] = useState<number | null>(null);
@@ -335,6 +339,13 @@ export function CreateRideForm({
                             <FormLabel>Price</FormLabel>
                             <FormControl>
                                 <NumericFormat
+                                    className={cn({
+                                        "border-red-500 border-2":
+                                            field.value >
+                                            (bestPriceValue || 0) /
+                                                (form.watch("availableSeats") ||
+                                                    1),
+                                    })}
                                     decimalScale={2}
                                     customInput={Input}
                                     value={field.value}
@@ -357,8 +368,12 @@ export function CreateRideForm({
                                 />
                             </FormControl>
                             <FormDescription>
-                                Best price is {(bestPriceValue || 0).toFixed(1)}{" "}
-                                GEL
+                                Best price is{" "}
+                                {(
+                                    (bestPriceValue || 0) /
+                                    (form.watch("availableSeats") || 1)
+                                ).toFixed(1)}{" "}
+                                GEL, But you can set your own price
                             </FormDescription>
                             <FormMessage errorMessage="Enter valid price" />
                         </FormItem>
