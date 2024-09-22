@@ -29,24 +29,20 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
-          <span className=" mt-1 text-xl">
-            {languages[currentLanguage].flagImg && (
-              <img
-                src={languages[currentLanguage].flagImg}
-                alt={languages[currentLanguage].label}
-                width={24}
-                height={24}
-                className="h-5 w-8 object-cover"
-              />
-            )}
-          </span>
+        <Button variant="ghost" className="p-0 pl-1 pr-1">
+          {languages[currentLanguage].flagImg && (
+            <img
+              src={languages[currentLanguage].flagImg}
+              alt={languages[currentLanguage].label}
+              className="h-5 md:rounded-md w-8 md:w-10 md:h-8 object-cover"
+            />
+          )}
           {/* <span className="hidden md:block">
             {languages[currentLanguage].label}
           </span> */}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent style={{ zIndex: 999 }}>
         <DropdownMenuLabel>{m.bold_bland_puffin_fetch()}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {Object.keys(languages).map((lang) => (
@@ -61,8 +57,6 @@ export function LanguageSwitcher() {
                 src={languages[lang].flagImg}
                 // @ts-ignore
                 alt={languages[lang].label}
-                width={24}
-                height={24}
                 className="h-5 w-8 object-cover mr-2"
               />{" "}
               {/* @ts-ignore */}
