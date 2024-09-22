@@ -20,6 +20,9 @@ export const menv = createEnv({
     // BACKEND
     BACKEND_URL: z.string().min(1),
     ORS_URL: z.string().min(1),
+
+    BOG_CLIENT_ID: z.string().min(1),
+    BOG_CLIENT_SECRET: z.string().min(1),
   },
 
   client: {
@@ -48,6 +51,9 @@ export const menv = createEnv({
 
     BACKEND_URL: process.env.BACKEND_URL,
     ORS_URL: process.env.ORS_URL,
+
+    BOG_CLIENT_ID: process.env.BOG_CLIENT_ID,
+    BOG_CLIENT_SECRET: process.env.BOG_CLIENT_SECRET,
   },
 
   skipValidation: true,
