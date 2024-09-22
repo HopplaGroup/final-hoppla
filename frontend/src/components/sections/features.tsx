@@ -16,10 +16,10 @@ export function Features({}: FeaturesProps) {
           getToken().then((result) => {
             if (result.success) {
               createOrder(result.access_token, {
-                callback_url: "https://localhost:3000/callback",
+                callback_url: "https://hoppla.ge/api/bog/callback",
                 external_order_id: "123",
                 redirect_urls: {
-                  fail: "https://localhost:3000/fail",
+                  fail: "https://hoppla.ge/fail",
                   success: "https://hoppla.ge/success",
                 },
                 purchase_units: {
