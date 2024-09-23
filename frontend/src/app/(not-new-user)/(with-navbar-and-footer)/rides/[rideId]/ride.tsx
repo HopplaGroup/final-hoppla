@@ -41,6 +41,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useMemo } from "react";
 import { ruleToIcon } from "../../search/_components/rule-icons";
+import bookRide from "@/lib/bog/book-ride";
 
 export function Ride({
     rideId,
@@ -104,27 +105,17 @@ export function Ride({
 
     const router = useRouter();
 
-    function bookRide() {
-        if (!userId) return;
-        createPassenger({
-            data: {
-                passengerId: userId,
-                rideId: rideId,
-            },
-        });
-    }
-
     function cancelRide() {
         if (!userId) return;
 
-        removePassenger({
-            where: {
-                passengerId_rideId: {
-                    passengerId: userId,
-                    rideId: rideId,
-                },
-            },
-        });
+        // removePassenger({
+        //     where: {
+        //         passengerId_rideId: {
+        //             passengerId: userId,
+        //             rideId: rideId,
+        //         },
+        //     },
+        // });
     }
 
     return (
@@ -448,7 +439,9 @@ export function Ride({
                                         ride.driverId !== userId && (
                                             <Button
                                                 disabled={isBookingRide}
-                                                onClick={bookRide}
+                                                onClick={() => {
+                                                    bookRide(rideId);
+                                                }}
                                                 className="w-full bg-primary text-white py-2 px-4 rounded-md"
                                             >
                                                 Book Now

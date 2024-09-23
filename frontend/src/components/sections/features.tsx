@@ -1,20 +1,11 @@
 "use client";
 import * as m from "@/paraglide/messages.js";
-import { Button } from "../ui/button";
-import bookRide from "@/lib/bog/book-ride";
 
 type FeaturesProps = {};
 
 export function Features({}: FeaturesProps) {
     return (
         <>
-            <Button
-                onClick={() => {
-                    bookRide("cm1ffsicd0002xes44pne9dmp");
-                }}
-            >
-                Wow, a button!
-            </Button>
             <div className="container mt-32">
                 <div className="max-w-2xl mx-auto text-center ">
                     <h2 className="text-4xl font-extrabold text-gray-800">

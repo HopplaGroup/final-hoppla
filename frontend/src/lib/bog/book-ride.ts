@@ -20,6 +20,10 @@ export default async function bookRide(rideId: string) {
     const orderRequest = await requestOrder({
         callback_url: CALLBACK_URL,
         external_order_id,
+        redirect_urls: {
+            success: "https://hoppla.ge/rides/" + rideId + "?success=true",
+            fail: "https://hoppla.ge/rides/" + rideId + "?success=false",
+        },
         purchase_units: {
             total_amount: FIXED_PRICE,
             basket: [

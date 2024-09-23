@@ -71,6 +71,8 @@ export async function POST(req: NextRequest) {
 
             // Attempt to add the passenger
             try {
+                // TODO: maybe save cards for future use as well
+
                 await db.ridePassenger.create({
                     data: {
                         passengerId: userId,
