@@ -699,6 +699,9 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'ride',
+                }, bogOrderId: {
+                    name: "bogOrderId",
+                    type: "String",
                 },
             }
             , uniqueConstraints: {

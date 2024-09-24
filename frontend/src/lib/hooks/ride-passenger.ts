@@ -322,7 +322,7 @@ export function useSuspenseCountRidePassenger<TArgs extends Prisma.RidePassenger
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('RidePassenger', `${endpoint}/ridePassenger/count`, args, options, fetch);
 }
 
-export function useCheckRidePassenger<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; passengerId?: string; rideId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRidePassenger<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; passengerId?: string; rideId?: string; bogOrderId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('RidePassenger', `${endpoint}/ridePassenger/check`, args, options, fetch);
 }

@@ -256,6 +256,7 @@ model RidePassenger extends Base {
   passengerId String @default(auth().id)
   ride        Ride   @relation(fields: [rideId], references: [id])
   rideId      String
+  bogOrderId  String
 
   @@unique([passengerId, rideId])
   @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"

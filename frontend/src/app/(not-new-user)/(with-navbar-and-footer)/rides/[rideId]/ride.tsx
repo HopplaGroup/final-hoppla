@@ -42,6 +42,7 @@ import { Separator } from "@/components/ui/separator";
 import { useMemo } from "react";
 import { ruleToIcon } from "../../search/_components/rule-icons";
 import bookRide from "@/lib/bog/book-ride";
+import cancelRide from "@/lib/bog/cancel-ride";
 
 export function Ride({
     rideId,
@@ -104,19 +105,6 @@ export function Ride({
         useDeleteRidePassenger({});
 
     const router = useRouter();
-
-    function cancelRide() {
-        if (!userId) return;
-
-        // removePassenger({
-        //     where: {
-        //         passengerId_rideId: {
-        //             passengerId: userId,
-        //             rideId: rideId,
-        //         },
-        //     },
-        // });
-    }
 
     return (
         <>
@@ -386,7 +374,15 @@ export function Ride({
                                                             disabled={
                                                                 isRemovingPassenger
                                                             }
-                                                            onClick={cancelRide}
+                                                            onClick={() => {
+                                                                cancelRide(
+                                                                    rideId
+                                                                ).then((re) =>
+                                                                    console.log(
+                                                                        re
+                                                                    )
+                                                                );
+                                                            }}
                                                             className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
                                                         >
                                                             Cancel
