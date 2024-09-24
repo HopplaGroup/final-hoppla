@@ -77,6 +77,7 @@ export async function POST(req: NextRequest) {
                     data: {
                         passengerId: userId,
                         rideId: rideId,
+                        bogOrderId: order_id,
                     },
                 });
 

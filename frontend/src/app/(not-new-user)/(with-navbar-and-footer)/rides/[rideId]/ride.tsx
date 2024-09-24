@@ -381,7 +381,7 @@ export function Ride({
                                                                     console.log(
                                                                         re
                                                                     )
-                                                                );
+                                                                );  
                                                             }}
                                                             className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
                                                         >
