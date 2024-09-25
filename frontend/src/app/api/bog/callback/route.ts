@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
             // Attempt to add the passenger
             try {
                 // TODO: maybe save cards for future use as well
-
+                // refundi gauketda da axla callbackma meorejerac gamoidzaxa da axla refundi
                 await db.ridePassenger.create({
                     data: {
                         passengerId: userId,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
                 console.error("Error adding passenger:", error);
 
                 // Refund the payment only if adding passenger failed
-                await refundPayment(order_id);
+                // await refundPayment(order_id); only refund if car was full and return 200
 
                 return NextResponse.json(
                     { error: "Error adding passenger. Payment refunded." },
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
             console.log(`Payment failed or incomplete for order ${order_id}`);
             return NextResponse.json(
                 { message: "Payment not completed." },
-                { status: 400 }
+                { status: 200 }
             );
         }
     } catch (error) {
