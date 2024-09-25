@@ -56,23 +56,18 @@ export async function POST(req: NextRequest) {
         if (orderStatusKey === "completed" && code === "100") {
             const [userId, rideId] = external_order_id.split("_");
 
-            // Check if the user is already added to the ride
             const existingPassenger = await db.ridePassenger.findFirst({
                 where: { passengerId: userId, rideId: rideId },
             });
 
             if (existingPassenger) {
-                // User already added, do nothing and return success
                 return NextResponse.json(
                     { message: "Passenger already added to the ride." },
                     { status: 200 }
                 );
             }
 
-            // Attempt to add the passenger
             try {
-                // TODO: maybe save cards for future use as well
-                // refundi gauketda da axla callbackma meorejerac gamoidzaxa da axla refundi
                 await db.ridePassenger.create({
                     data: {
                         passengerId: userId,
@@ -88,8 +83,17 @@ export async function POST(req: NextRequest) {
             } catch (error) {
                 console.error("Error adding passenger:", error);
 
-                // Refund the payment only if adding passenger failed
-                // await refundPayment(order_id); only refund if car was full and return 200
+                if (
+                    error instanceof Error &&
+                    error.message ===
+                        "This ride is full and cannot accept more passengers."
+                ) {
+                    await refundPayment(order_id);
+                    return NextResponse.json(
+                        { error: "Error adding passenger. Payment refunded." },
+                        { status: 200 }
+                    );
+                }
 
                 return NextResponse.json(
                     { error: "Error adding passenger. Payment refunded." },
