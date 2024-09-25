@@ -253,7 +253,7 @@ model Car {
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == driver && car.owner == auth() && status == 'ACTIVE')
 /// @@allow('read', true)
-/// @@allow('update', auth() == driver && car.owner == auth() && future().status == status)
+/// @@allow('update', auth() == driver && car.owner == auth() && status == 'ACTIVE')
 /// @@allow('delete', auth() == driver)
 model Ride {
   id             String                      @id() @default(cuid())

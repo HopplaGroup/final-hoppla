@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
   `;
 
         // @ts-ignore
-        console.log(rides);
+        // console.log(rides);
         return NextResponse.json({
             rides: (rides as any).map((ride: any) => ({
                 ...ride,
@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
             totalCount: (totalCount as any)[0].count.toString(),
         });
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         return NextResponse.json(
             { error: "Error fetching rides" },
             { status: 500 }

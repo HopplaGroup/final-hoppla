@@ -23,7 +23,7 @@ export const getUser = cache(async () => {
 
         return dbUser;
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         return null;
     }
 });
@@ -60,6 +60,6 @@ export const createUser = async () => {
             });
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
     }
 };

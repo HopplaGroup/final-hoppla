@@ -66,7 +66,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
         );
         return totalRating / userReviews.length;
     }, [userReviews]);
-    console.log(user);
+    // console.log(user);
     const isDriver = user?.driverVerificationRequest?.status === "APPROVED";
 
     return (

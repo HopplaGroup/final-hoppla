@@ -151,7 +151,7 @@ export default function AddCar() {
         },
     ];
 
-    console.log(form.getValues());
+    // console.log(form.getValues());
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>

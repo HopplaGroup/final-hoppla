@@ -50,7 +50,7 @@ export default function ContentWithReviews({
         [userReviews, loggedUser]
     );
 
-    console.log(loggedUserReview);
+    // console.log(loggedUserReview);
 
     const reviews =
         isUserReviewsLoading || !userId ? (

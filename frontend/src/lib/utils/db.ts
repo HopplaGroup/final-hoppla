@@ -69,9 +69,9 @@ const prismaClientSingleton = () => {
                             rideDetails._count.ridePassengers ===
                                 rideDetails.availableSeats
                         ) {
-                            console.log(
-                                "Ride is not full anymore, sending email..."
-                            );
+                            // console.log(
+                            //     "Ride is not full anymore, sending email..."
+                            // );
                             // TODO: send email to driver that car is not full anymore
                         }
 
