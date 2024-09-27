@@ -323,7 +323,7 @@ export function useSuspenseCountUser<TArgs extends Prisma.UserCountArgs, TQueryF
 }
 import type { UserSex, UserRole, UserStatus } from '@zenstackhq/runtime/models';
 
-export function useCheckUser<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; isNewUser?: boolean; email?: string; name?: string; mobileNumber?: string; idNumber?: string; profileImg?: string; bio?: string; sex?: UserSex; role?: UserRole; status?: UserStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckUser<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; isNewUser?: boolean; email?: string; name?: string; mobileNumber?: string; idNumber?: string; profileImg?: string; bio?: string; sex?: UserSex; role?: UserRole; status?: UserStatus; IDPhotos?: string; isUserVerified?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('User', `${endpoint}/user/check`, args, options, fetch);
 }

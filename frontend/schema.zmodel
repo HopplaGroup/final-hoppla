@@ -83,37 +83,30 @@ abstract model Base {
 }
 
 model User extends Base {
-  isNewUser                 Boolean                     @default(true)
+  isNewUser                 Boolean                    @default(true)
 
-  email                     String                      @unique @email
-  name                      String                      @length(min: 1, max: 50)
+  email                     String                     @unique @email
+  name                      String                     @length(min: 1, max: 50)
 
-  mobileNumber              String                      @length(min: 1, max: 30)
-  idNumber                  String                      @length(min: 1, max: 30)
-  birthDate                 DateTime                    @default(now())
-  profileImg                String                      @url
-  bio                       String                      @length(min: 1, max: 500)
-  sex                       UserSex                     @default(OTHER)
-  role                      UserRole                    @default(USER)
-  status                    UserStatus                  @default(ACTIVE)
-  balance                   Float                       @default(0)
+  mobileNumber              String                     @length(min: 1, max: 30)
+  idNumber                  String                     @length(min: 1, max: 30) @allow('read', auth() == this)
+  birthDate                 DateTime                   @default(now())
+  profileImg                String                     @url
+  bio                       String                     @length(min: 1, max: 500)
+  sex                       UserSex                    @default(OTHER)
+  role                      UserRole                   @default(USER)
+  status                    UserStatus                 @default(ACTIVE)
+  balance                   Float                      @default(0)
+  IDPhotos                  String[]                   @allow('read', auth() == this)
+  isUserVerified            Boolean                    @default(false)
 
   driverVerificationRequest DriverVerificationRequest?
 
-  ridesAsDriver             Ride[]                      @relation("RideDriver")
-  passengerRides            RidePassenger[]
+  ridesAsDriver             Ride[]                     @relation("RideDriver")
+  passengerRideRequests     RidePassengerRequest[]
   cars                      Car[]
-  userReviewsByMe           UserReview[]                @relation("ReviewAuthor")
-  userReviewsAboutMe        UserReview[]                @relation("ReviewReviewee")
-
-  reportsSubmitted          Report[]                    @relation("ReportSubmitter")
-  reportsReceived           Report[]                    @relation("ReportedUser")
-
-
-  notifications             UserNotification[]
-
-  myFavourites              UserUserFavorite[]          @relation("UserFavorites")
-  favouritesOfMine          UserUserFavorite[]          @relation("UserFavourites")
+  userReviewsByMe           UserReview[]               @relation("ReviewAuthor")
+  userReviewsAboutMe        UserReview[]               @relation("ReviewReviewee")
 
   @@index([email])
   @@index([role])
@@ -121,68 +114,12 @@ model User extends Base {
 
   @@auth
 
-  @@allow('create', isNewUser == true && role == "USER" && status == "ACTIVE" && balance == 0)
+  @@allow('create', isNewUser == true && role == "USER" && status == "ACTIVE" && balance == 0 && isUserVerified == false)
   @@allow('read', true)
-  @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance)
+  @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance && future().isUserVerified == isUserVerified)
   @@allow('delete', auth() == this)
 
-  a                         UserFavoritedNotification[] @ignore
-}
-
-model UserUserFavorite extends Base {
-  user       User   @relation("UserFavorites", fields: [userId], references: [id])
-  userId     String @default(auth().id)
-  favorite   User   @relation("UserFavourites", fields: [favoriteId], references: [id])
-  favoriteId String
-
-  @@unique([userId, favoriteId])
-
-  @@allow('create', auth() != null && userId == auth().id && favoriteId != auth().id)
-  @@allow('read', true)
-  @@allow('update', false)
-  @@allow('delete', auth() == user)
-}
-
-model Report extends Base {
-  submitterId String       @default(auth().id)
-  submitter   User         @relation("ReportSubmitter", fields: [submitterId], references: [id])
-  reportedId  String
-  reported    User         @relation("ReportedUser", fields: [reportedId], references: [id])
-  reason      String       @length(min: 3, max: 500)
-  description String       @length(min: 3, max: 500)
-  status      ReportStatus @default(PENDING)
-
-  @@allow('create', auth() != null && submitterId == auth().id && reportedId != auth().id && status == "PENDING")
-  @@allow('read', auth() == submitter)
-  @@allow('update', auth() == submitter && status == "PENDING")
-  @@allow('delete', auth() == submitter)
-}
-
-
-model UserNotification extends Base {
-  readAt DateTime? @allow('update', auth() == user && readAt == null) // Does this work when update is called 
-  userId String
-  user   User      @relation(fields: [userId], references: [id])
-  type   String
-
-  @@delegate(type)
-
-  @@allow('create', false)
-  @@allow('read', auth() == user)
-  @@allow('update', false)
-  @@allow('delete', false)
-  // QUESTION: Does this read policy also works for inhereted models?
-}
-
-model RideCancelledNotification extends UserNotification {
-  reason String
-  rideId String
-  ride   Ride   @relation(fields: [rideId], references: [id])
-}
-
-model UserFavoritedNotification extends UserNotification {
-  favouritedBy   User   @relation(fields: [favouritedById], references: [id], onDelete: Cascade)
-  favouritedById String
+  b                         RideStartedConfirmation[]  @ignore
 }
 
 model DriverVerificationRequest extends Base {
@@ -208,7 +145,7 @@ model Car extends Base {
   plate         String      @regex('^[A-Z]{2}-\\d{3}-[A-Z]{2}$')
   mark          String      @length(min: 1, max: 50)
 
-  capacity      Int
+  capacity      Int         @gte(1)
   status        CarStatus   @default(PENDING)
   photos        String[]    @length(min: 1)
   licensePhotos String[]    @length(min: 2, max: 2)
@@ -219,51 +156,75 @@ model Car extends Base {
 
   @@allow('create', auth() == owner && status == "PENDING")
   @@allow('read', true)
-  @@allow('update', auth() == owner && future().owner == owner && future().status == "PENDING")
+  @@allow('update', false)
   @@allow('delete', auth() == owner)
 }
 
 
 
 model Ride extends Base {
-  availableSeats Int
+  availableSeats        Int
 
-  price          Float
-  from           String                      @length(min: 1, max: 50)
-  to             String                      @length(min: 1, max: 50)
-  departure      DateTime
-  distance       Float
-  duration       Float
+  price                 Float
+  from                  String                    @length(min: 1, max: 50)
+  to                    String                    @length(min: 1, max: 50)
+  departure             DateTime
+  distance              Float
+  duration              Float
 
-  driver         User                        @relation("RideDriver", fields: [driverId], references: [id])
-  driverId       String                      @default(auth().id)
-  ridePassengers RidePassenger[]
-  status         RideStatus                  @default(ACTIVE)
-  rideRules      RideRule[]
-  car            Car                         @relation(fields: [carId], references: [id])
-  carId          String
+  driver                User                      @relation("RideDriver", fields: [driverId], references: [id])
+  driverId              String                    @default(auth().id)
+  ridePassengerRequests RidePassengerRequest[]
+  status                RideStatus                @default(ACTIVE)
+  rideRules             RideRule[]
+  car                   Car                       @relation(fields: [carId], references: [id])
+  carId                 String
 
-  @@allow('create', auth() == driver && car.owner == auth() && status == "ACTIVE")
-  @@allow('read', true)
-  @@allow('update', auth() == driver && car.owner == auth() && status == "ACTIVE")
-  @@allow('delete', auth() == driver)
+  // @@allow('create', auth() == driver && car.owner == auth() && status == "ACTIVE")
+  // @@allow('read', true)
+  // @@allow('update', auth() == driver && car.owner == auth() && status != "CANCELLED" && future().driver == driver && future().car == car)
+  // @@allow('delete', auth() == driver)
+  @@allow('all', true)
 
-  a              RideCancelledNotification[] @ignore
+  b                     RideStartedConfirmation[] @ignore
 }
 
-model RidePassenger extends Base {
-  passenger   User   @relation(fields: [passengerId], references: [id])
-  passengerId String @default(auth().id)
-  ride        Ride   @relation(fields: [rideId], references: [id])
+enum RidePassengerRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+model RidePassengerRequest extends Base {
+  passenger   User                       @relation(fields: [passengerId], references: [id])
+  passengerId String                     @default(auth().id)
+  ride        Ride                       @relation(fields: [rideId], references: [id])
   rideId      String
   bogOrderId  String
-
+  status      RidePassengerRequestStatus @default(PENDING)
+  // preferredPrice Float
+  // description   String                     @length(min: 1, max: 500)
   @@unique([passengerId, rideId])
-  @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
-  && ride.departure > now() && ride.status == "ACTIVE")
+  // @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
+  // && ride.departure > now() && ride.status == "ACTIVE" && status == "PENDING")
+  // @@allow('update', ride.driver == auth() && status == "PENDING" && future().passenger == passenger && future().ride == ride)
+  // @@allow('delete', auth() == passenger)
+  @@allow('all', true)
+}
+
+model RideStartedConfirmation extends Base {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @default(auth().id)
+  ride   Ride   @relation(fields: [rideId], references: [id])
+  rideId String
+
+  @@unique([rideId, userId])
+  // @@allow('create', auth() == user && (user == ride.driver || ride.ridePassengers?[passengerId == auth().id] && ride.departure < now()) && ride.status == "ACTIVE")
+  @@allow('create', true)
   @@allow('read', true)
-  @@allow('update', auth() == passenger && future().passenger == passenger && future().ride == ride && ride.driver != auth())
-  @@allow('delete', auth() == passenger)
+  @@allow('update', false)
+  @@allow('delete', false)
 }
 
 
@@ -293,7 +254,7 @@ model Rule extends Base {
 
 model UserReview extends Base {
   comment    String @length(min: 1, max: 500)
-  rating     Float
+  rating     Float  @gte(0) @lte(5)
 
   author     User   @relation("ReviewAuthor", fields: [authorId], references: [id])
   authorId   String @default(auth().id)

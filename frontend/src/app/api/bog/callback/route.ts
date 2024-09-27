@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { PaymentDetailsResponse } from "@/lib/bog/types";
 import refundPayment from "@/lib/bog/refund-payment";
+import { RIDE_PRICE } from "@/lib/bog/constants";
 
 const PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu4RUyAw3+CdkS3ZNILQh
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
         if (orderStatusKey === "completed" && code === "100") {
             const [userId, rideId] = external_order_id.split("_");
 
-            const existingPassenger = await db.ridePassenger.findFirst({
+            const existingPassenger = await db.ridePassengerRequest.findFirst({
                 where: { passengerId: userId, rideId: rideId },
             });
 
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
             }
 
             try {
-                await db.ridePassenger.create({
+                await db.ridePassengerRequest.create({
                     data: {
                         passengerId: userId,
                         rideId: rideId,
@@ -81,14 +82,21 @@ export async function POST(req: NextRequest) {
                     { status: 200 }
                 );
             } catch (error) {
-                console.error("Error adding passenger:", error);
+                // console.error("Error adding passenger:", error);
 
                 if (
                     error instanceof Error &&
                     error.message ===
                         "This ride is full and cannot accept more passengers."
                 ) {
-                    await refundPayment(order_id);
+                    await db.user.update({
+                        where: { id: userId },
+                        data: {
+                            balance: {
+                                increment: RIDE_PRICE,
+                            },
+                        },
+                    });
                     return NextResponse.json(
                         { error: "Error adding passenger. Payment refunded." },
                         { status: 200 }

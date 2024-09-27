@@ -1,32 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { menv } from "./menv";
 import { sendEmailToDriverThatCarIsFull } from "../functions/emails/templates";
-import refundPayment from "../bog/refund-payment";
+import { REFUND_PRICE } from "../bog/constants";
 
 const prismaClientSingleton = () => {
     const prismaClient = new PrismaClient();
 
     return prismaClient.$extends({
         query: {
-            // userUserFavorite: {
-            //     create: async ({ args, query }) => {
-            //         const result = await query(args);
-            //         if (result.userId && result.favoriteId) {
-            //             await prismaClient.userNotification.create({
-            //                 data: {
-            //                     userId: result.favoriteId,
-            //                     delegate_aux_userFavoritedNotification: {
-            //                         create: {
-            //                             favouritedById: result.userId,
-            //                         },
-            //                     },
-            //                     type: "UserFavoritedNotification",
-            //                 },
-            //             });
-            //         }
-            //         return result;
-            //     },
-            // },
             userReview: {
                 create: async ({ args, query }) => {
                     // USER will review if had at least one ride with the driver and then create review
@@ -46,68 +27,80 @@ const prismaClientSingleton = () => {
                     // send email to all passengers and driver that the ride is cancelled
                 },
             },
-            ridePassenger: {
+            ridePassengerRequest: {
                 // Do i need this delete function? when ride deleted? or ride cannot be deleted just canceled?
                 // When ride deleted, does these delete function called as well?
                 delete: async ({ args, query }) => {
                     return await prismaClient.$transaction(async (trx) => {
-                        const deleteResult = await trx.ridePassenger.delete(
-                            args
-                        );
+                        const deleteResult =
+                            await trx.ridePassengerRequest.delete(args);
 
                         const rideDetails = await trx.ride.findUnique({
                             where: {
                                 id: deleteResult.rideId,
                             },
                             include: {
-                                _count: { select: { ridePassengers: true } },
+                                _count: {
+                                    select: { ridePassengerRequests: true },
+                                },
                             },
                         });
 
                         if (
                             rideDetails &&
-                            rideDetails._count.ridePassengers ===
-                                rideDetails.availableSeats
+                            rideDetails._count.ridePassengerRequests ===
+                                rideDetails.availableSeats - 1
                         ) {
-                            // console.log(
-                            //     "Ride is not full anymore, sending email..."
-                            // );
                             // TODO: send email to driver that car is not full anymore
                         }
 
-                        const REFUND_PRICE = 0.1;
-                        const refundResponse = await refundPayment(
-                            deleteResult.bogOrderId,
-                            REFUND_PRICE
-                        );
-
-                        if (!refundResponse.success) {
-                            throw new Error("Refund failed");
-                        }
+                        await trx.user.update({
+                            where: { id: deleteResult.passengerId },
+                            data: {
+                                balance: {
+                                    increment: REFUND_PRICE,
+                                },
+                            },
+                        });
 
                         return deleteResult;
                     });
                 },
                 create: async ({ args, query }) => {
+                    // When passenger create ridePassenger, decrement balance from passenger in transaction and add intro passenger if balance of passenger is greater than the price of the ride
                     const ride = await prismaClient.ride.findUnique({
                         where: { id: args.data.rideId },
                         include: {
-                            _count: { select: { ridePassengers: true } },
+                            _count: { select: { ridePassengerRequests: true } },
                             driver: true,
                         },
                     });
                     if (
                         ride &&
-                        ride.availableSeats <= ride._count.ridePassengers
+                        ride.availableSeats <= ride._count.ridePassengerRequests
                     ) {
                         throw new Error(
                             "This ride is full and cannot accept more passengers."
                         );
                     }
                     const result = await query(args);
+                    const passenger = await prismaClient.user.findUnique({
+                        where: { id: args.data.passengerId },
+                    });
+                    if (passenger && passenger.balance >= REFUND_PRICE) {
+                        await prismaClient.user.update({
+                            where: { id: args.data.passengerId },
+                            data: {
+                                balance: {
+                                    decrement: REFUND_PRICE,
+                                },
+                            },
+                        });
+                    }
                     if (
                         ride &&
-                        ride.availableSeats === ride._count.ridePassengers + 1
+                        ride.availableSeats ===
+                            ride._count.ridePassengerRequests + 1
                     ) {
                         await sendEmailToDriverThatCarIsFull({
                             to: [ride.driver],

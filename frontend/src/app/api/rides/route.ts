@@ -92,13 +92,14 @@ export async function GET(request: NextRequest) {
                 ${whereClause}
                 GROUP BY ride.id
                 HAVING (${availableSeats}::int IS NULL OR (
-                  ride."availableSeats" - (SELECT COUNT(ridepassenger_sub."passengerId")
-                                     FROM "RidePassenger" ridepassenger_sub
-                                     WHERE ride.id = ridepassenger_sub."rideId"
+                  ride."availableSeats" - (SELECT COUNT(ridepassengerrequest_sub."passengerId")
+                                     FROM "RidePassengerRequest" ridepassengerrequest_sub
+                                     WHERE ride.id = ridepassengerrequest_sub."rideId" AND ridepassengerrequest_sub.status = 'ACCEPTED'
                                     ) >= ${availableSeats}::int
                 ))
             ) AS filtered_rides
            `;
+        //    TODO: and avaialble seats that remaining should be more than zero
 
         const rides = await db.$queryRaw`
           SELECT ride.id as id,
@@ -140,15 +141,15 @@ export async function GET(request: NextRequest) {
           LEFT JOIN "Rule" rule ON ridetorule."ruleId" = rule.id
           LEFT JOIN "User" driver ON ride."driverId" = driver.id
           LEFT JOIN "Car" car ON ride."carId" = car.id
-          LEFT JOIN "RidePassenger" ridepassenger ON ride.id = ridepassenger."rideId"
-          LEFT JOIN "User" passenger ON ridepassenger."passengerId" = passenger.id
+          LEFT JOIN "RidePassengerRequest" ridepassengerrequest ON ride.id = ridepassengerrequest."rideId"
+          LEFT JOIN "User" passenger ON ridepassengerrequest."passengerId" = passenger.id
           LEFT JOIN "DriverVerificationRequest" dr ON ride."driverId" = dr."driverId"
           ${whereClause}
           GROUP BY ride.id, driver.id, car.id
           HAVING (${availableSeats}::int IS NULL OR (
-                  ride."availableSeats" -(SELECT COUNT(ridepassenger_sub."passengerId")
-                                     FROM "RidePassenger" ridepassenger_sub
-                                     WHERE ride.id = ridepassenger_sub."rideId"
+                  ride."availableSeats" -(SELECT COUNT(ridepassengerrequest_sub."passengerId")
+                                     FROM "RidePassengerRequest" ridepassengerrequest_sub
+                                     WHERE ride.id = ridepassengerrequest_sub."rideId" AND ridepassengerrequest_sub.status = 'ACCEPTED'
                                     ) >= ${availableSeats}::int
           ))
           ORDER BY ${orderByClause}

@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-    useCreateRidePassenger,
-    useDeleteRidePassenger,
+    useCreateRidePassengerRequest,
+    useCreateRideStartedConfirmation,
+    useDeleteRidePassengerRequest,
     useFindManyUserReview,
     useFindUniqueRide,
-    useUpdateRide,
+    useFindUniqueRideStartedConfirmation,
 } from "@/lib/hooks";
 import {
     Bookmark,
@@ -31,17 +32,11 @@ import { languageTag } from "@/paraglide/runtime";
 import PLACES from "@/lib/constants/places";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ContentWithReviews from "../../users/[userId]/content-with-reviews";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { useMemo } from "react";
 import { ruleToIcon } from "../../search/_components/rule-icons";
 import bookRide from "@/lib/bog/book-ride";
+import { cn } from "@/lib/utils/cn";
 
 export function Ride({
     rideId,
@@ -56,7 +51,7 @@ export function Ride({
         },
         include: {
             driver: true,
-            ridePassengers: {
+            ridePassengerRequests: {
                 include: {
                     passenger: true,
                 },
@@ -70,23 +65,37 @@ export function Ride({
         },
     });
 
-    const { data: userReviews, isLoading: isUserReviewsLoading } =
-        useFindManyUserReview(
+    const { data: rideStartedConfirmation } =
+        useFindUniqueRideStartedConfirmation(
             {
                 where: {
-                    revieweeId: ride?.driverId,
-                },
-                include: {
-                    author: true,
-                },
-                orderBy: {
-                    createdAt: "desc",
+                    rideId_userId: {
+                        rideId,
+                        userId: userId || "",
+                    },
                 },
             },
             {
-                enabled: !!ride?.driverId,
+                enabled: !!userId,
             }
         );
+
+    const { data: userReviews } = useFindManyUserReview(
+        {
+            where: {
+                revieweeId: ride?.driverId,
+            },
+            include: {
+                author: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        },
+        {
+            enabled: !!ride?.driverId,
+        }
+    );
 
     const averageUserRating = useMemo(() => {
         if (!userReviews || userReviews.length === 0) return 0;
@@ -98,24 +107,15 @@ export function Ride({
         return totalRating / userReviews.length;
     }, [userReviews]);
 
-    const { mutate: createPassenger, isPending: isBookingRide } =
-        useCreateRidePassenger();
-    const { mutate: removePassenger, isPending: isRemovingPassenger } =
-        useDeleteRidePassenger({});
+    const {
+        mutate: createRideStartedConfirmation,
+        isPending: isRideStartedConfirming,
+    } = useCreateRideStartedConfirmation();
 
-    const router = useRouter();
-
-    function cancelRide() {
-        if (!userId) return;
-        removePassenger({
-            where: {
-                passengerId_rideId: {
-                    passengerId: userId,
-                    rideId,
-                },
-            },
-        });
-    }
+    const {
+        mutate: removePassengerRequest,
+        isPending: isRemovingPassengerRequest,
+    } = useDeleteRidePassengerRequest({});
 
     return (
         <>
@@ -167,8 +167,6 @@ export function Ride({
 
                         <Separator className="mt-4" />
                         <h2 className="mt-2 font-semibold text-xl mb-2">
-                            {/* 28 April */}
-                            {/* get the only day here */}
                             {format(ride.departure, "d MMMM", {
                                 // locale: languageTag(),
                             })}
@@ -326,8 +324,6 @@ export function Ride({
                                 </dl>
                             </div>
                         </div>
-
-                        {/* RIDE */}
                     </div>
 
                     <div className="p-4 md:pl-28 md:pr-28 ">
@@ -339,13 +335,18 @@ export function Ride({
                                 <div className="pt-5 px-5">
                                     <h2 className="text-lg mt-0 mb-1 text-center">
                                         {ride.availableSeats -
-                                            ride.ridePassengers.length}{" "}
+                                            ride.ridePassengerRequests.filter(
+                                                (r) => r.status === "ACCEPTED"
+                                            ).length}{" "}
                                         seats available
                                     </h2>
                                     <ul className="list-none mb-0">
                                         {new Array(
                                             ride.availableSeats -
-                                                ride.ridePassengers.length
+                                                ride.ridePassengerRequests.filter(
+                                                    (r) =>
+                                                        r.status === "ACCEPTED"
+                                                ).length
                                         )
                                             .fill(null)
                                             .map((_, index) => (
@@ -357,11 +358,24 @@ export function Ride({
                                                     You?
                                                 </li>
                                             ))}
-                                        {ride.ridePassengers.map(
-                                            ({ passenger }) => (
+                                        {ride.ridePassengerRequests
+                                            .filter(
+                                                (r) => r.status === "ACCEPTED"
+                                            )
+                                            .map(({ passenger, status }) => (
                                                 <li
                                                     key={passenger.id}
-                                                    className="py-3 pr-4 flex items-center justify-between border-b border-gray-300"
+                                                    className={cn(
+                                                        "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
+                                                        {
+                                                            "bg-green-300":
+                                                                userId ===
+                                                                passenger.id,
+                                                            "bg-red-300":
+                                                                status ===
+                                                                "REJECTED",
+                                                        }
+                                                    )}
                                                 >
                                                     <div>
                                                         <img
@@ -379,21 +393,35 @@ export function Ride({
                                                         </Link>
                                                     </div>
 
-                                                    {passenger.id ===
-                                                        userId && (
-                                                        <Button
-                                                            disabled={
-                                                                isRemovingPassenger
-                                                            }
-                                                            onClick={cancelRide}
-                                                            className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
-                                                        >
-                                                            Cancel
-                                                        </Button>
-                                                    )}
+                                                    {passenger.id === userId &&
+                                                        ride.departure >
+                                                            new Date() &&
+                                                        !rideStartedConfirmation && (
+                                                            <Button
+                                                                disabled={
+                                                                    isRemovingPassengerRequest
+                                                                }
+                                                                onClick={() => {
+                                                                    removePassengerRequest(
+                                                                        {
+                                                                            where: {
+                                                                                passengerId_rideId:
+                                                                                    {
+                                                                                        passengerId:
+                                                                                            userId,
+                                                                                        rideId,
+                                                                                    },
+                                                                            },
+                                                                        }
+                                                                    );
+                                                                }}
+                                                                className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                        )}
                                                 </li>
-                                            )
-                                        )}
+                                            ))}
                                     </ul>
                                 </div>
                                 <div className="p-4">
@@ -410,37 +438,20 @@ export function Ride({
                                             </span>{" "}
                                         </div>
                                     </div>
-                                    {/* <pre>
-                                        {JSON.stringify(
-                                            {
-                                                userId,
-                                                r: ride.ridePassengers.length,
-                                                rr: ride.availableSeats,
-                                                am: ride.ridePassengers.find(
-                                                    ({ passengerId }) =>
-                                                        passengerId === userId
-                                                ),
-                                                d: ride.departure,
-                                                n: new Date(),
-                                            },
-                                            null,
-                                            2
-                                        )}
-                                    </pre> */}
-                                    {userId &&
-                                        ride.ridePassengers.length <
-                                            ride.availableSeats &&
-                                        !ride.ridePassengers.find(
-                                            ({ passengerId }) =>
-                                                passengerId === userId
+
+                                    {ride.departure > new Date() &&
+                                        userId &&
+                                        ride.driverId !== userId &&
+                                        !rideStartedConfirmation &&
+                                        !ride.ridePassengerRequests.find(
+                                            (r) => r.passengerId === userId
                                         ) &&
-                                        ride.departure > new Date() &&
-                                        ride.driverId !== userId && (
+                                        ride.ridePassengerRequests.filter(
+                                            (r) => r.status === "ACCEPTED"
+                                        ).length < ride.availableSeats && (
                                             <Button
-                                                disabled={isBookingRide}
                                                 onClick={() => {
                                                     bookRide(rideId);
-                                                    // No better way to do this?
                                                 }}
                                                 className="w-full bg-primary text-white py-2 px-4 rounded-md"
                                             >
@@ -478,383 +489,3 @@ function RideSkeleton() {
         </div>
     );
 }
-
-// "use client";
-
-// import { Button } from "@/components/ui/button";
-// import {
-//     useCreateRidePassenger,
-//     useFindUniqueRide,
-//     useUpdateRide,
-// } from "@/lib/hooks";
-// import {
-//     Bookmark,
-//     Calendar,
-//     CarTaxiFront,
-//     Check,
-//     ChevronDown,
-//     CircleDot,
-//     Clock,
-//     DollarSign,
-//     MapPin,
-//     PanelTopDashed,
-//     Type,
-//     User,
-//     Users,
-//     Image,
-//     FlagTriangleRight,
-//     CheckCheck,
-// } from "lucide-react";
-// import { format } from "date-fns";
-// import { languageTag } from "@/paraglide/runtime";
-// import PLACES from "@/lib/constants/places";
-// import { useRouter } from "next/navigation";
-// import Link from "next/link";
-// import ContentWithReviews from "../../users/[userId]/content-with-reviews";
-// import {
-//     Accordion,
-//     AccordionContent,
-//     AccordionItem,
-//     AccordionTrigger,
-// } from "@/components/ui/accordion";
-
-// export function Ride({
-//     rideId,
-//     userId,
-// }: {
-//     rideId: string;
-//     userId: string | undefined;
-// }) {
-//     const { data: ride, isPending } = useFindUniqueRide({
-//         where: {
-//             id: rideId,
-//         },
-//         include: {
-//             driver: true,
-//             ridePassengers: {
-//                 include: {
-//                     passenger: true,
-//                 },
-//             },
-//             car: true,
-//             rideRules: {
-//                 include: {
-//                     rule: true,
-//                 },
-//             },
-//         },
-//     });
-
-//     // const { mutate, isPending: isBookingRide } = useUpdateRide();
-//     const { mutate: createPassenger, isPending: isBookingRide } =
-//         useCreateRidePassenger();
-//     const router = useRouter();
-
-//     function bookRide() {
-//         createPassenger({
-//             data: {
-//                 passengerId: userId,
-//                 rideId: rideId,
-//             },
-//         });
-//     }
-
-//     return (
-//         <ContentWithReviews userId={ride?.driver.id}>
-//             {isPending ? (
-//                 <RideSkeleton />
-//             ) : ride ? (
-//                 <>
-//                     <div className="flex items-center justify-between">
-//                         <div className="bg-primary/10 size-16 flex items-center justify-center rounded-full">
-//                             <Check
-//                                 className="text-primary font-bold"
-//                                 size={24}
-//                             />
-//                         </div>
-//                     </div>
-//                     <h3 className="mt-5 font-semibold">Ride booking</h3>
-//                     <h2 className="mt-2 font-bold text-3xl">
-//                         {/* 28 April */}
-//                         {/* get the only day here */}
-//                         {format(ride.departure, "d MMMM", {
-//                             // locale: languageTag(),
-//                         })}
-//                     </h2>
-//                     <Accordion
-//                         defaultValue={["ride", "car"]}
-//                         className="mt-4"
-//                         type="multiple"
-//                     >
-//                         <AccordionItem value="ride" className="mb-4">
-//                             <AccordionTrigger className="bg-white p-4 rounded-md">
-//                                 <span className="font-semibold">
-//                                     Details about the ride
-//                                 </span>
-//                             </AccordionTrigger>
-//                             <AccordionContent>
-//                                 <div className="max-w-md mt-5">
-//                                     <dl className="-my-3 divide-y divide-gray-100 text-sm">
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <CircleDot size={22} />
-//                                                 From
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {
-//                                                     PLACES.find(
-//                                                         (place) =>
-//                                                             place.osm ===
-//                                                             ride.from
-//                                                     )?.name[languageTag()]
-//                                                 }
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <MapPin size={22} />
-//                                                 To
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {" "}
-//                                                 {
-//                                                     PLACES.find(
-//                                                         (place) =>
-//                                                             place.osm ===
-//                                                             ride.to
-//                                                     )?.name[languageTag()]
-//                                                 }
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900  flex items-center gap-2">
-//                                                 <DollarSign size={22} /> Price
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.price} GEL
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900  flex items-start gap-2">
-//                                                 <CheckCheck size={22} /> Rules
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.rideRules.map(
-//                                                     ({ rule }) => (
-//                                                         <div key={rule.id}>
-//                                                             {rule.description}
-//                                                         </div>
-//                                                     )
-//                                                 )}
-//                                             </dd>
-//                                         </div>
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900  flex items-center gap-2">
-//                                                 <Clock size={22} /> Departure
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {/* 28 April 2022, 10:00 */}
-//                                                 {format(
-//                                                     ride.departure,
-//                                                     "d MMMM yyyy, HH:mm",
-//                                                     {
-//                                                         // locale: languageTag(),
-//                                                     }
-//                                                 )}
-//                                             </dd>
-//                                         </div>
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <User size={22} /> Driver
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 <Link
-//                                                     href={`/users/${ride.driver.id}`}
-//                                                     className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-2 pr-3 py-2 font-semibold"
-//                                                 >
-//                                                     <img
-//                                                         src={
-//                                                             ride.driver
-//                                                                 .profileImg
-//                                                         }
-//                                                         // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
-//                                                         className="size-6 rounded-full object-cover"
-//                                                         alt=""
-//                                                     />
-//                                                     <span>
-//                                                         {ride.driver.name}
-//                                                     </span>
-//                                                 </Link>
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <Users size={22} /> Passengers
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.ridePassengers.length >
-//                                                 0 ? (
-//                                                     <div className="inline-flex -space-x-1 overflow-hidden bg-primary/10 text-primary rounded-full px-2 py-2 font-semibold">
-//                                                         {ride.ridePassengers.map(
-//                                                             ({ passenger }) => (
-//                                                                 <Link
-//                                                                     href={
-//                                                                         "/users/" +
-//                                                                         passenger.id
-//                                                                     }
-//                                                                     key={
-//                                                                         passenger.id
-//                                                                     }
-//                                                                 >
-//                                                                     <img
-//                                                                         src={
-//                                                                             passenger.profileImg
-//                                                                         }
-//                                                                         // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
-//                                                                         className="size-6 border-background border-2 rounded-full object-cover"
-//                                                                         alt=""
-//                                                                     />
-//                                                                 </Link>
-//                                                             )
-//                                                         )}
-//                                                     </div>
-//                                                 ) : (
-//                                                     "No passengers yet"
-//                                                 )}
-//                                             </dd>
-//                                         </div>
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900">
-//                                                 {userId &&
-//                                                     ride.ridePassengers.length <
-//                                                         ride.availableSeats &&
-//                                                     !ride.ridePassengers.find(
-//                                                         ({ passengerId }) =>
-//                                                             passengerId ===
-//                                                             userId
-//                                                     ) &&
-//                                                     ride.driverId !==
-//                                                         userId && (
-//                                                         <Button
-//                                                             disabled={
-//                                                                 isBookingRide
-//                                                             }
-//                                                             onClick={bookRide}
-//                                                         >
-//                                                             Book Ride
-//                                                         </Button>
-//                                                     )}
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 There is still{" "}
-//                                                 {ride.availableSeats -
-//                                                     ride.ridePassengers
-//                                                         .length}{" "}
-//                                                 places remaining
-//                                             </dd>
-//                                         </div>
-//                                     </dl>
-//                                 </div>
-//                             </AccordionContent>
-//                         </AccordionItem>
-//                         <AccordionItem value="car">
-//                             <AccordionTrigger className="bg-white p-4 rounded-md">
-//                                 <span className="font-semibold">
-//                                     Car Details
-//                                 </span>
-//                             </AccordionTrigger>
-//                             <AccordionContent>
-//                                 <div className="max-w-md mt-5">
-//                                     <dl className="-my-3 divide-y divide-gray-100 text-sm">
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <Type size={22} />
-//                                                 Type
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.car.type}
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-center gap-2">
-//                                                 <PanelTopDashed size={22} />
-//                                                 Plate
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.car.plate}
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900  flex items-center gap-2">
-//                                                 <CarTaxiFront size={22} /> Mark
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.car.mark}
-//                                             </dd>
-//                                         </div>
-
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900  flex items-center gap-2">
-//                                                 <Users size={22} /> Capacity
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 {ride.car.capacity}
-//                                             </dd>
-//                                         </div>
-//                                         <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-//                                             <dt className="font-medium text-gray-900 flex items-start gap-2">
-//                                                 <Image size={22} /> Photo
-//                                             </dt>
-//                                             <dd className="text-gray-700 sm:col-span-2">
-//                                                 <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-md px-2 py-2 font-semibold">
-//                                                     <img
-//                                                         src={
-//                                                             ride.car
-//                                                                 .photos?.[0] ||
-//                                                             ""
-//                                                         }
-//                                                         // src="https://yt3.googleusercontent.com/-0Rgm4PydVPspcst43ybfo4us_zM6_4ZCdrmI5LB4Dxq6MJNg9oZ2u7mq7YDwmc8WIrVU-m0xTQ=s900-c-k-c0x00ffffff-no-rj"
-//                                                         className="size-40 rounded-md object-cover"
-//                                                         alt=""
-//                                                     />
-//                                                 </div>
-//                                             </dd>
-//                                         </div>
-//                                     </dl>
-//                                 </div>
-//                             </AccordionContent>
-//                         </AccordionItem>
-//                     </Accordion>
-//                 </>
-//             ) : (
-//                 "Ride not exists"
-//             )}
-//         </ContentWithReviews>
-//     );
-// }
-
-// function RideSkeleton() {
-//     return (
-//         <div className="animate-pulse">
-//             <div className="h-8 w-32 bg-gray-200 rounded mb-4"></div>
-//             <div className="h-10 w-64 bg-gray-200 rounded mb-4"></div>
-//             <div className="flex gap-4 mb-6">
-//                 <div className="h-6 w-40 bg-gray-200 rounded"></div>
-//                 <div className="h-6 w-40 bg-gray-200 rounded"></div>
-//             </div>
-//             <div className="h-10 w-full bg-gray-200 rounded mb-6"></div>
-//             {[...Array(7)].map((_, index) => (
-//                 <div key={index} className="flex gap-4 mb-4">
-//                     <div className="h-6 w-1/4 bg-gray-200 rounded"></div>
-//                     <div className="h-6 w-2/3 bg-gray-200 rounded"></div>
-//                 </div>
-//             ))}
-//         </div>
-//     );
-// }

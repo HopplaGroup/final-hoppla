@@ -68,137 +68,57 @@ enum ReportStatus {
   DISMISSED
 }
 
+enum RidePassengerRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
 /// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@auth
-/// @@allow('create', isNewUser == true && role == 'USER' && status == 'ACTIVE' && balance == 0)
+/// @@allow('create', isNewUser == true && role == 'USER' && status == 'ACTIVE' && balance == 0 && isUserVerified == false)
 /// @@allow('read', true)
-/// @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance)
+/// @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance && future().isUserVerified == isUserVerified)
 /// @@allow('delete', auth() == this)
 model User {
-  id                        String                      @id() @default(cuid())
-  createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime                    @updatedAt()
-  isNewUser                 Boolean                     @default(true)
+  id                        String                     @id() @default(cuid())
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt()
+  isNewUser                 Boolean                    @default(true)
   /// @email
-  email                     String                      @unique()
+  email                     String                     @unique()
   /// @length(min: 1, max: 50)
   name                      String
   /// @length(min: 1, max: 30)
   mobileNumber              String
   /// @length(min: 1, max: 30)
+  /// @allow('read', auth() == this)
   idNumber                  String
-  birthDate                 DateTime                    @default(now())
+  birthDate                 DateTime                   @default(now())
   /// @url
   profileImg                String
   /// @length(min: 1, max: 500)
   bio                       String
-  sex                       UserSex                     @default(OTHER)
-  role                      UserRole                    @default(USER)
-  status                    UserStatus                  @default(ACTIVE)
-  balance                   Float                       @default(0)
+  sex                       UserSex                    @default(OTHER)
+  role                      UserRole                   @default(USER)
+  status                    UserStatus                 @default(ACTIVE)
+  balance                   Float                      @default(0)
+  /// @allow('read', auth() == this)
+  IDPhotos                  String[]
+  isUserVerified            Boolean                    @default(false)
   driverVerificationRequest DriverVerificationRequest?
-  ridesAsDriver             Ride[]                      @relation("RideDriver")
-  passengerRides            RidePassenger[]
+  ridesAsDriver             Ride[]                     @relation("RideDriver")
+  passengerRideRequests     RidePassengerRequest[]
   cars                      Car[]
-  userReviewsByMe           UserReview[]                @relation("ReviewAuthor")
-  userReviewsAboutMe        UserReview[]                @relation("ReviewReviewee")
-  reportsSubmitted          Report[]                    @relation("ReportSubmitter")
-  reportsReceived           Report[]                    @relation("ReportedUser")
-  notifications             UserNotification[]
-  myFavourites              UserUserFavorite[]          @relation("UserFavorites")
-  favouritesOfMine          UserUserFavorite[]          @relation("UserFavourites")
-  a                         UserFavoritedNotification[] @ignore()
+  userReviewsByMe           UserReview[]               @relation("ReviewAuthor")
+  userReviewsAboutMe        UserReview[]               @relation("ReviewReviewee")
+  b                         RideStartedConfirmation[]  @ignore()
 
   @@index([email])
   @@index([role])
   @@index([status])
-}
-
-/// @@deny('all', auth().status == 'BLOCKED')
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() != null && userId == auth().id && favoriteId != auth().id)
-/// @@allow('read', true)
-/// @@allow('update', false)
-/// @@allow('delete', auth() == user)
-model UserUserFavorite {
-  id         String   @id() @default(cuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt()
-  user       User     @relation("UserFavorites", fields: [userId], references: [id])
-  userId     String
-  favorite   User     @relation("UserFavourites", fields: [favoriteId], references: [id])
-  favoriteId String
-
-  @@unique([userId, favoriteId])
-}
-
-/// @@deny('all', auth().status == 'BLOCKED')
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() != null && submitterId == auth().id && reportedId != auth().id && status == 'PENDING')
-/// @@allow('read', auth() == submitter)
-/// @@allow('update', auth() == submitter && status == 'PENDING')
-/// @@allow('delete', auth() == submitter)
-model Report {
-  id          String       @id() @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  submitterId String
-  submitter   User         @relation("ReportSubmitter", fields: [submitterId], references: [id])
-  reportedId  String
-  reported    User         @relation("ReportedUser", fields: [reportedId], references: [id])
-  /// @length(min: 3, max: 500)
-  reason      String
-  /// @length(min: 3, max: 500)
-  description String
-  status      ReportStatus @default(PENDING)
-}
-
-/// @@deny('all', auth().status == 'BLOCKED')
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@delegate(type)
-/// @@allow('create', false)
-/// @@allow('read', auth() == user)
-/// @@allow('update', false)
-/// @@allow('delete', false)
-model UserNotification {
-  id                                     String                     @id() @default(cuid())
-  createdAt                              DateTime                   @default(now())
-  updatedAt                              DateTime                   @updatedAt()
-  /// @allow('update', auth() == user && readAt == null)
-  readAt                                 DateTime?
-  userId                                 String
-  user                                   User                       @relation(fields: [userId], references: [id])
-  type                                   String
-  delegate_aux_rideCancelledNotification RideCancelledNotification?
-  delegate_aux_userFavoritedNotification UserFavoritedNotification?
-}
-
-/// @@deny('all', auth().status == 'BLOCKED')
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', false)
-/// @@allow('read', auth() == user)
-/// @@allow('update', false)
-/// @@allow('delete', false)
-model RideCancelledNotification {
-  id                            String           @id() @default(cuid())
-  reason                        String
-  rideId                        String
-  ride                          Ride             @relation(fields: [rideId], references: [id])
-  delegate_aux_userNotification UserNotification @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-}
-
-/// @@deny('all', auth().status == 'BLOCKED')
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', false)
-/// @@allow('read', auth() == user)
-/// @@allow('update', false)
-/// @@allow('delete', false)
-model UserFavoritedNotification {
-  id                            String           @id() @default(cuid())
-  favouritedBy                  User             @relation(fields: [favouritedById], references: [id], onDelete: Cascade)
-  favouritedById                String
-  delegate_aux_userNotification UserNotification @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')
@@ -224,7 +144,7 @@ model DriverVerificationRequest {
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('create', auth() == owner && status == 'PENDING')
 /// @@allow('read', true)
-/// @@allow('update', auth() == owner && future().owner == owner && future().status == 'PENDING')
+/// @@allow('update', false)
 /// @@allow('delete', auth() == owner)
 model Car {
   id            String      @id() @default(cuid())
@@ -237,6 +157,7 @@ model Car {
   plate         String
   /// @length(min: 1, max: 50)
   mark          String
+  /// @gte(1)
   capacity      Int
   status        CarStatus   @default(PENDING)
   /// @length(min: 1)
@@ -251,50 +172,63 @@ model Car {
 
 /// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() == driver && car.owner == auth() && status == 'ACTIVE')
-/// @@allow('read', true)
-/// @@allow('update', auth() == driver && car.owner == auth() && status == 'ACTIVE')
-/// @@allow('delete', auth() == driver)
+/// @@allow('all', true)
 model Ride {
-  id             String                      @id() @default(cuid())
-  createdAt      DateTime                    @default(now())
-  updatedAt      DateTime                    @updatedAt()
-  availableSeats Int
-  price          Float
+  id                    String                    @id() @default(cuid())
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt()
+  availableSeats        Int
+  price                 Float
   /// @length(min: 1, max: 50)
-  from           String
+  from                  String
   /// @length(min: 1, max: 50)
-  to             String
-  departure      DateTime
-  distance       Float
-  duration       Float
-  driver         User                        @relation("RideDriver", fields: [driverId], references: [id])
-  driverId       String
-  ridePassengers RidePassenger[]
-  status         RideStatus                  @default(ACTIVE)
-  rideRules      RideRule[]
-  car            Car                         @relation(fields: [carId], references: [id])
-  carId          String
-  a              RideCancelledNotification[] @ignore()
+  to                    String
+  departure             DateTime
+  distance              Float
+  duration              Float
+  driver                User                      @relation("RideDriver", fields: [driverId], references: [id])
+  driverId              String
+  ridePassengerRequests RidePassengerRequest[]
+  status                RideStatus                @default(ACTIVE)
+  rideRules             RideRule[]
+  car                   Car                       @relation(fields: [carId], references: [id])
+  carId                 String
+  b                     RideStartedConfirmation[] @ignore()
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == 'APPROVED' && ride.car.status == 'APPROVED' && ride.departure > now() && ride.status == 'ACTIVE')
-/// @@allow('read', true)
-/// @@allow('update', auth() == passenger && future().passenger == passenger && future().ride == ride && ride.driver != auth())
-/// @@allow('delete', auth() == passenger)
-model RidePassenger {
-  id          String   @id() @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
-  passenger   User     @relation(fields: [passengerId], references: [id])
+/// @@allow('all', true)
+model RidePassengerRequest {
+  id          String                     @id() @default(cuid())
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt()
+  passenger   User                       @relation(fields: [passengerId], references: [id])
   passengerId String
-  ride        Ride     @relation(fields: [rideId], references: [id])
+  ride        Ride                       @relation(fields: [rideId], references: [id])
   rideId      String
   bogOrderId  String
+  status      RidePassengerRequestStatus @default(PENDING)
 
   @@unique([passengerId, rideId])
+}
+
+/// @@deny('all', auth().status == 'BLOCKED')
+/// @@allow('all', auth().role == 'ADMIN')
+/// @@allow('create', true)
+/// @@allow('read', true)
+/// @@allow('update', false)
+/// @@allow('delete', false)
+model RideStartedConfirmation {
+  id        String   @id() @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  ride      Ride     @relation(fields: [rideId], references: [id])
+  rideId    String
+
+  @@unique([rideId, userId])
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')
@@ -342,6 +276,8 @@ model UserReview {
   updatedAt  DateTime @updatedAt()
   /// @length(min: 1, max: 500)
   comment    String
+  /// @gte(0)
+  /// @lte(5)
   rating     Float
   author     User     @relation("ReviewAuthor", fields: [authorId], references: [id])
   authorId   String
