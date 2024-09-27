@@ -1,6 +1,10 @@
 "use client";
 
-import { useFindManyRide, useFindManyUserReview } from "@/lib/hooks";
+import {
+    useFindManyRide,
+    useFindManyRideStartedConfirmation,
+    useFindManyUserReview,
+} from "@/lib/hooks";
 import { Milestone, Sparkles, Wallet } from "lucide-react";
 
 export function Stats({ userId }: { userId: string }) {
@@ -16,20 +20,17 @@ export function Stats({ userId }: { userId: string }) {
             driverId: userId,
         },
         select: {
-            _count: {
-                select: {
-                    ridePassengers: true,
-                },
-            },
+            id: true,
             price: true,
+            startedConfirmations: true,
         },
     });
 
     let totalEarnings = 0;
-    // console.log(userRides);
+
     if (userRides) {
         totalEarnings = userRides.reduce(
-            (acc, ride) => acc + ride.price * ride._count.ridePassengers,
+            (acc, ride) => acc + ride.price * ride.startedConfirmations.length,
             0
         );
     }

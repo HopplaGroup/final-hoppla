@@ -329,8 +329,8 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'car',
-                }, b: {
-                    name: "b",
+                }, startedConfirmations: {
+                    name: "startedConfirmations",
                     type: "RideStartedConfirmation",
                     isDataModel: true,
                     isArray: true,
@@ -441,7 +441,7 @@ const metadata = {
                     name: "ride",
                     type: "Ride",
                     isDataModel: true,
-                    backLink: 'b',
+                    backLink: 'startedConfirmations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "rideId" },
                 }, rideId: {

@@ -40,6 +40,7 @@ const prismaClientSingleton = () => {
                                 id: deleteResult.rideId,
                             },
                             include: {
+                                ridePassengerRequests: true,
                                 _count: {
                                     select: { ridePassengerRequests: true },
                                 },
@@ -48,20 +49,35 @@ const prismaClientSingleton = () => {
 
                         if (
                             rideDetails &&
-                            rideDetails._count.ridePassengerRequests ===
+                            rideDetails.ridePassengerRequests.filter(
+                                (r) => r.status === "ACCEPTED"
+                            ).length ===
                                 rideDetails.availableSeats - 1
                         ) {
                             // TODO: send email to driver that car is not full anymore
                         }
-
-                        await trx.user.update({
-                            where: { id: deleteResult.passengerId },
-                            data: {
-                                balance: {
-                                    increment: REFUND_PRICE,
+                        // if status of this was accepted, then refund on website balance
+                        // if status of this was pending, then refund on credit card
+                        // TODO:
+                        if (deleteResult.status === "ACCEPTED") {
+                            await trx.user.update({
+                                where: { id: deleteResult.passengerId },
+                                data: {
+                                    balance: {
+                                        increment: REFUND_PRICE,
+                                    },
                                 },
-                            },
-                        });
+                            });
+                        } else {
+                            await trx.user.update({
+                                where: { id: deleteResult.passengerId },
+                                data: {
+                                    balance: {
+                                        increment: REFUND_PRICE,
+                                    },
+                                },
+                            });
+                        }
 
                         return deleteResult;
                     });

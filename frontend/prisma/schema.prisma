@@ -193,7 +193,7 @@ model Ride {
   rideRules             RideRule[]
   car                   Car                       @relation(fields: [carId], references: [id])
   carId                 String
-  b                     RideStartedConfirmation[] @ignore()
+  startedConfirmations  RideStartedConfirmation[]
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')

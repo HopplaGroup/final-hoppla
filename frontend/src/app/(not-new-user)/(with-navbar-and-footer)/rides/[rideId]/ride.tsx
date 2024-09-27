@@ -360,7 +360,9 @@ export function Ride({
                                             ))}
                                         {ride.ridePassengerRequests
                                             .filter(
-                                                (r) => r.status === "ACCEPTED"
+                                                (r) =>
+                                                    r.status === "ACCEPTED" ||
+                                                    r.passengerId === userId
                                             )
                                             .map(({ passenger, status }) => (
                                                 <li
@@ -374,6 +376,9 @@ export function Ride({
                                                             "bg-red-300":
                                                                 status ===
                                                                 "REJECTED",
+                                                            "bg-yellow-300":
+                                                                status ===
+                                                                "PENDING",
                                                         }
                                                     )}
                                                 >

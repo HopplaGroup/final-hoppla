@@ -186,7 +186,7 @@ model Ride extends Base {
   // @@allow('delete', auth() == driver)
   @@allow('all', true)
 
-  b                     RideStartedConfirmation[] @ignore
+  startedConfirmations  RideStartedConfirmation[]
 }
 
 enum RidePassengerRequestStatus {
