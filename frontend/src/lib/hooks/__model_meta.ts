@@ -390,6 +390,7 @@ const metadata = {
                 }, bogOrderId: {
                     name: "bogOrderId",
                     type: "String",
+                    isOptional: true,
                 }, status: {
                     name: "status",
                     type: "RidePassengerRequestStatus",

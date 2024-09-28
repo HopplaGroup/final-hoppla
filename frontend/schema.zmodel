@@ -201,7 +201,7 @@ model RidePassengerRequest extends Base {
   passengerId String                     @default(auth().id)
   ride        Ride                       @relation(fields: [rideId], references: [id])
   rideId      String
-  bogOrderId  String
+  bogOrderId  String?
   status      RidePassengerRequestStatus @default(PENDING)
   // preferredPrice Float
   // description   String                     @length(min: 1, max: 500)

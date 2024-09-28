@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
+    getQueryKey,
     useCreateRidePassengerRequest,
     useCreateRideStartedConfirmation,
     useDeleteRidePassengerRequest,
@@ -33,10 +34,13 @@ import PLACES from "@/lib/constants/places";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ruleToIcon } from "../../search/_components/rule-icons";
 import bookRide from "@/lib/bog/book-ride";
 import { cn } from "@/lib/utils/cn";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import cancelRide from "@/lib/bog/cancel-ride";
 
 export function Ride({
     rideId,
@@ -45,6 +49,9 @@ export function Ride({
     rideId: string;
     userId: string | undefined;
 }) {
+    const [isSendingRequest, setIsSendingRequest] = useState(false);
+    const [isCancelingRide, setIsCancelingRide] = useState(false);
+
     const { data: ride, isPending } = useFindUniqueRide({
         where: {
             id: rideId,
@@ -62,6 +69,17 @@ export function Ride({
                     rule: true,
                 },
             },
+        },
+    });
+    const queryClient = useQueryClient();
+    const queryKey = getQueryKey("User", "findUnique", {
+        where: {
+            id: userId,
+        },
+    });
+    const bookRideQueryKey = getQueryKey("Ride", "findUnique", {
+        where: {
+            id: rideId,
         },
     });
 
@@ -117,6 +135,45 @@ export function Ride({
         isPending: isRemovingPassengerRequest,
     } = useDeleteRidePassengerRequest({});
 
+    const sendRequest = () => {
+        setIsSendingRequest(true);
+        bookRide(rideId)
+            .then((res) => {
+                setIsSendingRequest(false);
+                if (res.success) {
+                    queryClient.invalidateQueries({
+                        queryKey: bookRideQueryKey,
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey,
+                    });
+                } else {
+                    // TODO: show error toast
+                    toast.error("Error booking ride");
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setIsSendingRequest(false);
+            });
+    };
+
+    const onCancelRide = () => {
+        setIsCancelingRide(true);
+        cancelRide(rideId).then((res) => {
+            setIsCancelingRide(false);
+            if (res.success) {
+                queryClient.invalidateQueries({
+                    queryKey: bookRideQueryKey,
+                });
+                queryClient.invalidateQueries({
+                    queryKey,
+                });
+            } else {
+                toast.error("Error canceling ride");
+            }
+        });
+    };
     return (
         <>
             {isPending ? (
@@ -401,25 +458,20 @@ export function Ride({
                                                     {passenger.id === userId &&
                                                         ride.departure >
                                                             new Date() &&
-                                                        !rideStartedConfirmation && (
+                                                        !rideStartedConfirmation &&
+                                                        !(
+                                                            status ===
+                                                                "REJECTED" ||
+                                                            status ===
+                                                                "CANCELLED"
+                                                        ) && (
                                                             <Button
                                                                 disabled={
-                                                                    isRemovingPassengerRequest
+                                                                    isCancelingRide
                                                                 }
-                                                                onClick={() => {
-                                                                    removePassengerRequest(
-                                                                        {
-                                                                            where: {
-                                                                                passengerId_rideId:
-                                                                                    {
-                                                                                        passengerId:
-                                                                                            userId,
-                                                                                        rideId,
-                                                                                    },
-                                                                            },
-                                                                        }
-                                                                    );
-                                                                }}
+                                                                onClick={
+                                                                    onCancelRide
+                                                                }
                                                                 className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
                                                             >
                                                                 Cancel
@@ -432,7 +484,7 @@ export function Ride({
                                 <div className="p-4">
                                     <div className="mb-4 flex">
                                         <div className="flex-grow flex items-center">
-                                            Book now for
+                                            Request now for
                                         </div>
                                         <div>
                                             <span className="text-2xl font-bold">
@@ -455,12 +507,11 @@ export function Ride({
                                             (r) => r.status === "ACCEPTED"
                                         ).length < ride.availableSeats && (
                                             <Button
-                                                onClick={() => {
-                                                    bookRide(rideId);
-                                                }}
+                                                disabled={isSendingRequest}
+                                                onClick={sendRequest}
                                                 className="w-full bg-primary text-white py-2 px-4 rounded-md"
                                             >
-                                                Book Now
+                                                Request Now
                                             </Button>
                                         )}
                                 </div>

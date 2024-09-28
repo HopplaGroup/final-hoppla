@@ -207,7 +207,7 @@ model RidePassengerRequest {
   passengerId String
   ride        Ride                       @relation(fields: [rideId], references: [id])
   rideId      String
-  bogOrderId  String
+  bogOrderId  String?
   status      RidePassengerRequestStatus @default(PENDING)
 
   @@unique([passengerId, rideId])

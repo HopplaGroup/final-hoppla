@@ -82,13 +82,12 @@ export async function POST(req: NextRequest) {
                     { status: 200 }
                 );
             } catch (error) {
-                // console.error("Error adding passenger:", error);
-
                 if (
                     error instanceof Error &&
                     error.message ===
                         "This ride is full and cannot accept more passengers."
                 ) {
+                    // TODO: back to credit card
                     await db.user.update({
                         where: { id: userId },
                         data: {
