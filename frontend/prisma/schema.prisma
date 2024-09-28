@@ -114,7 +114,7 @@ model User {
   cars                      Car[]
   userReviewsByMe           UserReview[]               @relation("ReviewAuthor")
   userReviewsAboutMe        UserReview[]               @relation("ReviewReviewee")
-  b                         RideStartedConfirmation[]  @ignore()
+  rideStartedConfirmations  RideStartedConfirmation[]
 
   @@index([email])
   @@index([role])

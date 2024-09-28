@@ -8,7 +8,8 @@ import { getUser } from "@/lib/utils/auth";
 import type { Metadata } from "next";
 import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
-import { sendEmailToDriverThatCarIsFull } from "@/lib/functions/emails/templates";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { Logo } from "@/components/common/logo";
 
 export const dynamic = "force-dynamic";
 
@@ -30,9 +31,41 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     const user = await getUser();
-    // if (user) {
-    //     await sendEmailToDriverThatCarIsFull({ to: [user] });
-    // }
+
+    const blockedContent = (
+        <div className="">
+            <section className="">
+                <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+                    <div>
+                        <Logo />
+                    </div>
+                    <div className="w-full text-center p-6 ">
+                        <h1 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                            Your account is blocked!
+                        </h1>
+                        <p className="">
+                            Please contact support to resolve this issue.
+                        </p>
+                        <div className="flex flex-col items-center justify-center mt-6 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                            <a
+                                href="mailto:
+                                m@gmail.com"
+                                className="flex items-center justify-center w-full px-6 py-3 text-sm text-white bg-primary rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-primary/60"
+                            >
+                                Contact Support
+                            </a>
+                            <LogoutLink className="flex items-center justify-center w-full px-6 py-3 text-sm text-primary bg-gray-100 rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-gray-200 font-semibold">
+                                Logout
+                            </LogoutLink>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+
+    console.log("user", user);
+
     return (
         <LanguageProvider>
             <html lang={languageTag()} suppressHydrationWarning>
@@ -42,8 +75,9 @@ export default async function RootLayout({
                     )}
                 >
                     <MainProvider user={user}>
-                        {/* <RealtimeComponent /> */}
-                        {children}
+                        {user && user.status === "BLOCKED"
+                            ? blockedContent
+                            : children}
                         <Toaster />
                     </MainProvider>
                 </body>

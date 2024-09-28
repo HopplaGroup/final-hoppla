@@ -102,8 +102,8 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'reviewee',
-                }, b: {
-                    name: "b",
+                }, rideStartedConfirmations: {
+                    name: "rideStartedConfirmations",
                     type: "RideStartedConfirmation",
                     isDataModel: true,
                     isArray: true,
@@ -428,7 +428,7 @@ const metadata = {
                     name: "user",
                     type: "User",
                     isDataModel: true,
-                    backLink: 'b',
+                    backLink: 'rideStartedConfirmations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userId" },
                 }, userId: {

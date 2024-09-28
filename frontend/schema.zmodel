@@ -119,7 +119,7 @@ model User extends Base {
   @@allow('update', auth() == this && future().role == role && future().status == status && future().isNewUser == false && future().balance == balance && future().isUserVerified == isUserVerified)
   @@allow('delete', auth() == this)
 
-  b                         RideStartedConfirmation[]  @ignore
+  rideStartedConfirmations  RideStartedConfirmation[]
 }
 
 model DriverVerificationRequest extends Base {

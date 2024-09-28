@@ -41,6 +41,9 @@ import { cn } from "@/lib/utils/cn";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import cancelRide from "@/lib/bog/cancel-ride";
+import db from "@/lib/utils/db";
+import acceptPassenger from "@/lib/bog/accept-passenger";
+import rejectPassenger from "@/lib/bog/reject-passenger";
 
 export function Ride({
     rideId,
@@ -51,6 +54,8 @@ export function Ride({
 }) {
     const [isSendingRequest, setIsSendingRequest] = useState(false);
     const [isCancelingRide, setIsCancelingRide] = useState(false);
+    const [isAcceptingPassenger, setIsAcceptingPassenger] = useState(false);
+    const [isRejectingPassenger, setIsRejectingPassenger] = useState(false);
 
     const { data: ride, isPending } = useFindUniqueRide({
         where: {
@@ -174,6 +179,41 @@ export function Ride({
             }
         });
     };
+
+    function onAcceptPassenger(passengerId: string) {
+        setIsAcceptingPassenger(true);
+        acceptPassenger(rideId, passengerId).then((res) => {
+            setIsAcceptingPassenger(false);
+            if (res.success) {
+                queryClient.invalidateQueries({
+                    queryKey: bookRideQueryKey,
+                });
+                queryClient.invalidateQueries({
+                    queryKey,
+                });
+            } else {
+                toast.error("Error accepting passenger");
+            }
+        });
+    }
+
+    function onRejectPassenger(passengerId: string) {
+        setIsRejectingPassenger(true);
+        rejectPassenger(rideId, passengerId).then((res) => {
+            setIsRejectingPassenger(false);
+            if (res.success) {
+                queryClient.invalidateQueries({
+                    queryKey: bookRideQueryKey,
+                });
+                queryClient.invalidateQueries({
+                    queryKey,
+                });
+            } else {
+                toast.error("Error rejecting passenger");
+            }
+        });
+    }
+
     return (
         <>
             {isPending ? (
@@ -383,102 +423,236 @@ export function Ride({
                         </div>
                     </div>
 
-                    <div className="p-4 md:pl-28 md:pr-28 ">
-                        <div className="xl:w-[460px] flex flex-col justify-center">
+                    <div className="p-4 md:pl-28 md:pr-28">
+                        <div className="xl:w-[460px] flex flex-col justify-center ">
                             <h2 className="font-semibold text-xl mb-2">
                                 Book the ride
                             </h2>
-                            <div className="border mt-2 w-full shadow-sm bg-white rounded-2xl mb-4 p-0 relative">
+                            <div
+                                className={cn(
+                                    "border mt-2 w-full shadow-sm bg-white rounded-2xl mb-4 p-0 relative",
+                                    {
+                                        "border-primary":
+                                            ride.status === "CANCELLED",
+                                    }
+                                )}
+                            >
                                 <div className="pt-5 px-5">
                                     <h2 className="text-lg mt-0 mb-1 text-center">
-                                        {ride.availableSeats -
-                                            ride.ridePassengerRequests.filter(
-                                                (r) => r.status === "ACCEPTED"
-                                            ).length}{" "}
-                                        seats available
+                                        {ride.status === "CANCELLED" ? (
+                                            <div className="text-red-500 font-semibold">
+                                                Ride is cancelled
+                                            </div>
+                                        ) : (
+                                            <>
+                                                {ride.availableSeats -
+                                                    ride.ridePassengerRequests.filter(
+                                                        (r) =>
+                                                            r.status ===
+                                                            "ACCEPTED"
+                                                    ).length}{" "}
+                                                seats available
+                                            </>
+                                        )}
                                     </h2>
                                     <ul className="list-none mb-0">
-                                        {new Array(
-                                            ride.availableSeats -
-                                                ride.ridePassengerRequests.filter(
-                                                    (r) =>
-                                                        r.status === "ACCEPTED"
-                                                ).length
-                                        )
-                                            .fill(null)
-                                            .map((_, index) => (
-                                                <li
-                                                    key={index}
-                                                    className="py-3 pr-4 flex items-center border-b border-gray-300"
-                                                >
-                                                    <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                                                    You?
-                                                </li>
-                                            ))}
-                                        {ride.ridePassengerRequests
-                                            .filter(
-                                                (r) =>
-                                                    r.status === "ACCEPTED" ||
-                                                    r.passengerId === userId
+                                        {ride.driverId !== userId &&
+                                            new Array(
+                                                ride.availableSeats -
+                                                    ride.ridePassengerRequests.filter(
+                                                        (r) =>
+                                                            r.status ===
+                                                            "ACCEPTED"
+                                                    ).length
                                             )
-                                            .map(({ passenger, status }) => (
-                                                <li
-                                                    key={passenger.id}
-                                                    className={cn(
-                                                        "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
-                                                        {
-                                                            "bg-green-300":
-                                                                userId ===
-                                                                passenger.id,
-                                                            "bg-red-300":
-                                                                status ===
-                                                                "REJECTED",
-                                                            "bg-yellow-300":
-                                                                status ===
-                                                                "PENDING",
-                                                        }
-                                                    )}
-                                                >
-                                                    <div>
-                                                        <img
-                                                            src={
-                                                                passenger.profileImg
-                                                            }
-                                                            className="w-10 h-10 rounded-full mr-3 object-cover"
-                                                            alt=""
-                                                        />
-                                                        <Link
-                                                            href={`/users/${passenger.id}`}
-                                                            className="text-primary font-semibold"
+                                                .fill(null)
+                                                .map((_, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="py-3 pr-4 flex items-center border-b border-gray-300"
+                                                    >
+                                                        <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                                                        You?
+                                                    </li>
+                                                ))}
+                                        {ride.driverId === userId &&
+                                            ride.ridePassengerRequests
+                                                // .filter(
+                                                //     (r) =>
+                                                //         r.status ===
+                                                //             "PENDING" ||
+                                                //         r.status === "REJECTED"
+                                                // )
+                                                .map(
+                                                    ({ passenger, status }) => (
+                                                        <li
+                                                            key={passenger.id}
+                                                            className={cn(
+                                                                "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
+                                                                {
+                                                                    "bg-green-300":
+                                                                        status ===
+                                                                        "ACCEPTED",
+                                                                    "bg-red-300":
+                                                                        status ===
+                                                                        "REJECTED",
+                                                                    "bg-yellow-300":
+                                                                        status ===
+                                                                        "PENDING",
+                                                                }
+                                                            )}
                                                         >
-                                                            {passenger.name}
-                                                        </Link>
-                                                    </div>
+                                                            <div className="flex items-center justify-between w-full">
+                                                                <Link
+                                                                    href={`/users/${passenger.id}`}
+                                                                    className="text-primary font-semibold"
+                                                                >
+                                                                    <img
+                                                                        src={
+                                                                            passenger.profileImg
+                                                                        }
+                                                                        className="w-10 h-10 rounded-full mr-3 object-cover "
+                                                                        alt=""
+                                                                    />
+                                                                    {
+                                                                        passenger.name
+                                                                    }
+                                                                </Link>
+                                                                {status ===
+                                                                    "PENDING" && (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Button
+                                                                            disabled={
+                                                                                isAcceptingPassenger
+                                                                            }
+                                                                            onClick={() =>
+                                                                                onAcceptPassenger(
+                                                                                    passenger.id
+                                                                                )
+                                                                            }
+                                                                            className="ml-auto bg-green-500 text-white py-2 px-4 rounded-md"
+                                                                        >
+                                                                            Accept
+                                                                        </Button>
+                                                                        <Button
+                                                                            disabled={
+                                                                                isRejectingPassenger
+                                                                            }
+                                                                            onClick={() =>
+                                                                                onRejectPassenger(
+                                                                                    passenger.id
+                                                                                )
+                                                                            }
+                                                                            className="ml-auto bg-red-500 text-white py-2 px-4 rounded-md"
+                                                                        >
+                                                                            Reject
+                                                                        </Button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </li>
+                                                    )
+                                                )}
+                                        {ride.driverId !== userId &&
+                                            ride.ridePassengerRequests
+                                                .filter(
+                                                    (r) =>
+                                                        r.status ===
+                                                            "ACCEPTED" ||
+                                                        r.passengerId === userId
+                                                )
+                                                .map(
+                                                    ({ passenger, status }) => (
+                                                        <li
+                                                            key={passenger.id}
+                                                            className={cn(
+                                                                "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
+                                                                {
+                                                                    "bg-green-300":
+                                                                        userId ===
+                                                                        passenger.id,
+                                                                    "bg-red-300":
+                                                                        status ===
+                                                                        "REJECTED",
+                                                                    "bg-yellow-300":
+                                                                        status ===
+                                                                        "PENDING",
+                                                                }
+                                                            )}
+                                                        >
+                                                            <div>
+                                                                <img
+                                                                    src={
+                                                                        passenger.profileImg
+                                                                    }
+                                                                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                                                                    alt=""
+                                                                />
+                                                                <Link
+                                                                    href={`/users/${passenger.id}`}
+                                                                    className="text-primary font-semibold"
+                                                                >
+                                                                    {
+                                                                        passenger.name
+                                                                    }
+                                                                </Link>
+                                                            </div>
 
-                                                    {passenger.id === userId &&
-                                                        ride.departure >
-                                                            new Date() &&
-                                                        !rideStartedConfirmation &&
-                                                        !(
-                                                            status ===
-                                                                "REJECTED" ||
-                                                            status ===
-                                                                "CANCELLED"
-                                                        ) && (
-                                                            <Button
-                                                                disabled={
-                                                                    isCancelingRide
-                                                                }
-                                                                onClick={
-                                                                    onCancelRide
-                                                                }
-                                                                className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
-                                                            >
-                                                                Cancel
-                                                            </Button>
-                                                        )}
-                                                </li>
-                                            ))}
+                                                            {passenger.id ===
+                                                                userId &&
+                                                                ride.departure >
+                                                                    new Date() &&
+                                                                !rideStartedConfirmation &&
+                                                                ride.status ===
+                                                                    "ACTIVE" &&
+                                                                status ===
+                                                                    "ACCEPTED" && (
+                                                                    <Button
+                                                                        disabled={
+                                                                            isRideStartedConfirming
+                                                                        }
+                                                                        onClick={() => {
+                                                                            createRideStartedConfirmation(
+                                                                                {
+                                                                                    data: {
+                                                                                        rideId,
+                                                                                        userId,
+                                                                                    },
+                                                                                }
+                                                                            );
+                                                                        }}
+                                                                        className="ml-auto bg-red-500 text-white py-2 px-4 rounded-md"
+                                                                    >
+                                                                        Confirm
+                                                                        Start
+                                                                    </Button>
+                                                                )}
+                                                            {passenger.id ===
+                                                                userId &&
+                                                                ride.status ===
+                                                                    "ACTIVE" &&
+                                                                !rideStartedConfirmation &&
+                                                                !(
+                                                                    status ===
+                                                                        "REJECTED" ||
+                                                                    status ===
+                                                                        "CANCELLED"
+                                                                ) && (
+                                                                    <Button
+                                                                        disabled={
+                                                                            isCancelingRide
+                                                                        }
+                                                                        onClick={
+                                                                            onCancelRide
+                                                                        }
+                                                                        className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
+                                                                    >
+                                                                        Cancel
+                                                                    </Button>
+                                                                )}
+                                                        </li>
+                                                    )
+                                                )}
                                     </ul>
                                 </div>
                                 <div className="p-4">
@@ -496,7 +670,8 @@ export function Ride({
                                         </div>
                                     </div>
 
-                                    {ride.departure > new Date() &&
+                                    {ride.status === "ACTIVE" &&
+                                        ride.departure > new Date() &&
                                         userId &&
                                         ride.driverId !== userId &&
                                         !rideStartedConfirmation &&
