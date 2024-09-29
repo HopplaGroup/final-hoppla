@@ -1,6 +1,5 @@
 import TwoColumnFooter from "@/components/common/footer/footer";
 import { Navbar } from "@/components/common/navbar/navbar";
-import BackgroundCross from "@/components/ui/bg-cross";
 
 export default function WithNavbarLayout({
     children,

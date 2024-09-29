@@ -8,8 +8,8 @@ export default function ProfileTripsPage() {
             </h1>
 
             <p className="mt-4 leading-relaxed text-gray-500 max-w-xl lg:max-w-3xl">
-                The table below shows all the rides you have created as a driver
-                you can see them as well on specific pages.
+                The table below shows all the rides you are a part of as a
+                passenger
             </p>
 
             <div className="mt-4 w-full">

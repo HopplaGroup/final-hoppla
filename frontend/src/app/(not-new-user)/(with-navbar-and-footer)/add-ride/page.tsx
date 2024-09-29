@@ -42,10 +42,6 @@ export default async function AddCarPage({
                     </div>
 
                     <div className="relative w-full max-w-lg text-center">
-                        {/* <SendDriverRequestForm
-              user={user}
-              driverVerificationRequest={response}
-            /> */}
                         <CreateRideForm rules={rules} cars={cars} user={user} />
                     </div>
                 </div>

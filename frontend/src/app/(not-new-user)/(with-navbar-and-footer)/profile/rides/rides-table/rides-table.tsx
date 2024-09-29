@@ -4,7 +4,6 @@ import { DataTable } from "./data-table";
 import db from "@/lib/utils/db";
 
 async function getData(): Promise<Row[]> {
-    // Fetch data from your API here.
     const user = await getUser();
 
     return await db.ride.findMany({
@@ -13,11 +12,6 @@ async function getData(): Promise<Row[]> {
         },
         include: {
             car: true,
-            ridePassengers: {
-                include: {
-                    passenger: true,
-                },
-            },
         },
         orderBy: {
             createdAt: "desc",

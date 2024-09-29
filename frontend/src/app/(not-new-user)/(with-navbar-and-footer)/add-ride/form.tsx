@@ -42,8 +42,6 @@ import { useCreateRide } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 
-const PRICE_RANGE = 5;
-
 const FormSchema = RideCreateSchema.extend({
     ruleIds: z.array(z.string()).optional(),
 });

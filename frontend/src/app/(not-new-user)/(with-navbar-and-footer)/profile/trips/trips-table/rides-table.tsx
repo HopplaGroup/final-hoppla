@@ -8,7 +8,7 @@ async function getData(): Promise<Row[]> {
 
     return await db.ride.findMany({
         where: {
-            ridePassengers: {
+            ridePassengerRequests: {
                 some: {
                     passengerId: user?.id,
                 },
@@ -16,11 +16,6 @@ async function getData(): Promise<Row[]> {
         },
         include: {
             car: true,
-            ridePassengers: {
-                include: {
-                    passenger: true,
-                },
-            },
         },
         orderBy: {
             createdAt: "desc",

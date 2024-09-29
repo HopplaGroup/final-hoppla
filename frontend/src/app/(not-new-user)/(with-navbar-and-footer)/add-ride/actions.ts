@@ -1,9 +1,7 @@
 "use server";
 
 import { createServerAction } from "@/lib/utils/create-server-action";
-import db from "@/lib/utils/db";
 import { z } from "zod";
-import api from "@/lib/utils/api";
 import PLACES from "@/lib/constants/places";
 import { menv } from "@/lib/utils/menv";
 

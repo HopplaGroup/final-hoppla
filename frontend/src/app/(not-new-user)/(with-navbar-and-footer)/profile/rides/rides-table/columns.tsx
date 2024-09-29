@@ -1,27 +1,39 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import PLACES from "@/lib/constants/places";
 import { languageTag } from "@/paraglide/runtime";
 import { ColumnDef } from "@tanstack/react-table";
 import { Prisma, Ride } from "@zenstackhq/runtime/models";
 import * as d from "date-fns";
-import { Calendar, Car, Clock, Coins, Users, Waypoints } from "lucide-react";
+import {
+    Calendar,
+    Car,
+    Circle,
+    Clock,
+    Coins,
+    MapPin,
+    Users,
+    Waypoints,
+    Table,
+    SquareArrowOutUpRight,
+} from "lucide-react";
 
 export type Row = Prisma.RideGetPayload<{
     include: {
         car: true;
-        ridePassengers: {
-            include: {
-                passenger: true;
-            };
-        };
     };
 }>;
 
 export const columns: ColumnDef<Row>[] = [
     {
         accessorKey: "from",
-        header: "From",
+        header: () => (
+            <div className="flex items-center gap-1">
+                <Circle size={18} />
+                <span>From</span>
+            </div>
+        ),
         cell: ({ row }) => {
             return (
                 PLACES.find((place) => place.osm === row.getValue("from"))
@@ -31,7 +43,12 @@ export const columns: ColumnDef<Row>[] = [
     },
     {
         accessorKey: "to",
-        header: "To",
+        header: () => (
+            <div className="flex items-center gap-1">
+                <MapPin size={18} />
+                <span>To</span>
+            </div>
+        ),
         cell: ({ row }) => {
             return (
                 PLACES.find((place) => place.osm === row.getValue("to"))
@@ -99,6 +116,27 @@ export const columns: ColumnDef<Row>[] = [
             const minutes = Math.floor((durationInSeconds % 3600) / 60);
 
             return `${hours}h ${minutes}m `;
+        },
+    },
+    {
+        accessorKey: "id",
+        header: () => (
+            <div className="flex items-center gap-1">
+                <SquareArrowOutUpRight size={18} />
+                Actions
+            </div>
+        ),
+        cell: ({ row }) => {
+            return (
+                <div>
+                    <Button
+                        variant="default"
+                        href={`/rides/${row.getValue("id")}`}
+                    >
+                        Go to ride
+                    </Button>
+                </div>
+            );
         },
     },
 ];

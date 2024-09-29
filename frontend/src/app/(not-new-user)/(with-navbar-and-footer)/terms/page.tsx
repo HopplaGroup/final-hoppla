@@ -159,7 +159,7 @@ const TermsAndConditions = () => {
 
                 <ul className="pl-4 pr-4 pt-2">
                     <li>
-                        <strong>(i)</strong> გაქვთ მოქმედი{" "}
+                        <strong>{`(i)`}</strong> გაქვთ მოქმედი{" "}
                         <strong>მართვის მოწმობა</strong>;{" "}
                     </li>
                     <li>
@@ -256,7 +256,7 @@ const TermsAndConditions = () => {
                     <strong>
                         მოგზვარობისთვის ადგილების ონლაინ დაჯავშნის სისტემა
                     </strong>{" "}
-                    ("დაჯავშნა").
+                    {`("დაჯავშნა")`}.
                 </p>
 
                 <p className="pl-4 pr-4 pt-2">
@@ -285,8 +285,8 @@ const TermsAndConditions = () => {
                     შესაძლებელია. <strong>Hoppla</strong>-ს მიერ გადახდის
                     მიღებისა და მძღოლის მიერ დაჯავშნის მოთხოვნის დადასტურების
                     შემდეგ, სადაც ეს შესაძლებელია, მგზავრი იღებს{" "}
-                    <strong>დაჯავშნის დადასტურებას</strong> ("ჯავშნის
-                    დადასტურება").
+                    <strong>დაჯავშნის დადასტურებას</strong> {`("ჯავშნის
+                    დადასტურება").`}
                 </p>
 
                 <p className="pl-4 pr-4 pt-2">

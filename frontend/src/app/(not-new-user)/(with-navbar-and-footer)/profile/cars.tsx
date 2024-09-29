@@ -64,7 +64,16 @@ function CarCard({
                 </div>
                 <Separator className="my-4" />
                 <div className="flex h-5 items-center space-x-4 text-sm">
-                    <div>{car.capacity}</div>
+                    {/* <div>{car.capacity}</div> */}
+                    <div>
+                        {car.status === "APPROVED" ? (
+                            <span className="text-green-500">APPROVED</span>
+                        ) : car.status === "PENDING" ? (
+                            <span className="text-orange-500">PENDING</span>
+                        ) : (
+                            <span className="text-red-500">REJECTED</span>
+                        )}
+                    </div>
                     <Separator orientation="vertical" />
                     <div>{car.type}</div>
                     {!car.$optimistic && car.rides.length === 0 && (
