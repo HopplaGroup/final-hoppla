@@ -28,6 +28,13 @@ export default function AuthBlock({}: AuthBlockProps) {
             where: {
                 id: user?.id,
             },
+            include: {
+                driverVerificationRequest: {
+                    select: {
+                        status: true,
+                    },
+                },
+            },
         },
         {
             enabled: !!user,
@@ -84,12 +91,16 @@ export default function AuthBlock({}: AuthBlockProps) {
                             </Link>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem asChild>
-                            <Link href="/send-driver-verification">
-                                {/* {m.bad_caring_wallaby_pull()} */}
-                                Become a driver
-                            </Link>
-                        </DropdownMenuItem>
+                        {latestUser &&
+                            (!latestUser.driverVerificationRequest ||
+                                latestUser.driverVerificationRequest?.status ==
+                                    "PENDING") && (
+                                <DropdownMenuItem asChild>
+                                    <Link href="/send-driver-verification">
+                                        Become a driver
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
 
                         <DropdownMenuItem className="p-0">
                             <LogoutLink className="w-full h-full  px-2 py-1.5">

@@ -6,7 +6,10 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
 
-const Select = SelectPrimitive.Root;
+// const Select = SelectPrimitive.Root;
+const Select = (
+    props: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>
+) => <SelectPrimitive.Root {...props} />;
 
 const SelectGroup = SelectPrimitive.Group;
 

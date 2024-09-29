@@ -1,14 +1,15 @@
-import { Milestone, Plus, Sparkles, Wallet } from "lucide-react";
 import AddCar from "./add-car";
 import Cars from "./cars";
 import { getUser } from "@/lib/utils/auth";
 import { Stats } from "./stats";
+import AddCarAlert from "./add-car-alert";
 
 export default async function ProfileGeneralPage() {
     const user = await getUser();
 
     return (
         <div>
+            <AddCarAlert />
             <Stats userId={user!.id} />
             <div className="">
                 <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">

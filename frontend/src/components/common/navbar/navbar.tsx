@@ -8,7 +8,9 @@ import Link from "next/link";
 import { useState } from "react";
 import NavigationDrawer from "./drawer";
 
-type NavbarProps = {};
+type NavbarProps = {
+    driverHasCar?: boolean;
+};
 
 const NAV_ITEMS = [
     { href: "/", label: "Home" },
@@ -18,11 +20,10 @@ const NAV_ITEMS = [
 ];
 
 // TODO: NAVBARS RO AKLIKEB CONTEXT MENUZE, LEPTOPIS ZOMAZE, DATAMASHOBS IQET AQET
-export function Navbar({}: NavbarProps) {
-    const isDriver = true;
+export function Navbar({ driverHasCar }: NavbarProps) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
-    //TODO: Here add user info, to check if it is driver or not
+
     return (
         <nav
             style={{
@@ -59,7 +60,7 @@ export function Navbar({}: NavbarProps) {
                     </div>
 
                     <div className="flex items-center gap-1">
-                        {isDriver && (
+                        {driverHasCar && (
                             <Button
                                 variant="ghost"
                                 className="flex items-center gap-2 font-semibold"
