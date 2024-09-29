@@ -64,7 +64,7 @@ export default async function RootLayout({
         </div>
     );
 
-    console.log("user", user);
+    // console.log("user", user);
 
     return (
         <LanguageProvider>

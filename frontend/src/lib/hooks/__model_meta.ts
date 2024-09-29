@@ -395,6 +395,14 @@ const metadata = {
                     name: "status",
                     type: "RidePassengerRequestStatus",
                     attributes: [{ "name": "@default", "args": [] }],
+                }, preferredPrice: {
+                    name: "preferredPrice",
+                    type: "Float",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
                 },
             }
             , uniqueConstraints: {

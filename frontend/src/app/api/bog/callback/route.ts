@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
                 where: { passengerId: userId, rideId: rideId },
             });
 
-            if (existingPassenger) {
+            if (existingPassenger?.status !== "UNPAID") {
                 return NextResponse.json(
                     { message: "Passenger already added to the ride." },
                     { status: 200 }
@@ -69,10 +69,15 @@ export async function POST(req: NextRequest) {
             }
 
             try {
-                await db.ridePassengerRequest.create({
+                await db.ridePassengerRequest.update({
+                    where: {
+                        passengerId_rideId: {
+                            passengerId: userId,
+                            rideId: rideId,
+                        },
+                    },
                     data: {
-                        passengerId: userId,
-                        rideId: rideId,
+                        status: "PENDING",
                         bogOrderId: order_id,
                     },
                 });
@@ -87,15 +92,7 @@ export async function POST(req: NextRequest) {
                     error.message ===
                         "This ride is full and cannot accept more passengers."
                 ) {
-                    // TODO: back to credit card
-                    await db.user.update({
-                        where: { id: userId },
-                        data: {
-                            balance: {
-                                increment: RIDE_PRICE,
-                            },
-                        },
-                    });
+                    await refundPayment(order_id);
                     return NextResponse.json(
                         { error: "Error adding passenger. Payment refunded." },
                         { status: 200 }

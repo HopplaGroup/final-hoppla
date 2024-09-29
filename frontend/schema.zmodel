@@ -194,17 +194,19 @@ enum RidePassengerRequestStatus {
   ACCEPTED
   REJECTED
   CANCELLED
+  UNPAID
 }
 
 model RidePassengerRequest extends Base {
-  passenger   User                       @relation(fields: [passengerId], references: [id])
-  passengerId String                     @default(auth().id)
-  ride        Ride                       @relation(fields: [rideId], references: [id])
-  rideId      String
-  bogOrderId  String?
-  status      RidePassengerRequestStatus @default(PENDING)
-  // preferredPrice Float
-  // description   String                     @length(min: 1, max: 500)
+  passenger      User                       @relation(fields: [passengerId], references: [id])
+  passengerId    String                     @default(auth().id)
+  ride           Ride                       @relation(fields: [rideId], references: [id])
+  rideId         String
+  bogOrderId     String?
+  status         RidePassengerRequestStatus @default(UNPAID)
+  preferredPrice Float?
+  description    String?                    @length(min: 1, max: 500)
+
   @@unique([passengerId, rideId])
   // @@allow('create', auth() == passenger && ride.driver != auth() && ride.driver.driverVerificationRequest.status == "APPROVED" && ride.car.status == "APPROVED"
   // && ride.departure > now() && ride.status == "ACTIVE" && status == "PENDING")

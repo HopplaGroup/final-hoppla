@@ -32,29 +32,34 @@ export default async function bookRide(rideId: string) {
                     throw new Error("Ride not found");
                 }
 
-                const numberOfPassengers = ride.ridePassengerRequests.filter(
-                    (c) => c.status === "ACCEPTED"
-                ).length;
+                // const numberOfPassengers = ride.ridePassengerRequests.filter(
+                //     (c) => c.status === "ACCEPTED"
+                // ).length;
 
-                const numberOfPossiblePassengers =
-                    ride.ridePassengerRequests.length;
+                // const numberOfPossiblePassengers =
+                //     ride.ridePassengerRequests.length;
 
-                if (ride.availableSeats <= numberOfPassengers) {
-                    throw new Error(
-                        "This ride is full and cannot accept more passengers."
-                    );
-                }
+                // if (ride.availableSeats <= numberOfPassengers) {
+                //     throw new Error(
+                //         "This ride is full and cannot accept more passengers."
+                //     );
+                // }
 
-                if (ride.availableSeats === numberOfPossiblePassengers + 1) {
-                    await sendEmailToDriverThatCarIsFull({
-                        to: [ride.driver],
-                    });
-                }
+                // if (ride.availableSeats === numberOfPossiblePassengers + 1) {
+                //     await sendEmailToDriverThatCarIsFull({
+                //         to: [ride.driver],
+                //     });
+                // }
 
-                await trx.ridePassengerRequest.create({
+                await trx.ridePassengerRequest.update({
+                    where: {
+                        passengerId_rideId: {
+                            passengerId: user.id,
+                            rideId: rideId,
+                        },
+                    },
                     data: {
-                        passengerId: user.id,
-                        rideId: rideId,
+                        status: "PENDING",
                     },
                 });
 

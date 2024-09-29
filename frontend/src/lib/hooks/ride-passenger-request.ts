@@ -323,7 +323,7 @@ export function useSuspenseCountRidePassengerRequest<TArgs extends Prisma.RidePa
 }
 import type { RidePassengerRequestStatus } from '@zenstackhq/runtime/models';
 
-export function useCheckRidePassengerRequest<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; passengerId?: string; rideId?: string; bogOrderId?: string; status?: RidePassengerRequestStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRidePassengerRequest<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; passengerId?: string; rideId?: string; bogOrderId?: string; status?: RidePassengerRequestStatus; description?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('RidePassengerRequest', `${endpoint}/ridePassengerRequest/check`, args, options, fetch);
 }

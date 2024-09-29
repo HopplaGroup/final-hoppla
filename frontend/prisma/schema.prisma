@@ -73,6 +73,7 @@ enum RidePassengerRequestStatus {
   ACCEPTED
   REJECTED
   CANCELLED
+  UNPAID
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')
@@ -200,15 +201,18 @@ model Ride {
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('all', true)
 model RidePassengerRequest {
-  id          String                     @id() @default(cuid())
-  createdAt   DateTime                   @default(now())
-  updatedAt   DateTime                   @updatedAt()
-  passenger   User                       @relation(fields: [passengerId], references: [id])
-  passengerId String
-  ride        Ride                       @relation(fields: [rideId], references: [id])
-  rideId      String
-  bogOrderId  String?
-  status      RidePassengerRequestStatus @default(PENDING)
+  id             String                     @id() @default(cuid())
+  createdAt      DateTime                   @default(now())
+  updatedAt      DateTime                   @updatedAt()
+  passenger      User                       @relation(fields: [passengerId], references: [id])
+  passengerId    String
+  ride           Ride                       @relation(fields: [rideId], references: [id])
+  rideId         String
+  bogOrderId     String?
+  status         RidePassengerRequestStatus @default(UNPAID)
+  preferredPrice Float?
+  /// @length(min: 1, max: 500)
+  description    String?
 
   @@unique([passengerId, rideId])
 }

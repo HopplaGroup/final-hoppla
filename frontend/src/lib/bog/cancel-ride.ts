@@ -46,7 +46,7 @@ export default async function cancelRide(rideId: string) {
             }
         });
 
-        console.log(RIDE_PRICE, `Ride ${rideId} cancelled by user ${user.id}`);
+        // console.log(RIDE_PRICE, `Ride ${rideId} cancelled by user ${user.id}`);
         return {
             success: true,
         };
