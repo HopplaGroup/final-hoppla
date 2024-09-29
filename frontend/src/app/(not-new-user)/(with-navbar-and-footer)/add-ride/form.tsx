@@ -371,7 +371,7 @@ export function CreateRideForm({
                                 Best price is{" "}
                                 {(
                                     (bestPriceValue || 0) /
-                                    (form.watch("availableSeats") || 1)
+                                    (selectedCar?.capacity || 1)
                                 ).toFixed(1)}{" "}
                                 GEL, But you can set your own price
                             </FormDescription>

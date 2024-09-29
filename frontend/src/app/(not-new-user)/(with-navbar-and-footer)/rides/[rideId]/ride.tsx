@@ -27,6 +27,7 @@ import {
     FlagTriangleRight,
     CheckCheck,
     Stars,
+    Plus,
 } from "lucide-react";
 import { format } from "date-fns";
 import { languageTag } from "@/paraglide/runtime";
@@ -44,6 +45,35 @@ import cancelRide from "@/lib/bog/cancel-ride";
 import db from "@/lib/utils/db";
 import acceptPassenger from "@/lib/bog/accept-passenger";
 import rejectPassenger from "@/lib/bog/reject-passenger";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { NumericFormat } from "react-number-format";
+
+const FormSchema = z.object({
+    preferredPrice: z.number().int().positive().optional(),
+    description: z.string().min(1).max(255).optional(),
+    buyImmediately: z.boolean(),
+});
 
 export function Ride({
     rideId,
@@ -52,6 +82,12 @@ export function Ride({
     rideId: string;
     userId: string | undefined;
 }) {
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            buyImmediately: true,
+        },
+    });
     const [isSendingRequest, setIsSendingRequest] = useState(false);
     const [isPaying, setIsPaying] = useState(false);
     const [isCancelingRide, setIsCancelingRide] = useState(false);
@@ -82,6 +118,8 @@ export function Ride({
             id: userId,
         },
     });
+    const [open, setOpen] = useState(false);
+
     const bookRideQueryKey = getQueryKey("Ride", "findUnique", {
         where: {
             id: rideId,
@@ -144,27 +182,6 @@ export function Ride({
         mutate: createPassengerRequest,
         isPending: isCreatingPassengerRequest,
     } = useCreateRidePassengerRequest({});
-
-    const sendRequest = () => {
-        createPassengerRequest(
-            {
-                data: {
-                    rideId,
-                    passengerId: userId,
-                },
-            },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({
-                        queryKey: bookRideQueryKey,
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey,
-                    });
-                },
-            }
-        );
-    };
 
     const onCancelRide = () => {
         setIsCancelingRide(true);
@@ -237,6 +254,34 @@ export function Ride({
                 console.error(error);
                 setIsSendingRequest(false);
             });
+    }
+
+    function onSubmit(data: z.infer<typeof FormSchema>) {
+        createPassengerRequest(
+            {
+                data: {
+                    rideId,
+                    passengerId: userId,
+                    preferredPrice: data.preferredPrice,
+                    description: data.description,
+                },
+            },
+            {
+                onSuccess: () => {
+                    setOpen(false);
+                    form.reset();
+                    queryClient.invalidateQueries({
+                        queryKey: bookRideQueryKey,
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey,
+                    });
+                    if (data.buyImmediately) {
+                        payForRide();
+                    }
+                },
+            }
+        );
     }
 
     return (
@@ -509,7 +554,12 @@ export function Ride({
                                                 //         r.status === "REJECTED"
                                                 // )
                                                 .map(
-                                                    ({ passenger, status }) => (
+                                                    ({
+                                                        passenger,
+                                                        status,
+                                                        preferredPrice,
+                                                        description,
+                                                    }) => (
                                                         <li
                                                             key={passenger.id}
                                                             className={cn(
@@ -543,6 +593,19 @@ export function Ride({
                                                                         passenger.name
                                                                     }
                                                                 </Link>
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-gray-500">
+                                                                        {
+                                                                            preferredPrice
+                                                                        }{" "}
+                                                                        ₾
+                                                                    </span>
+                                                                    <span className="text-gray-500">
+                                                                        {
+                                                                            description
+                                                                        }
+                                                                    </span>
+                                                                </div>
                                                                 {ride.status ===
                                                                     "ACTIVE" &&
                                                                     status ===
@@ -630,7 +693,7 @@ export function Ride({
 
                                                             {passenger.id ===
                                                                 userId &&
-                                                                ride.departure >
+                                                                ride.departure <
                                                                     new Date() &&
                                                                 !rideStartedConfirmation &&
                                                                 ride.status ===
@@ -774,15 +837,183 @@ export function Ride({
                                         ride.ridePassengerRequests.filter(
                                             (r) => r.status === "ACCEPTED"
                                         ).length < ride.availableSeats && (
-                                            <Button
-                                                disabled={
-                                                    isCreatingPassengerRequest
-                                                }
-                                                onClick={sendRequest}
-                                                className="w-full bg-primary text-white py-2 px-4 rounded-md"
+                                            <AlertDialog
+                                                open={open}
+                                                onOpenChange={setOpen}
                                             >
-                                                Request Now
-                                            </Button>
+                                                <AlertDialogTrigger>
+                                                    <div className="flex items-center gap-2 bg-primary text-white p-3 rounded-lg">
+                                                        <Plus size={24} />{" "}
+                                                        Request Now
+                                                    </div>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <Form {...form}>
+                                                        <form
+                                                            onSubmit={form.handleSubmit(
+                                                                onSubmit
+                                                            )}
+                                                            className="space-y-8 overflow-auto"
+                                                        >
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>
+                                                                    Enter
+                                                                    additional
+                                                                    info
+                                                                </AlertDialogTitle>
+                                                            </AlertDialogHeader>
+                                                            <div className="space-y-4">
+                                                                <FormField
+                                                                    control={
+                                                                        form.control
+                                                                    }
+                                                                    name="preferredPrice"
+                                                                    render={({
+                                                                        field,
+                                                                    }) => (
+                                                                        <FormItem>
+                                                                            <FormLabel>
+                                                                                Prefered
+                                                                                Price
+                                                                            </FormLabel>
+                                                                            <FormControl>
+                                                                                <NumericFormat
+                                                                                    className={cn()}
+                                                                                    decimalScale={
+                                                                                        2
+                                                                                    }
+                                                                                    customInput={
+                                                                                        Input
+                                                                                    }
+                                                                                    value={
+                                                                                        field.value
+                                                                                    }
+                                                                                    onValueChange={(
+                                                                                        v
+                                                                                    ) => {
+                                                                                        const {
+                                                                                            floatValue,
+                                                                                        } =
+                                                                                            v;
+                                                                                        let newV:
+                                                                                            | number
+                                                                                            | undefined =
+                                                                                            Number(
+                                                                                                floatValue
+                                                                                            );
+                                                                                        if (
+                                                                                            isNaN(
+                                                                                                newV
+                                                                                            )
+                                                                                        ) {
+                                                                                            newV =
+                                                                                                undefined;
+                                                                                        }
+
+                                                                                        field.onChange(
+                                                                                            newV
+                                                                                        );
+                                                                                    }}
+                                                                                />
+                                                                            </FormControl>
+                                                                            <FormDescription>
+                                                                                {`Enter the price you are willing to pay for the ride`}
+                                                                            </FormDescription>
+                                                                            <FormMessage errorMessage="Please enter a valid price" />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                                <FormField
+                                                                    control={
+                                                                        form.control
+                                                                    }
+                                                                    name="description"
+                                                                    render={({
+                                                                        field,
+                                                                    }) => (
+                                                                        <FormItem>
+                                                                            <FormLabel>
+                                                                                Description
+                                                                            </FormLabel>
+                                                                            <FormControl>
+                                                                                <Input
+                                                                                    {...field}
+                                                                                />
+                                                                            </FormControl>
+                                                                            <FormDescription>
+                                                                                {`Enter the description for the driver`}
+                                                                            </FormDescription>
+                                                                            <FormMessage errorMessage="Please enter a valid description" />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                                <FormField
+                                                                    control={
+                                                                        form.control
+                                                                    }
+                                                                    name="buyImmediately"
+                                                                    render={({
+                                                                        field,
+                                                                    }) => (
+                                                                        <FormItem>
+                                                                            {/* <FormLabel>
+                                                                                Check
+                                                                                if
+                                                                                you
+                                                                                want
+                                                                                to
+                                                                                buy
+                                                                                immediately
+                                                                            </FormLabel> */}
+                                                                            <FormControl>
+                                                                                <div className="">
+                                                                                    <label className="flex items-center gap-2">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={
+                                                                                                field.value
+                                                                                            }
+                                                                                            onChange={
+                                                                                                field.onChange
+                                                                                            }
+                                                                                        />
+                                                                                        <span className="select-none">
+                                                                                            Check
+                                                                                            if
+                                                                                            you
+                                                                                            want
+                                                                                            to
+                                                                                            buy
+                                                                                            immediately
+                                                                                        </span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </FormControl>
+                                                                            {/* <FormDescription>
+                                                                                {`Check if you want to buy immediately`}
+                                                                            </FormDescription> */}
+                                                                            <FormMessage errorMessage="Please check correctly" />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>
+                                                                    Cancel
+                                                                </AlertDialogCancel>
+                                                                <Button
+                                                                    disabled={
+                                                                        isCreatingPassengerRequest
+                                                                    }
+                                                                    type="submit"
+                                                                >
+                                                                    Submit
+                                                                </Button>
+                                                            </AlertDialogFooter>
+                                                        </form>
+                                                    </Form>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
                                         )}
                                 </div>
                             </div>
