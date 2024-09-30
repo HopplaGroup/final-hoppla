@@ -20,7 +20,7 @@ export function MainProvider({ children, user }: MainProviderProps) {
                     attribute="class"
                     defaultTheme="light"
                     // enableSystem
-                    themes={["light", "dark"]}
+                    themes={["light"]}
                     disableTransitionOnChange
                 >
                     <LoadingProvider>{children}</LoadingProvider>

@@ -8,7 +8,7 @@ export function createServerAction<T, U>(
     schema: z.ZodSchema<T>,
     logic: (data: T) => Promise<U>
 ) {
-    return async (values: unknown): Promise<Result<U>> => {
+    return async (values: T): Promise<Result<U>> => {
         try {
             const data = schema.parse(values);
             const result = await logic(data);
