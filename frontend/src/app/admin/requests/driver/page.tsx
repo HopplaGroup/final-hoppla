@@ -131,14 +131,12 @@ export default function DriverRequestsPage() {
                                                         {request.licencePhotos.map(
                                                             (photo, index) => (
                                                                 <a
+                                                                    key={index}
                                                                     href={photo}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                 >
                                                                     <img
-                                                                        key={
-                                                                            index
-                                                                        }
                                                                         src={
                                                                             photo
                                                                         }
