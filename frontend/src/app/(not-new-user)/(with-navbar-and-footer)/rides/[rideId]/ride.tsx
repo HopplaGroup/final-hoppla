@@ -28,6 +28,7 @@ import {
   CheckCheck,
   Stars,
   Plus,
+  X,
 } from "lucide-react";
 import { format } from "date-fns";
 import { languageTag } from "@/paraglide/runtime";
@@ -488,37 +489,121 @@ export function Ride({
                         {ride.availableSeats -
                           ride.ridePassengerRequests.filter(
                             (r) => r.status === "ACCEPTED"
-                          ).length}{" "}
-                        seats available
+                          ).length ===
+                        0
+                          ? "Fully Booked"
+                          : `${
+                              ride.availableSeats -
+                              ride.ridePassengerRequests.filter(
+                                (r) => r.status === "ACCEPTED"
+                              ).length
+                            } seats available`}
                       </>
                     )}
                   </h2>
                   <ul className="list-none mb-0">
-                    {ride.driverId !== userId &&
-                      new Array(
-                        ride.availableSeats -
-                          ride.ridePassengerRequests.filter(
-                            (r) => r.status === "ACCEPTED"
-                          ).length
-                      )
+                    {ride.driverId === userId &&
+                      new Array(ride.availableSeats)
                         .fill(null)
-                        .map((_, index) => (
-                          <li
-                            key={index}
-                            className="py-3 pr-4 flex items-center border-b border-gray-300"
-                          >
-                            <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                            You?
-                          </li>
-                        ))}
+                        .map((_, index) => {
+                          const acceptedPassenger =
+                            ride.ridePassengerRequests.filter(
+                              (r) =>
+                                r.status === "ACCEPTED" &&
+                                r.passengerId !== ride.driverId
+                            )[index]; // Exclude driver
+
+                          return (
+                            <li
+                              key={index}
+                              className="py-3 pr-4 flex items-center border-b border-gray-300"
+                            >
+                              {acceptedPassenger ? (
+                                <img
+                                  src={acceptedPassenger.passenger.profileImg}
+                                  className="w-10 h-10 rounded-full mr-3 object-cover"
+                                  alt="Passenger"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                              )}
+                              {acceptedPassenger
+                                ? acceptedPassenger.passenger.name
+                                : "Available Seat"}{" "}
+                              {/* For driver view */}
+                            </li>
+                          );
+                        })}
+
+                    {ride.driverId !== userId &&
+                      new Array(ride.availableSeats)
+                        .fill(null)
+                        .map((_, index) => {
+                          const acceptedPassenger =
+                            ride.ridePassengerRequests.filter(
+                              (r) => r.status === "ACCEPTED"
+                            )[index]; // Get the passenger at the current index if available
+
+                          return (
+                            <li
+                              key={index}
+                              className="py-3 pr-4 flex items-center border-b border-gray-300"
+                            >
+                              {acceptedPassenger ? (
+                                <img
+                                  src={acceptedPassenger.passenger.profileImg}
+                                  className="w-10 h-10 rounded-full mr-3 object-cover"
+                                  alt="Passenger"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                              )}
+                              {acceptedPassenger
+                                ? acceptedPassenger.passenger.name
+                                : "You?"}
+                            </li>
+                          );
+                        })}
+
+                    <div className="mb-4 mt-4 flex">
+                      <div className="flex-grow flex items-center">
+                        Driver's price for one seat
+                      </div>
+                      <div>
+                        <span className="text-2xl font-bold">
+                          {ride.price}{" "}
+                        </span>
+                        <span className="text-gray-400">₾</span>{" "}
+                      </div>
+                    </div>
+
+                    {ride.driverId === userId &&
+                      ride.ridePassengerRequests.some(
+                        (r) => r.status !== "ACCEPTED"
+                      ) && (
+                        <div className="mt-6">
+                          <Separator />
+                          <div className="text-center">Requests</div>
+                        </div>
+                      )}
+
                     {ride.driverId === userId &&
                       ride.ridePassengerRequests
-                        // .filter(
-                        //     (r) =>
-                        //         r.status ===
-                        //             "PENDING" ||
-                        //         r.status === "REJECTED"
-                        // )
+                        .filter(
+                          (r) =>
+                            r.status === "PENDING" || r.status === "REJECTED"
+                        )
+                        .sort((a, b) => {
+                          const statusOrder = [
+                            "PENDING",
+                            "ACCEPTED",
+                            "REJECTED",
+                          ];
+                          return (
+                            statusOrder.indexOf(a.status) -
+                            statusOrder.indexOf(b.status)
+                          );
+                        })
                         .map(
                           ({
                             passenger,
@@ -529,34 +614,28 @@ export function Ride({
                             <li
                               key={passenger.id}
                               className={cn(
-                                "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
+                                "py-3 mt-2 bg-white rounded-md pl-4 pr-4 flex flex-col items-center justify-between border",
                                 {
-                                  "bg-green-300": status === "ACCEPTED",
-                                  "bg-red-300": status === "REJECTED",
-                                  "bg-yellow-300": status === "PENDING",
+                                  "border-orange-300": status === "UNPAID",
+                                  "border-green-300": status === "ACCEPTED",
+                                  "border-red-300": status === "REJECTED",
+                                  "border-yellow-300": status === "PENDING",
                                 }
                               )}
                             >
                               <div className="flex items-center justify-between w-full">
                                 <Link
                                   href={`/users/${passenger.id}`}
-                                  className="text-primary font-semibold"
+                                  className="text-primary font-semibold flex items-center"
                                 >
                                   <img
                                     src={passenger.profileImg}
                                     className="w-10 h-10 rounded-full mr-3 object-cover "
                                     alt=""
                                   />
-                                  {passenger.name}
+                                  <div>{passenger.name}</div>
                                 </Link>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-gray-500">
-                                    {preferredPrice} ₾
-                                  </span>
-                                  <span className="text-gray-500">
-                                    {description}
-                                  </span>
-                                </div>
+
                                 {ride.status === "ACTIVE" &&
                                   status === "PENDING" && (
                                     <div className="flex items-center gap-2">
@@ -565,56 +644,99 @@ export function Ride({
                                         onClick={() =>
                                           onAcceptPassenger(passenger.id)
                                         }
-                                        className="ml-auto bg-green-500 text-white py-2 px-4 rounded-md"
+                                        className="ml-auto bg-green-500 hover:bg-gray-400 text-white py-2 px-4 rounded-md"
                                       >
-                                        Accept
+                                        <Check />
                                       </Button>
                                       <Button
                                         disabled={isRejectingPassenger}
                                         onClick={() =>
                                           onRejectPassenger(passenger.id)
                                         }
-                                        className="ml-auto bg-red-500 text-white py-2 px-4 rounded-md"
+                                        className="ml-auto bg-red-500 hover:bg-gray-400 text-white py-2 px-4 rounded-md"
                                       >
-                                        Reject
+                                        <X />
                                       </Button>
                                     </div>
                                   )}
+                                {ride.status === "ACTIVE" &&
+                                  status === "REJECTED" && (
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-red-500 font-bold">
+                                        Rejected
+                                      </span>
+                                    </div>
+                                  )}
                               </div>
+
+                              {description !== "" && (
+                                <div className="mt-3 w-full">
+                                  <Separator />
+                                  <p className="mt-1">{description}</p>
+                                </div>
+                              )}
+
+                              {preferredPrice !== "" && (
+                                <div className="flex items-center justify-end w-full mt-2 gap-2">
+                                  <span className="text-gray-500 text-lg">
+                                    Asks for {preferredPrice} ₾
+                                  </span>
+                                </div>
+                              )}
                             </li>
                           )
                         )}
+
+                    {ride.driverId !== userId &&
+                      ride.ridePassengerRequests.some(
+                        (r) =>
+                          r.passengerId === userId && r.status !== "ACCEPTED"
+                      ) && (
+                        <div className="mt-6">
+                          <Separator />
+                          <div className="text-center">Request</div>
+                        </div>
+                      )}
+
                     {ride.driverId !== userId &&
                       ride.ridePassengerRequests
                         .filter(
                           (r) =>
-                            r.status === "ACCEPTED" || r.passengerId === userId
+                            r.passengerId === userId && r.status !== "ACCEPTED"
                         )
                         .map(({ passenger, status }) => (
                           <li
                             key={passenger.id}
                             className={cn(
-                              "py-3 pr-4 flex items-center justify-between border-b border-gray-300",
+                              "py-3 mt-2 bg-white rounded-md pl-4 pr-4 flex items-center justify-between border",
                               {
-                                "bg-orange-300": status === "UNPAID",
-                                "bg-green-300": status === "ACCEPTED",
-                                "bg-red-300": status === "REJECTED",
-                                "bg-yellow-300": status === "PENDING",
+                                "border-orange-300": status === "UNPAID",
+                                "border-green-300": status === "ACCEPTED",
+                                "border-red-300": status === "REJECTED",
+                                "border-yellow-300": status === "PENDING",
                               }
                             )}
                           >
-                            <div>
+                            <div className="flex items-center">
                               <img
                                 src={passenger.profileImg}
                                 className="w-10 h-10 rounded-full mr-3 object-cover"
                                 alt=""
                               />
-                              <Link
-                                href={`/users/${passenger.id}`}
-                                className="text-primary font-semibold"
-                              >
-                                {passenger.name}
-                              </Link>
+                              {passenger.name}
+                            </div>
+
+                            <div className="hidden sm:block">
+                              {status === "PENDING" && (
+                                <span className="text-yellow-500 font-bold">
+                                  Pending
+                                </span>
+                              )}
+                              {status === "REJECTED" && (
+                                <span className="text-red-500 font-bold">
+                                  Rejected
+                                </span>
+                              )}
                             </div>
 
                             {passenger.id === userId &&
@@ -692,7 +814,7 @@ export function Ride({
                                 <Button
                                   disabled={isCancelingRide}
                                   onClick={onCancelRide}
-                                  className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
+                                  className="bg-primary text-white py-2 px-4 rounded-md"
                                 >
                                   Cancel
                                 </Button>
@@ -701,17 +823,8 @@ export function Ride({
                         ))}
                   </ul>
                 </div>
-                <div className="p-4">
-                  <div className="mb-4 flex">
-                    <div className="flex-grow flex items-center">
-                      Driver's price for one seat
-                    </div>
-                    <div>
-                      <span className="text-2xl font-bold">{ride.price} </span>
-                      <span className="text-gray-400">₾</span>{" "}
-                    </div>
-                  </div>
 
+                <div className="p-4">
                   {ride.status === "ACTIVE" &&
                     ride.departure > new Date() &&
                     userId &&
@@ -858,6 +971,39 @@ export function Ride({
                           </Form>
                         </AlertDialogContent>
                       </AlertDialog>
+                    )}
+
+                  {ride.status === "ACTIVE" &&
+                    userId &&
+                    ride.driverId !== userId &&
+                    !rideStartedConfirmation &&
+                    ride.ridePassengerRequests
+                      .filter((r) => r.status === "ACCEPTED") // Filter accepted requests
+                      .some((r) => r.passengerId === userId) && ( // Check if this user is among the accepted
+                      <div className="flex items-center gap-2">
+                        <Button
+                          disabled={isRideStartedConfirming}
+                          onClick={() =>
+                            createRideStartedConfirmation({
+                              data: {
+                                rideId,
+                                userId,
+                              },
+                            })
+                          }
+                          className="bg-green-500 w-1/2 text-white py-2 px-4 rounded-md"
+                        >
+                          Start Ride
+                        </Button>
+
+                        <Button
+                          disabled={isCancelingRide}
+                          onClick={onCancelRide} // Function to cancel the ride
+                          className="bg-red-500 w-1/2 text-white py-2 px-4 rounded-md"
+                        >
+                          Cancel Ride
+                        </Button>
+                      </div>
                     )}
                 </div>
               </div>
