@@ -8,14 +8,16 @@ import {
     useFindManyRide,
 } from "@/lib/hooks";
 import { Coins, MapPin, Users } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 
 export default function Stats() {
-    const { data: totalUserCount } = useCountUser(
-        {},
-        {
-            refetchOnWindowFocus: false,
-        }
-    );
+    const { data: totalUserCount, isLoading: isUserCountLoading } =
+        useCountUser(
+            {},
+            {
+                refetchOnWindowFocus: false,
+            }
+        );
 
     // const { data: allRides } = useFindManyRide({
     //     where: {
@@ -56,29 +58,33 @@ export default function Stats() {
     //         );
     //     }, 0) || 0;
 
-    const { data: totalStartedRideCount } = useCountRide(
-        {
-            where: {
-                startedConfirmations: {
-                    some: {},
+    const { data: totalStartedRideCount, isLoading: isRideCountLoading } =
+        useCountRide(
+            {
+                where: {
+                    startedConfirmations: {
+                        some: {},
+                    },
                 },
             },
-        },
-        {
-            refetchOnWindowFocus: false,
-        }
-    );
+            {
+                refetchOnWindowFocus: false,
+            }
+        );
 
     return (
-        <div className="flex gap-5 items-center">
-            <div className="w-[200px] rounded-[25px] bg-white p-8">
+        <div className="flex flex-wrap gap-5 items-center">
+            <div className="w-[200px] rounded-lg border-2 bg-white p-8">
                 <div className="h-12">
                     <Users className="text-primary" size={32} />
                 </div>
                 <div className="my-2">
-                    <h2 className="text-4xl font-bold">
-                        <span>{totalUserCount}</span> +
-                    </h2>
+                    {isUserCountLoading && <Skeleton height={"40px"} />}
+                    {!isUserCountLoading && (
+                        <h2 className="text-4xl font-bold h-[40px] inline-block">
+                            <span>{totalUserCount}</span> +
+                        </h2>
+                    )}
                 </div>
 
                 <div>
@@ -87,14 +93,17 @@ export default function Stats() {
                     </p>
                 </div>
             </div>
-            <div className="w-[200px] rounded-[25px] bg-white p-8">
+            <div className="w-[200px] rounded-lg border-2 bg-white p-8">
                 <div className="h-12">
                     <MapPin className="text-primary" size={32} />
                 </div>
                 <div className="my-2">
-                    <h2 className="text-4xl font-bold">
-                        <span>{totalStartedRideCount}</span> +
-                    </h2>
+                    {isRideCountLoading && <Skeleton height={"40px"} />}
+                    {!isRideCountLoading && (
+                        <h2 className="text-4xl font-bold h-[40px] inline-block">
+                            <span>{totalStartedRideCount}</span> +
+                        </h2>
+                    )}
                 </div>
 
                 <div>
@@ -103,15 +112,20 @@ export default function Stats() {
                     </p>
                 </div>
             </div>
-            <div className="w-[200px] rounded-[25px] bg-white p-8">
+            <div className="w-[200px] rounded-lg border-2 bg-white p-8">
                 <div className="h-12">
                     <Coins className="text-primary" size={32} />
                 </div>
                 <div className="my-2">
-                    <h2 className="text-4xl font-bold">
-                        <span>{(totalStartedRideCount || 0) * RIDE_PRICE}</span>{" "}
-                        ₾
-                    </h2>
+                    {isRideCountLoading && <Skeleton height={"40px"} />}
+                    {!isRideCountLoading && (
+                        <h2 className="text-4xl font-bold h-[40px] inline-block">
+                            <span>
+                                {(totalStartedRideCount || 0) * RIDE_PRICE}
+                            </span>{" "}
+                            ₾
+                        </h2>
+                    )}
                 </div>
 
                 <div>
