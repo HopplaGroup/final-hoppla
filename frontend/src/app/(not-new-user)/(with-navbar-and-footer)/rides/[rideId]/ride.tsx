@@ -70,6 +70,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { NumericFormat } from "react-number-format";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { menv } from "@/lib/utils/menv";
 
 const FormSchema = z.object({
   preferredPrice: z.number().int().positive().optional(),
@@ -618,6 +620,19 @@ export function Ride({
                         <span className="text-gray-400">₾</span>{" "}
                       </div>
                     </div>
+                    {!userId && (
+                      <RegisterLink
+                        authUrlParams={{
+                          connection_id:
+                            menv.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE,
+                        }}
+                      >
+                        <Button className="flex w-full justify-center items-center gap-2 bg-primary text-white p-3 rounded-lg">
+                          Sign In To Book
+                        </Button>
+                      </RegisterLink>
+                    )}
+
                     {ride.driverId === userId && (
                       <div className="flex justify-end">
                         <AlertDialog open={open} onOpenChange={setOpen}>
@@ -749,14 +764,14 @@ export function Ride({
                                   )}
                               </div>
 
-                              {description !== "" && (
+                              {description && (
                                 <div className="mt-3 w-full">
                                   <Separator />
                                   <p className="mt-1">{description}</p>
                                 </div>
                               )}
 
-                              {preferredPrice !== "" && (
+                              {preferredPrice && preferredPrice > 0 && (
                                 <div className="flex items-center justify-end w-full mt-2 gap-2">
                                   <span className="text-gray-500 text-lg">
                                     Asks for {preferredPrice} ₾
@@ -942,8 +957,7 @@ export function Ride({
                                       <FormLabel>Request Details</FormLabel>
                                       <FormControl>
                                         <Input
-                                          defaultValue="Please, accept my request"
-                                          placeholder="Please, accept my request"
+                                          placeholder="You can leave this empty"
                                           {...field}
                                         />
                                       </FormControl>
