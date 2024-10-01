@@ -615,7 +615,7 @@ export function Ride({
 
                     <div className="mb-4 mt-4 flex">
                       <div className="flex-grow flex items-center">
-                        Driver's price for one seat
+                        {`Driver's price for one seat`}
                       </div>
                       <div>
                         <span className="text-2xl font-bold">
@@ -840,7 +840,7 @@ export function Ride({
                             </div>
 
                             {passenger.id === userId &&
-                              ride.departure < new Date() &&
+                              new Date(ride.departure) < new Date() &&
                               !rideStartedConfirmation &&
                               ride.status === "ACTIVE" &&
                               status === "ACCEPTED" && (
@@ -926,7 +926,7 @@ export function Ride({
 
                 <div className="p-4">
                   {ride.status === "ACTIVE" &&
-                    ride.departure > new Date() &&
+                    new Date(ride.departure) > new Date() &&
                     userId &&
                     ride.driverId !== userId &&
                     !rideStartedConfirmation &&
@@ -1026,10 +1026,11 @@ export function Ride({
                                 <Separator />
 
                                 <FormDescription>
-                                  <strong>Note:</strong> You will pay the
+                                  <strong>Note:</strong>{" "}
+                                  {` You will pay the
                                   booking fee now and get a refund if the driver
                                   declines. If accepted, you'll be able to
-                                  contact the driver.
+                                  contact the driver.`}
                                 </FormDescription>
                                 {/* <FormField
                                   control={form.control}
@@ -1082,8 +1083,8 @@ export function Ride({
                       <div className="flex items-center gap-2">
                         <Button
                           disabled={
-                            new Date(ride.departure).getUTCDate() <
-                              Date.now() || isRideStartedConfirming
+                            new Date(ride.departure) > new Date() ||
+                            isRideStartedConfirming
                           }
                           onClick={() =>
                             createRideStartedConfirmation({
