@@ -159,7 +159,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       rides: (rides as any).map((ride: any) => ({
         ...ride,
-        departure: new Date(ride.departure),
+        // departure: new Date(ride.departure).getUTCDate(),
       })),
       totalCount: (totalCount as any)[0].count.toString(),
     });
