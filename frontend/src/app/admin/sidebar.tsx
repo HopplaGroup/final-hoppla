@@ -45,7 +45,7 @@ export default function MySidebar() {
                     >
                         Driver Requests
                     </MenuItem>
-                    <MenuItem component={<Link href="/admin/requests/user" />}>
+                    <MenuItem component={<Link href="/admin/requests/car" />}>
                         Car Requests
                     </MenuItem>
                 </SubMenu>

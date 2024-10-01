@@ -10,7 +10,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useUpdateDriverVerificationRequest } from "@/lib/hooks";
+import { useUpdateCar, useUpdateDriverVerificationRequest } from "@/lib/hooks";
 import { cn } from "@/lib/utils/cn";
 import { Prisma } from "@zenstackhq/runtime/models";
 import { Eye } from "lucide-react";
@@ -19,14 +19,15 @@ import { useState } from "react";
 export default function RequestCard({
     request,
 }: {
-    request: Prisma.DriverVerificationRequestGetPayload<{
+    request: Prisma.CarGetPayload<{
         include: {
-            driver: true;
+            owner: true;
         };
     }>;
 }) {
-    const { mutate: approveRequest, isPending: isApprovingUser } =
-        useUpdateDriverVerificationRequest({});
+    const { mutate: approveRequest, isPending: isApprovingUser } = useUpdateCar(
+        {}
+    );
     const [open, setOpen] = useState(false);
     return (
         <li
@@ -41,16 +42,20 @@ export default function RequestCard({
                     <div className="">
                         <img
                             className="w-8 h-8 rounded-full"
-                            src={request.driver.profileImg}
-                            alt="Profile image"
+                            src={
+                                request.photos.length > 0
+                                    ? request.photos[0]
+                                    : ""
+                            }
+                            alt="Car image"
                         />
                     </div>
                     <div className="">
                         <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                            {request.driver.name}
+                            {request.mark}
                         </p>
                         <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                            {request.driver.email}
+                            {request.plate}
                         </p>
                     </div>
                 </div>
@@ -66,13 +71,14 @@ export default function RequestCard({
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Approve Request</AlertDialogTitle>
+                            <AlertDialogTitle>
+                                Approve Car Request
+                            </AlertDialogTitle>
                         </AlertDialogHeader>
                         <div className="space-y-4">
                             <p>
-                                Are you sure you want to approve this request?
+                                This will make {request.owner.name} car verified
                             </p>
-                            <p>This will make {request.driver.name} a driver</p>
 
                             <div className="space-y-2">
                                 <p>
@@ -90,7 +96,7 @@ export default function RequestCard({
                                 <div>
                                     <strong>License Photos:</strong>
                                     <div className="grid grid-cols-2 gap-4">
-                                        {request.licencePhotos.map(
+                                        {request.licensePhotos.map(
                                             (photo, index) => (
                                                 <a
                                                     key={index}
@@ -113,12 +119,12 @@ export default function RequestCard({
                                 <div>
                                     <strong>Selfie:</strong>
                                     <a
-                                        href={request.selfie}
+                                        href={request.photos[0]}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src={request.selfie}
+                                            src={request.photos[0]}
                                             alt="Driver Selfie"
                                             className="w-32 h-32 border rounded-full mt-2"
                                         />

@@ -1,52 +1,56 @@
 "use client";
 
-import { useCountUser, useFindManyUser } from "@/lib/hooks";
+import {
+    useCountRide,
+    useCountUser,
+    useFindManyCar,
+    useFindManyRide,
+    useFindManyUser,
+} from "@/lib/hooks";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { cn } from "@/lib/utils/cn";
 import { Prisma } from "@zenstackhq/runtime/models";
-import UserCard from "./user-card";
 import ResponsivePagination from "react-responsive-pagination";
 import Skeleton from "react-loading-skeleton";
 import SearchBox from "../components/searchbox";
+import RideCard from "./ride-card";
 
 const PAGE_COUNT = 10;
 
-export default function UsersPage() {
+export default function RidesPage() {
     const [searchText, setSearchText] = useState("");
     const [value] = useDebounce(searchText, 500);
-    const [userRole, setUserRole] = useState<"USER" | "ADMIN" | undefined>(
-        undefined
-    );
-    const [userStatus, setUserStatus] = useState<
-        "ACTIVE" | "BLOCKED" | undefined
+
+    const [rideStatus, setRideStatus] = useState<
+        "ACTIVE" | "CANCELLED" | undefined
     >(undefined);
+
     const [page, setPage] = useState(1);
-    const whereClause: Prisma.UserWhereInput = {
-        ...(userRole && { role: userRole }),
-        ...(userStatus && { status: userStatus }),
+    const whereClause: Prisma.RideWhereInput = {
+        ...(rideStatus && { status: rideStatus }),
         ...(value && {
             OR: [
                 {
-                    email: {
-                        contains: value,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    name: {
-                        contains: value,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    idNumber: {
-                        contains: value,
-                        mode: "insensitive",
-                    },
-                },
-                {
                     id: {
+                        contains: value,
+                    },
+                },
+                {
+                    driver: {
+                        name: {
+                            contains: value,
+                            mode: "insensitive",
+                        },
+                    },
+                },
+                {
+                    driverId: {
+                        contains: value,
+                    },
+                },
+                {
+                    carId: {
                         contains: value,
                     },
                 },
@@ -54,7 +58,7 @@ export default function UsersPage() {
         }),
     };
 
-    const { data: searchedUsersCount } = useCountUser(
+    const { data: searchedRidesCount } = useCountRide(
         {
             where: whereClause,
         },
@@ -75,8 +79,8 @@ export default function UsersPage() {
         };
     };
 
-    const { data: users, isLoading } = useFindManyUser(
-        withPagination<Prisma.UserFindManyArgs>(
+    const { data: rides, isLoading } = useFindManyRide(
+        withPagination<Prisma.RideFindManyArgs>(
             {
                 where: whereClause,
             },
@@ -88,14 +92,14 @@ export default function UsersPage() {
         }
     );
 
-    const totalPages = Math.ceil((searchedUsersCount || 0) / PAGE_COUNT);
+    const totalPages = Math.ceil((searchedRidesCount || 0) / PAGE_COUNT);
 
     return (
         <div className="mt-5">
             <SearchBox
                 value={searchText}
                 onChange={setSearchText}
-                placeholder="Search by name, email, ID number, or ID"
+                placeholder="Search by ride id, driver name, driver id, car id"
             />
             <div className="flex items-center gap-3 mt-5">
                 <div className="flex items-center gap-1 border-2 p-2 rounded-lg">
@@ -103,48 +107,12 @@ export default function UsersPage() {
                         className={cn(
                             "px-3 py-2.5 select-none bg-white border-2 rounded-lg cursor-pointer",
                             {
-                                "bg-primary text-white": userRole === "ADMIN",
-                            }
-                        )}
-                        onClick={() => {
-                            setUserRole((p) => {
-                                if (p === "ADMIN") return undefined;
-                                return "ADMIN";
-                            });
-                            setPage(1);
-                        }}
-                    >
-                        Admins
-                    </div>
-                    <div
-                        className={cn(
-                            "px-3 py-2.5 select-none bg-white border-2 rounded-lg cursor-pointer",
-                            {
-                                "bg-primary text-white": userRole === "USER",
-                            }
-                        )}
-                        onClick={() => {
-                            setUserRole((p) => {
-                                if (p === "USER") return undefined;
-                                return "USER";
-                            });
-                            setPage(1);
-                        }}
-                    >
-                        <span className="">Users</span>
-                    </div>
-                </div>
-                <div className="flex items-center gap-1 border-2 p-2 rounded-lg">
-                    <div
-                        className={cn(
-                            "px-3 py-2.5 select-none bg-white border-2 rounded-lg cursor-pointer",
-                            {
                                 "bg-primary text-white":
-                                    userStatus === "ACTIVE",
+                                    rideStatus === "ACTIVE",
                             }
                         )}
                         onClick={() => {
-                            setUserStatus((p) => {
+                            setRideStatus((p) => {
                                 if (p === "ACTIVE") return undefined;
                                 return "ACTIVE";
                             });
@@ -158,18 +126,18 @@ export default function UsersPage() {
                             "px-3 py-2.5 select-none bg-white border-2 rounded-lg cursor-pointer",
                             {
                                 "bg-primary text-white":
-                                    userStatus === "BLOCKED",
+                                    rideStatus === "CANCELLED",
                             }
                         )}
                         onClick={() => {
-                            setUserStatus((p) => {
-                                if (p === "BLOCKED") return undefined;
-                                return "BLOCKED";
+                            setRideStatus((p) => {
+                                if (p === "CANCELLED") return undefined;
+                                return "CANCELLED";
                             });
                             setPage(1);
                         }}
                     >
-                        <span className="">Blocked</span>
+                        <span className="">Cancelled</span>
                     </div>
                 </div>
             </div>
@@ -180,21 +148,21 @@ export default function UsersPage() {
                 </div>
             )}
             {!isLoading &&
-                searchedUsersCount !== undefined &&
-                searchedUsersCount > 0 && (
+                searchedRidesCount !== undefined &&
+                searchedRidesCount > 0 && (
                     <p className="mt-5 h-[20px] inline-block">
-                        {searchedUsersCount} users found matching your search
+                        {searchedRidesCount} rides found matching your search
                     </p>
                 )}
-            {!isLoading && users && users.length === 0 && (
-                <p className="mt-5 h-[20px] inline-block">No users found</p>
+            {!isLoading && rides && rides.length === 0 && (
+                <p className="mt-5 h-[20px] inline-block">No rides found</p>
             )}
-            {!isLoading && users && (
+            {!isLoading && rides && (
                 <ul role="list" className="">
-                    {users?.map((user) => (
-                        <UserCard
-                            key={user.id}
-                            user={user}
+                    {rides?.map((ride) => (
+                        <RideCard
+                            key={ride.id}
+                            ride={ride}
                             page={page}
                             whereClause={whereClause}
                         />

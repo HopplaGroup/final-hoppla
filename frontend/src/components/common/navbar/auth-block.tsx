@@ -90,7 +90,11 @@ export default function AuthBlock({}: AuthBlockProps) {
                                 {m.bad_caring_wallaby_pull()}
                             </Link>
                         </DropdownMenuItem>
-
+                        {latestUser && latestUser.role === "ADMIN" && (
+                            <DropdownMenuItem asChild>
+                                <Link href="/admin">Admin Page</Link>
+                            </DropdownMenuItem>
+                        )}
                         {latestUser &&
                             (!latestUser.driverVerificationRequest ||
                                 latestUser.driverVerificationRequest?.status ==

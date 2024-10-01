@@ -1,7 +1,9 @@
 "use client";
 
 import {
+    useCountCar,
     useCountDriverVerificationRequest,
+    useFindManyCar,
     useFindManyDriverVerificationRequest,
 } from "@/lib/hooks";
 import RequestCard from "./request-card";
@@ -10,73 +12,61 @@ import { Prisma } from "@zenstackhq/runtime/models";
 import ResponsivePagination from "react-responsive-pagination";
 import { cn } from "@/lib/utils/cn";
 import Skeleton from "react-loading-skeleton";
-import { useDebounce } from "use-debounce";
 import SearchBox from "../../components/searchbox";
+import { useDebounce } from "use-debounce";
 
 const PAGE_COUNT = 10;
 
-export default function DriverRequestsPage() {
-    const [searchText, setSearchText] = useState("");
-    const [value] = useDebounce(searchText, 500);
+export default function CarRequestsPage() {
     const [requestStatus, setRequestStatus] = useState<
         "PENDING" | "APPROVED" | "REJECTED"
     >("PENDING");
+    const [searchText, setSearchText] = useState("");
+    const [value] = useDebounce(searchText, 500);
+
     const [userStatus, setUserStatus] = useState<
         "ACTIVE" | "BLOCKED" | undefined
     >(undefined);
     const [page, setPage] = useState(1);
 
-    const whereClause: Prisma.DriverVerificationRequestWhereInput = {
+    const whereClause: Prisma.CarWhereInput = {
         status: requestStatus,
         ...(userStatus && {
-            driver: {
+            owner: {
                 status: userStatus,
             },
         }),
         ...(value && {
             OR: [
                 {
-                    driver: {
-                        name: {
-                            contains: value,
-                            mode: "insensitive",
-                        },
+                    mark: {
+                        contains: value,
+                        mode: "insensitive",
                     },
                 },
                 {
-                    driver: {
-                        email: {
-                            contains: value,
-                            mode: "insensitive",
-                        },
+                    plate: {
+                        contains: value,
+                        mode: "insensitive",
                     },
                 },
-
                 {
                     id: {
                         contains: value,
-                    },
-                },
-                {
-                    driver: {
-                        idNumber: {
-                            contains: value,
-                            mode: "insensitive",
-                        },
                     },
                 },
             ],
         }),
     };
 
-    const { data: requests, isLoading } = useFindManyDriverVerificationRequest(
+    const { data: requests, isLoading } = useFindManyCar(
         {
             where: whereClause,
             orderBy: {
                 createdAt: "desc",
             },
             include: {
-                driver: true,
+                owner: true,
             },
         },
         {
@@ -84,15 +74,14 @@ export default function DriverRequestsPage() {
         }
     );
 
-    const { data: requestsCount, isLoading: isCountLoading } =
-        useCountDriverVerificationRequest(
-            {
-                where: whereClause,
-            },
-            {
-                refetchOnWindowFocus: false,
-            }
-        );
+    const { data: requestsCount, isLoading: isCountLoading } = useCountCar(
+        {
+            where: whereClause,
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
 
     const totalPages = Math.ceil((requestsCount || 0) / PAGE_COUNT);
 
@@ -101,7 +90,7 @@ export default function DriverRequestsPage() {
             <SearchBox
                 value={searchText}
                 onChange={setSearchText}
-                placeholder="Search by name, email, ID number, or ID"
+                placeholder="Search by mark, plate, or ID"
             />
             <div className="flex items-center gap-3 mb-5 mt-5">
                 <div className="flex items-center gap-1 border-2 p-2 rounded-lg">
@@ -197,12 +186,10 @@ export default function DriverRequestsPage() {
                 </div>
             )}
             {!isLoading && requests && requests.length > 0 && (
-                <p className="">
-                    {requests.length} driver verification requests found
-                </p>
+                <p className="">{requests.length} cars found</p>
             )}
             {!isLoading && requests && requests.length === 0 && (
-                <p className="">No Requests found</p>
+                <p className="">No cars found</p>
             )}
             {!isLoading && requests && (
                 <ul role="list" className="">
