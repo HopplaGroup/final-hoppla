@@ -29,6 +29,7 @@ import {
   Stars,
   Plus,
   X,
+  Phone,
 } from "lucide-react";
 import { format } from "date-fns";
 import { languageTag } from "@/paraglide/runtime";
@@ -286,6 +287,19 @@ export function Ride({
     );
   }
 
+  function formatPhoneNumber(phoneNumber: string): string {
+    if (phoneNumber.length === 13) {
+      return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(
+        4,
+        7
+      )} ${phoneNumber.slice(7, 9)} ${phoneNumber.slice(
+        9,
+        11
+      )} ${phoneNumber.slice(11, 13)}`;
+    }
+    return phoneNumber; // Return as is if it doesn't match expected length
+  }
+
   return (
     <>
       {isPending ? (
@@ -326,6 +340,21 @@ export function Ride({
                   </div>
                 )}
               </div>
+
+              {((ride.driverId !== userId &&
+                ride.ridePassengerRequests.some(
+                  (r) => r.passengerId === userId && r.status === "ACCEPTED"
+                )) ||
+                ride.driverId == userId) && (
+                <div className="flex items-center gap-2 pt-2">
+                  <Phone className="fill-white stroke-primary" />
+                  <span className="text-lg">
+                    {ride.driver.mobileNumber
+                      ? formatPhoneNumber(ride.driver.mobileNumber)
+                      : ""}
+                  </span>
+                </div>
+              )}
             </div>
 
             <Separator className="mt-4" />
