@@ -1,4 +1,6 @@
 "use server";
+import { RIDE_PRICE } from "@/lib/bog/constants";
+import refundPayment from "@/lib/bog/refund-payment";
 import { getUser } from "@/lib/utils/auth";
 import { createServerAction } from "@/lib/utils/create-server-action";
 import db from "@/lib/utils/db";
@@ -10,19 +12,136 @@ const blockUser = createServerAction(
         blocked: z.boolean(),
     }),
     async ({ userId, blocked }) => {
-        const user = await getUser();
+        await db.$transaction(async (trx) => {
+            const user = await getUser();
 
-        if (!user || user.role !== "ADMIN") {
-            throw new Error("You are not allowed to do this action");
-        }
+            if (!user || user.role !== "ADMIN") {
+                throw new Error("You are not allowed to do this action");
+            }
 
-        await db.user.update({
-            where: { id: userId },
-            data: { status: blocked ? "BLOCKED" : "ACTIVE" },
+            await trx.user.update({
+                where: { id: userId },
+                data: { status: blocked ? "BLOCKED" : "ACTIVE" },
+            });
+
+            if (!blocked) return;
+
+            const rides = await trx.ride.findMany({
+                where: {
+                    driverId: userId,
+                    // FIND ALL RIDES THAT IN PROGRESS BUT NOT STARTED AND WHICH NOT STARTED YET CANCELL THEM
+                    startedConfirmations: {
+                        none: {},
+                    },
+                },
+                include: {
+                    ridePassengerRequests: {
+                        include: {
+                            passenger: true,
+                        },
+                    },
+                },
+            });
+
+            const passengerRequests = await trx.ridePassengerRequest.findMany({
+                where: {
+                    passengerId: userId,
+                    status: {
+                        in: ["ACCEPTED", "PENDING"],
+                    },
+                },
+            });
+
+            for (const request of passengerRequests) {
+                await trx.ridePassengerRequest.update({
+                    where: {
+                        id: request.id,
+                    },
+                    data: {
+                        status: "CANCELLED",
+                    },
+                });
+
+                if (request.bogOrderId) {
+                    const res = await refundPayment(request.bogOrderId);
+                    if (!res.success) {
+                        await trx.user.update({
+                            where: {
+                                id: userId,
+                            },
+                            data: {
+                                balance: {
+                                    increment: RIDE_PRICE,
+                                },
+                            },
+                        });
+                    }
+                } else {
+                    await trx.user.update({
+                        where: {
+                            id: userId,
+                        },
+                        data: {
+                            balance: {
+                                increment: RIDE_PRICE,
+                            },
+                        },
+                    });
+                }
+            }
+
+            for (const ride of rides) {
+                await trx.ride.update({
+                    where: {
+                        id: ride.id,
+                    },
+                    data: {
+                        status: "CANCELLED",
+                    },
+                });
+                for (const request of ride.ridePassengerRequests) {
+                    if (
+                        request.status === "ACCEPTED" ||
+                        request.status === "PENDING"
+                    ) {
+                        await trx.ridePassengerRequest.update({
+                            where: {
+                                id: request.id,
+                            },
+                            data: {
+                                status: "CANCELLED",
+                            },
+                        });
+                        if (request.bogOrderId) {
+                            const res = await refundPayment(request.bogOrderId);
+                            if (!res.success) {
+                                await trx.user.update({
+                                    where: {
+                                        id: request.passengerId,
+                                    },
+                                    data: {
+                                        balance: {
+                                            increment: RIDE_PRICE,
+                                        },
+                                    },
+                                });
+                            }
+                        } else {
+                            await trx.user.update({
+                                where: {
+                                    id: request.passengerId,
+                                },
+                                data: {
+                                    balance: {
+                                        increment: RIDE_PRICE,
+                                    },
+                                },
+                            });
+                        }
+                    }
+                }
+            }
         });
-
-        // not only block cancel all his rides, refund his passengers if ride is not started yet u know veryone who paid and
-        // cancel all his trips where he is passenger and refund him
     }
 );
 

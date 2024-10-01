@@ -41,7 +41,14 @@ export default async function cancelRide(rideId: string) {
             } else {
                 const r = await refundPayment(passengerRequest.bogOrderId);
                 if (!r.success) {
-                    throw new Error("Refund failed");
+                    await trx.user.update({
+                        where: { id: user.id },
+                        data: {
+                            balance: {
+                                increment: RIDE_PRICE,
+                            },
+                        },
+                    });
                 }
             }
         });

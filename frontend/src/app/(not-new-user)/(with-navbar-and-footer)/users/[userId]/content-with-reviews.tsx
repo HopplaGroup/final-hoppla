@@ -1,6 +1,10 @@
 "use client";
 import { Logo } from "@/components/common/logo";
-import { useFindManyUserReview, useFindUniqueUser } from "@/lib/hooks";
+import {
+    useCountRide,
+    useFindManyUserReview,
+    useFindUniqueUser,
+} from "@/lib/hooks";
 import { Stars } from "lucide-react";
 import AddReview from "./add-review";
 import ReviewCard from "./review-card";
@@ -81,6 +85,36 @@ export default function ContentWithReviews({
             )
         );
 
+    // 1. find if that guy was at least in one ride in that user and clicked start button
+    const { data: wasPassengerOnce } = useCountRide({
+        where: {
+            driverId: userId,
+            startedConfirmations: {
+                some: {
+                    userId: loggedUser?.id,
+                },
+            },
+        },
+    });
+
+    // 2. find if that guy was driver for that passenger
+    const { data: wasDriverOnce } = useCountRide(
+        {
+            where: {
+                driverId: loggedUser?.id,
+                startedConfirmations: {
+                    some: {
+                        userId: userId,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!userId && !!loggedUser?.id,
+        }
+    );
+    const showAddButton = !!wasPassengerOnce || !!wasDriverOnce;
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr]">
             <div className="bg-gray-100 p-4 lg:p-10 lg:h-screen lg:grid lg:grid-rows-[auto,1fr]">
@@ -92,7 +126,8 @@ export default function ContentWithReviews({
                     {userId &&
                         user &&
                         loggedUser?.id !== user.id &&
-                        !loggedUserReview && <AddReview revieweeId={userId} />}
+                        !loggedUserReview &&
+                        showAddButton && <AddReview revieweeId={userId} />}
                 </div>
 
                 <div className="flex items-center justify-between lg:hidden">
@@ -109,7 +144,7 @@ export default function ContentWithReviews({
                 {children}
             </div>
             <div className="block lg:hidden bg-gray-100 px-5">
-                {user && !loggedUserReview && userId && (
+                {user && !loggedUserReview && showAddButton && userId && (
                     <AddReview revieweeId={userId} />
                 )}
                 {reviews}
