@@ -146,6 +146,10 @@ export function Ride({
       }
     );
 
+  console.log({
+    rideStartedConfirmation,
+  });
+
   const { data: userReviews } = useFindManyUserReview(
     {
       where: {
@@ -633,44 +637,45 @@ export function Ride({
                       </RegisterLink>
                     )}
 
-                    {ride.driverId === userId && (
-                      <div className="flex justify-end">
-                        <AlertDialog open={open} onOpenChange={setOpen}>
-                          <AlertDialogTrigger className="w-full">
-                            <div className="flex justify-center items-center gap-2 hover:bg-primary bg-gray-400 text-white p-3 rounded-lg">
-                              Cancel Ride
-                            </div>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="rounded-md">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Are you sure, you want to cancel the ride?
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <Separator />
+                    {ride.driverId === userId &&
+                      ride.status !== "CANCELLED" && (
+                        <div className="flex justify-end">
+                          <AlertDialog open={open} onOpenChange={setOpen}>
+                            <AlertDialogTrigger className="w-full">
+                              <div className="flex justify-center items-center gap-2 hover:bg-primary bg-gray-400 text-white p-3 rounded-lg">
+                                Cancel Ride
+                              </div>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="rounded-md">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure, you want to cancel the ride?
+                                </AlertDialogTitle>
+                              </AlertDialogHeader>
+                              <Separator />
 
-                            <div>
-                              <div className="text-2xl"></div>
-                              <p>
-                                <strong>Note: </strong>
-                                Canceling will inform future passengers and may
-                                affect your rating.
-                              </p>
-                            </div>
+                              <div>
+                                <div className="text-2xl"></div>
+                                <p>
+                                  <strong>Note: </strong>
+                                  Canceling will inform future passengers and
+                                  may affect your rating.
+                                </p>
+                              </div>
 
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Back</AlertDialogCancel>
-                              <Button
-                                disabled={isCancelingRide}
-                                onClick={onCancelRide}
-                              >
-                                Cancel
-                              </Button>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    )}
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Back</AlertDialogCancel>
+                                <Button
+                                  disabled={isCancelingRide}
+                                  onClick={onCancelRide}
+                                >
+                                  Cancel
+                                </Button>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      )}
 
                     {ride.driverId === userId &&
                       ride.ridePassengerRequests.some(
