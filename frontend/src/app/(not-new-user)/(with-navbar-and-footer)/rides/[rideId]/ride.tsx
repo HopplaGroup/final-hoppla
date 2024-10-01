@@ -318,11 +318,13 @@ export function Ride({
                   </div>
                 </div>
 
-                <div className="flex justify-between mt-1">
-                  <div className="bg-primary/10 size-6 flex items-center justify-center rounded-full">
-                    <Check className="text-primary font-bold" size={18} />
+                {ride.driver.isUserVerified && (
+                  <div className="flex justify-between mt-1">
+                    <div className="bg-primary/10 size-6 flex items-center justify-center rounded-full">
+                      <Check className="text-primary font-bold" size={18} />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
