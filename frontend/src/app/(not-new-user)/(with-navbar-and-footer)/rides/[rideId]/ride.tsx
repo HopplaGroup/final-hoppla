@@ -519,18 +519,23 @@ export function Ride({
                               className="py-3 pr-4 flex items-center border-b border-gray-300"
                             >
                               {acceptedPassenger ? (
-                                <img
-                                  src={acceptedPassenger.passenger.profileImg}
-                                  className="w-10 h-10 rounded-full mr-3 object-cover"
-                                  alt="Passenger"
-                                />
+                                <Link
+                                  className="flex items-center"
+                                  href={`/users/${acceptedPassenger.passengerId}`}
+                                >
+                                  <img
+                                    src={acceptedPassenger.passenger.profileImg}
+                                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                                    alt="Passenger"
+                                  />
+                                  {acceptedPassenger.passenger.name}
+                                </Link>
                               ) : (
-                                <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                                <div className="flex items-center">
+                                  <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                                  <div>{"Available Seat"} </div>
+                                </div>
                               )}
-                              {acceptedPassenger
-                                ? acceptedPassenger.passenger.name
-                                : "Available Seat"}{" "}
-                              {/* For driver view */}
                             </li>
                           );
                         })}
@@ -550,17 +555,23 @@ export function Ride({
                               className="py-3 pr-4 flex items-center border-b border-gray-300"
                             >
                               {acceptedPassenger ? (
-                                <img
-                                  src={acceptedPassenger.passenger.profileImg}
-                                  className="w-10 h-10 rounded-full mr-3 object-cover"
-                                  alt="Passenger"
-                                />
+                                <Link
+                                  className="flex items-center"
+                                  href={`/users/${acceptedPassenger.passengerId}`}
+                                >
+                                  <img
+                                    src={acceptedPassenger.passenger.profileImg}
+                                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                                    alt="Passenger"
+                                  />
+                                  {acceptedPassenger.passenger.name}
+                                </Link>
                               ) : (
-                                <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                                <div className="flex items-center">
+                                  <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+                                  <div>{"You? "} </div>
+                                </div>
                               )}
-                              {acceptedPassenger
-                                ? acceptedPassenger.passenger.name
-                                : "You?"}
                             </li>
                           );
                         })}
@@ -576,6 +587,44 @@ export function Ride({
                         <span className="text-gray-400">₾</span>{" "}
                       </div>
                     </div>
+                    {ride.driverId === userId && (
+                      <div className="flex justify-end">
+                        <AlertDialog open={open} onOpenChange={setOpen}>
+                          <AlertDialogTrigger className="w-full">
+                            <div className="flex justify-center items-center gap-2 hover:bg-primary bg-gray-400 text-white p-3 rounded-lg">
+                              Cancel Ride
+                            </div>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="rounded-md">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Are you sure, you want to cancel the ride?
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+                            <Separator />
+
+                            <div>
+                              <div className="text-2xl"></div>
+                              <p>
+                                <strong>Note: </strong>
+                                Canceling will inform future passengers and may
+                                affect your rating.
+                              </p>
+                            </div>
+
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Back</AlertDialogCancel>
+                              <Button
+                                disabled={isCancelingRide}
+                                onClick={onCancelRide}
+                              >
+                                Cancel
+                              </Button>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    )}
 
                     {ride.driverId === userId &&
                       ride.ridePassengerRequests.some(
@@ -982,7 +1031,10 @@ export function Ride({
                       .some((r) => r.passengerId === userId) && ( // Check if this user is among the accepted
                       <div className="flex items-center gap-2">
                         <Button
-                          disabled={isRideStartedConfirming}
+                          disabled={
+                            new Date(ride.departure).getUTCDate() <
+                              Date.now() || isRideStartedConfirming
+                          }
                           onClick={() =>
                             createRideStartedConfirmation({
                               data: {
