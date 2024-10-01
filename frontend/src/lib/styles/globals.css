@@ -187,6 +187,31 @@
     }
 }
 
+.pagination {
+    justify-content: start !important;
+}
+
+.page-item .page-link {
+    color: rgb(230, 78, 61) !important;
+    width: 50px !important;
+    height: 50px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border: 0 !important;
+    font-size: 18px !important;
+}
+
+.page-item.active .page-link {
+    background-color: rgb(230, 78, 61) !important;
+    color: white !important;
+    border: 0 !important;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d !important;
+}
+
 svg.star-svg {
     display: inline;
 }

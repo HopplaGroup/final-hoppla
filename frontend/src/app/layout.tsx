@@ -1,5 +1,7 @@
 import { LanguageProvider } from "@inlang/paraglide-next";
 import { languageTag } from "@/paraglide/runtime.js";
+import "react-loading-skeleton/dist/skeleton.css";
+import "react-responsive-pagination/themes/classic.css";
 import "@/lib/styles/globals.css";
 import { cn } from "@/lib/utils/cn";
 import { MainProvider } from "@/lib/providers/mainProvider";
