@@ -2,6 +2,7 @@ import { getUser } from "@/lib/utils/auth";
 import db from "@/lib/utils/db";
 import { redirect } from "next/navigation";
 import { SendDriverRequestForm } from "./form";
+import * as m from "@/paraglide/messages";
 
 type DriverVerficationRequestPageProps = {
   params: {};
@@ -30,11 +31,9 @@ export default async function DriverVerficationRequestPage({
         <div className="flex flex-col text-center items-center gap-12">
           <div className="text-start">
             <h1 className="text-3xl font-bold  sm:text-4xl lg:text-5xl lg:leading-tight">
-              Send Driver Request
+              {m.main_only_butterfly_wish()}
             </h1>
-            <p className="mt-1 md:text-lg ">
-              We will verify your driver request and get back to you soon.
-            </p>
+            <p className="mt-1 md:text-lg ">{m.misty_merry_lizard_assure()}</p>
           </div>
 
           <div className="relative w-full max-w-lg text-center">
