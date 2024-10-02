@@ -190,10 +190,12 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
             <p className="font-semibold leading-none">
               {ride.driver.name.split(" ")[0]}
             </p>
-            <p className="flex items-center gap-1 font-semibold">
-              {ride.driver.averageRating}{" "}
-              <Stars className="text-primary" size={17} />
-            </p>
+            {ride.driver.averageRating > 0 && (
+              <p className="flex items-center gap-1 font-semibold">
+                {ride.driver.averageRating}{" "}
+                <Stars className="text-primary" size={17} />
+              </p>
+            )}
           </div>
           <div className="flex ml-2 mr-2 sm:ml-5 sm:mr-5 h-7 items-center space-x-4 text-sm">
             <Separator orientation="vertical" />

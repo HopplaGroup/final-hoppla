@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
             <img
               src={languages[currentLanguage].flagImg}
               alt={languages[currentLanguage].label}
-              className="h-5 md:rounded-md w-8 md:w-10 md:h-8 object-cover"
+              className="h-5 md:rounded-md w-8 md:w-10 md:h-8 object-cover outline outline-1 outline-gray-300"
             />
           )}
           {/* <span className="hidden md:block">
