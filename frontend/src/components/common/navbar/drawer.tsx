@@ -9,13 +9,41 @@ type NavigationDrawerProps = {
   toggleDrawer: () => void;
 };
 import * as m from "@/paraglide/messages.js";
+import { useUser } from "@/lib/providers/user-provider";
+import { useFindUniqueUser } from "@/lib/hooks";
 
-export const DRAWER_LINKS = [
-  { href: "/profile", label: "Profile" },
-  { href: "/send-driver-verification", label: "Become a driver" },
-  { href: "/search/current-rides", label: "Current Rides" },
-];
 const NavigationDrawer = ({ isOpen, toggleDrawer }: NavigationDrawerProps) => {
+  const { user } = useUser();
+  const { data: latestUser } = useFindUniqueUser(
+    {
+      where: {
+        id: user?.id,
+      },
+      include: {
+        driverVerificationRequest: {
+          select: {
+            status: true,
+          },
+        },
+      },
+    },
+    {
+      enabled: !!user,
+    }
+  );
+  const showBecomeDriverButton =
+    latestUser &&
+    (!latestUser.driverVerificationRequest ||
+      latestUser.driverVerificationRequest?.status == "PENDING");
+
+  const DRAWER_LINKS = [
+    { href: "/profile", label: "Profile" },
+    ...(showBecomeDriverButton
+      ? [{ href: "/send-driver-verification", label: "Become a driver" }]
+      : []),
+    { href: "/search/current-rides", label: "Current Rides" },
+  ];
+
   return (
     <div>
       <div
