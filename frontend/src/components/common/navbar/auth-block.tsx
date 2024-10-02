@@ -123,7 +123,7 @@ export default function AuthBlock({}: AuthBlockProps) {
 
                 {latestUser && latestUser.role === "ADMIN" && (
                   <DropdownMenuItem asChild>
-                    <Link href="/admin">Admin Page</Link>
+                    <Link href="/admin">{m.long_dry_ibex_dash()}</Link>
                   </DropdownMenuItem>
                 )}
 

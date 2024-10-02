@@ -37,11 +37,16 @@ const NavigationDrawer = ({ isOpen, toggleDrawer }: NavigationDrawerProps) => {
       latestUser.driverVerificationRequest?.status == "PENDING");
 
   const DRAWER_LINKS = [
-    { href: "/profile", label: "Profile" },
+    { href: "/profile", label: m.major_legal_sheep_bloom() },
     ...(showBecomeDriverButton
-      ? [{ href: "/send-driver-verification", label: "Become a driver" }]
+      ? [
+          {
+            href: "/send-driver-verification",
+            label: m.direct_minor_dachshund_commend(),
+          },
+        ]
       : []),
-    { href: "/search/current-rides", label: "Current Rides" },
+    { href: "/search/current-rides", label: m.busy_equal_maggot_swim() },
   ];
 
   return (
@@ -58,7 +63,7 @@ const NavigationDrawer = ({ isOpen, toggleDrawer }: NavigationDrawerProps) => {
           id="drawer-navigation-label"
           className="text-base font-semibold text-gray-500 uppercase"
         >
-          Menu
+          {m.round_mealy_haddock_advise()}
         </h5>
         <button
           type="button"

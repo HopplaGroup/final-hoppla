@@ -8,18 +8,11 @@ import Link from "next/link";
 import { useState } from "react";
 import NavigationDrawer from "./drawer";
 
+import * as m from "@/paraglide/messages";
 type NavbarProps = {
   driverHasCar?: boolean;
 };
 
-const NAV_ITEMS = [
-  { href: "/", label: "Home" },
-  // { href: "/search", label: "Search" },
-  { href: "/terms", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-
-// TODO: NAVBARS RO AKLIKEB CONTEXT MENUZE, LEPTOPIS ZOMAZE, DATAMASHOBS IQET AQET
 export function Navbar({ driverHasCar }: NavbarProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
@@ -69,7 +62,9 @@ export function Navbar({ driverHasCar }: NavbarProps) {
                 href={"/add-ride"}
               >
                 <Plus />{" "}
-                <span className="hidden md:inline">Publish the ride</span>
+                <span className="hidden md:inline">
+                  {m.quiet_maroon_snake_find()}
+                </span>
               </Button>
             )}
             <AuthBlock />
