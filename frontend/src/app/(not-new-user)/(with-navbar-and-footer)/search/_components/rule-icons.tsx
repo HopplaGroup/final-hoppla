@@ -1,5 +1,24 @@
 import { SVGCanCarryBag, SVGNoSmoking, SVGPetsAllowed } from "./svgs";
 
+export const ruleToLabel: Record<string, { ka: string; en: string }> = {
+  "No Smoking": {
+    ka: "სიგარეტის მიცემის აკრძალვა",
+    en: "No Smoking",
+  },
+  "Pets Allowed": {
+    ka: "ცხოვრებაში შეშვება",
+    en: "Pets Allowed",
+  },
+  "Can Carry Bag": {
+    ka: "შეიძლება ჩაიტვირთოს ჩანთა",
+    en: "Can Carry Bag",
+  },
+  "Only Woman": {
+    ka: "მხარდამჭერი მხარე",
+    en: "Only Woman",
+  },
+};
+
 export const ruleToIcon: Record<string, React.ReactNode> = {
   "No Smoking": (
     <SVGNoSmoking className="fill-gray-500 w-4 h-4  sm:w-7 sm:h-7" />
