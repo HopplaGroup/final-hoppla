@@ -1,9 +1,15 @@
+import { Button } from "@/components/ui/actions/button";
+import { Separator } from "@/components/ui/separator";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 type NavigationDrawerProps = {
   isOpen: boolean;
   toggleDrawer: () => void;
 };
+import * as m from "@/paraglide/messages.js";
+
 export const DRAWER_LINKS = [
   { href: "/profile", label: "Profile" },
   { href: "/send-driver-verification", label: "Become a driver" },
@@ -72,6 +78,13 @@ const NavigationDrawer = ({ isOpen, toggleDrawer }: NavigationDrawerProps) => {
                   <span className="ms-3">{label}</span>
                 </Link>
               ))}
+              <Separator />
+
+              <LogoutLink className="flex items-center gap-3 pt-2 justify-start w-full  p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                <LogOut className="w-5 h-5" />
+
+                {m.extra_lucky_rook_trust()}
+              </LogoutLink>
             </li>
           </ul>
         </div>
