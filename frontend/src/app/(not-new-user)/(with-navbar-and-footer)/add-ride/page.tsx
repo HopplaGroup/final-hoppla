@@ -2,6 +2,7 @@ import { getUser } from "@/lib/utils/auth";
 import db from "@/lib/utils/db";
 import { redirect } from "next/navigation";
 import { CreateRideForm } from "./form";
+import * as m from "@/paraglide/messages.js";
 
 type AddCarPageProps = {
     params: {};
@@ -34,10 +35,10 @@ export default async function AddCarPage({
                 <div className="flex flex-col text-center items-center gap-12">
                     <div>
                         <h1 className="text-3xl font-bold  sm:text-4xl lg:text-5xl lg:leading-tight">
-                            Add ride
+                            {m.aqua_brave_turkey_treat()}
                         </h1>
                         <p className="mt-1 md:text-lg ">
-                            Add your car details and then add ride.
+                            {m.aware_pink_stork_walk()}
                         </p>
                     </div>
 
