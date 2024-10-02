@@ -27,6 +27,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import * as m from "@/paraglide/messages.js";
 
 import { z } from "zod";
 import { UserReviewCreateSchema } from "@zenstackhq/runtime/zod/models";
@@ -64,7 +65,7 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
                 <AlertDialogTrigger className="w-full">
                     <div className="mt-4 bg-white shadow-sm rounded-lg p-5">
                         <div className="flex items-center justify-center gap-2 font-medium">
-                            <Plus size={22} /> Add Review
+                            <Plus size={22} /> {m.day_blue_piranha_strive()}
                         </div>
                     </div>
                 </AlertDialogTrigger>
@@ -75,7 +76,9 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
                             className="space-y-8"
                         >
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Add Review</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                    {m.grand_every_panther_love()}
+                                </AlertDialogTitle>
                                 <div className="space-y-4">
                                     <FormField
                                         control={form.control}
@@ -99,7 +102,9 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
                                                     </div>
                                                 </FormControl>
                                                 {/* <FormDescription>This is the rating .</FormDescription> */}
-                                                <FormMessage />
+                                                <FormMessage
+                                                    errorMessage={m.weak_noble_donkey_nourish()}
+                                                />
                                             </FormItem>
                                         )}
                                     />
@@ -111,20 +116,26 @@ export default function AddReview({ revieweeId }: { revieweeId: string }) {
                                                 {/* <FormLabel>Comment</FormLabel> */}
                                                 <FormControl>
                                                     <Input
-                                                        placeholder="comment"
+                                                        placeholder={m.trite_mad_warthog_dare()}
                                                         {...field}
                                                     />
                                                 </FormControl>
                                                 {/* <FormDescription>This is the comment .</FormDescription> */}
-                                                <FormMessage />
+                                                <FormMessage
+                                                    errorMessage={m.lucky_solid_gopher_adore()}
+                                                />
                                             </FormItem>
                                         )}
                                     />
                                 </div>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <Button type="submit">Submit</Button>
+                                <AlertDialogCancel>
+                                    {m.clean_nice_bumblebee_radiate()}
+                                </AlertDialogCancel>
+                                <Button type="submit">
+                                    {m.mean_next_camel_peel()}
+                                </Button>
                             </AlertDialogFooter>
                         </form>
                     </Form>

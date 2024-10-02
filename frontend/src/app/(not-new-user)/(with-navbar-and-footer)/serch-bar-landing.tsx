@@ -13,6 +13,7 @@ import {
     parseAsArrayOf,
     parseAsString,
 } from "nuqs";
+import * as m from "@/paraglide/messages.js";
 
 import { DatePicker } from "@/components/ui/date-picker";
 import { useMemo } from "react";
@@ -53,7 +54,7 @@ export default function SearchBarLanding() {
                                 .startsWith(query.toLowerCase())
                     )
                 }
-                placeholder="Departure location"
+                placeholder={m.sad_livid_octopus_express()}
             />
             <Autocomplete
                 startContent={<MapPin size={18} />}
@@ -74,14 +75,14 @@ export default function SearchBarLanding() {
                                 .startsWith(query.toLowerCase())
                     )
                 }
-                placeholder="Destination location"
+                placeholder={m.early_born_crow_arrive()}
             />
             <DatePicker
                 value={departureDate || undefined}
                 onChange={(newDate) => setDepartureDate(newDate || null)}
             />
 
-            <Button onClick={search}>Search</Button>
+            <Button onClick={search}>{m.weak_sharp_jan_cry()}</Button>
         </div>
     );
 }

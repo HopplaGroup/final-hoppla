@@ -6,6 +6,7 @@ import HowItWorks from "@/components/sections/how-it-works";
 import { Features } from "@/components/sections/features";
 import { Testimonials } from "@/components/sections/testimonials";
 import Partners from "@/components/sections/partners";
+import * as m from "@/paraglide/messages.js";
 
 export default function Home() {
     return (
@@ -21,7 +22,7 @@ export default function Home() {
                 <div className="bg-[#ff5733] h-full min-h-80 bg-opacity-20 p-4 relative">
                     <div className="mt-10 mb-20">
                         <p className="text-white stroke-red-500 text-center text-5xl font-bold">
-                            Where are you headed to?
+                            {m.ago_clean_fireant_zoom()}
                         </p>
                     </div>
                     <div className="flex justify-center">

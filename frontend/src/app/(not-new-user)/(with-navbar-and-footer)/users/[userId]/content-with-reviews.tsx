@@ -10,6 +10,7 @@ import AddReview from "./add-review";
 import ReviewCard from "./review-card";
 import { useMemo } from "react";
 import GoBackButton from "./go-back-button";
+import * as m from "@/paraglide/messages.js";
 
 import { useUser } from "@/lib/providers/user-provider";
 
@@ -77,8 +78,8 @@ export default function ContentWithReviews({
                     {loggedUser?.id === user?.id &&
                         userReviews.length === 0 && (
                             <div className="">
-                                No reviews yet. <br />
-                                Share your profile with others.
+                                {m.sound_patchy_ocelot_grasp()} <br />
+                                {m.white_civil_kangaroo_tickle()}
                             </div>
                         )}
                 </div>

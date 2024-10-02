@@ -1,3 +1,4 @@
+import * as m from "@/paraglide/messages.js";
 export default function FAQ() {
   return (
     <>
@@ -6,12 +7,12 @@ export default function FAQ() {
           <div className="md:col-span-2">
             <div className="max-w-xs">
               <h2 className="text-2xl font-semibold md:text-4xl md:leading-tight">
-                Frequently
+                {m.quaint_ago_warthog_hug()}
                 <br />
-                asked questions
+                {m.due_tangy_maggot_fetch()}
               </h2>
               <p className="mt-1 hidden md:block text-gray-600">
-                Answers to the most frequently asked questions.
+                {m.candid_stale_cat_grow()}
               </p>
             </div>
           </div>

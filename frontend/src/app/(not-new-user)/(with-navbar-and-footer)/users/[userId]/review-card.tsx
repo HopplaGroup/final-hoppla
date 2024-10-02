@@ -14,7 +14,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import * as m from "@/paraglide/messages.js";
 export default function ReviewCard({
     review,
 }: {
@@ -86,7 +86,7 @@ export default function ReviewCard({
                                         }
                                     >
                                         <Trash size={18} />
-                                        Delete
+                                        {m.fancy_brief_yak_zap()}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

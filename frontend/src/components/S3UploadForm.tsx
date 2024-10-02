@@ -155,7 +155,7 @@ export const UploadForm = ({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle className="text-center">
-                            Edit the image
+                            {m.pink_each_reindeer_twist()}
                         </DialogTitle>
                         <div className="relative">
                             <div className="h-[300px] rounded-lg overflow-hidden mt-2">
@@ -179,7 +179,7 @@ export const UploadForm = ({
                             }}
                             variant="ghost"
                         >
-                            Cancel
+                            {m.large_tired_grizzly_mop()}
                         </Button>
                         <Button
                             className=""
@@ -188,7 +188,7 @@ export const UploadForm = ({
                                 handleUpload();
                             }}
                         >
-                            Finish
+                            {m.equal_gray_shell_kiss()}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -244,7 +244,7 @@ export const UploadForm = ({
                         onClick={handleUpload}
                         disabled={uploading}
                     >
-                        {uploading ? "Uploading..." : "Upload Cropped Image"}
+                        {uploading ? m.basic_teary_ape_inspire(): m.aloof_safe_hamster_zip()}
                     </button>
                 </div>
             )}

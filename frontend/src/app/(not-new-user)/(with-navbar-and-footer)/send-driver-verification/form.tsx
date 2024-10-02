@@ -68,7 +68,7 @@ export function SendDriverRequestForm({
     });
 
     async function onSubmit(values: z.infer<typeof FormSchema>) {
-        const toastId = toast.loading("Sending...");
+        const toastId = toast.loading(m.short_curly_shad_bubble());
         if (driverVerificationRequest) {
             update(
                 {
@@ -84,12 +84,12 @@ export function SendDriverRequestForm({
                 {
                     onSuccess: () => {
                         router.refresh();
-                        toast.success("Succesffyly sent", {
+                        toast.success(m.plane_proof_cow_promise(), {
                             id: toastId,
                         });
                     },
                     onError: () => {
-                        toast.error("Failed to send...", {
+                        toast.error(m.sour_grassy_skate_gasp(), {
                             id: toastId,
                         });
                     },
@@ -107,12 +107,12 @@ export function SendDriverRequestForm({
                 {
                     onSuccess: () => {
                         router.refresh();
-                        toast.success("Succesffyly sent", {
+                        toast.success(m.aware_dirty_wasp_arrive(), {
                             id: toastId,
                         });
                     },
                     onError: () => {
-                        toast.error("Failed to send...", {
+                        toast.error(m.cute_polite_weasel_mend(), {
                             id: toastId,
                         });
                     },
@@ -140,7 +140,7 @@ export function SendDriverRequestForm({
                     name="selfie"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Selfie</FormLabel>
+                            <FormLabel>{m.true_day_sparrow_kiss()}</FormLabel>
                             <FormControl>
                                 <UploadForm
                                     defaultUrl={field.value}
@@ -148,10 +148,11 @@ export function SendDriverRequestForm({
                                 />
                             </FormControl>
                             <FormDescription>
-                                Upload a clear and recent selfie for identity
-                                verification.
+                                {m.funny_muddy_lionfish_pat()}
                             </FormDescription>
-                            <FormMessage errorMessage="Selfie is required for verification. Please upload a clear photo." />
+                            <FormMessage
+                                errorMessage={m.mealy_witty_pug_kick()}
+                            />
                         </FormItem>
                     )}
                 />
@@ -161,7 +162,9 @@ export function SendDriverRequestForm({
                     name="licencePhotos"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>License Photos</FormLabel>
+                            <FormLabel>
+                                {m.heroic_simple_sawfish_thrive()}
+                            </FormLabel>
                             <FormControl>
                                 <div className="grid md:grid-cols-2 gap-4">
                                     <UploadForm
@@ -193,17 +196,17 @@ export function SendDriverRequestForm({
                                 </div>
                             </FormControl>
                             <FormDescription>
-                                {`                Upload photos of the front and back of your driver's license.
-`}
+                                {m.house_key_cockroach_persist()}
                             </FormDescription>
-                            <FormMessage errorMessage="Both front and back license photos are required. Please upload them." />
+                            <FormMessage
+                                errorMessage={m.major_dirty_boar_boil()}
+                            />
                         </FormItem>
                     )}
                 />
 
                 <Button disabled={isSubmitting} type="submit">
-                    {/* {m.kind_gaudy_puma_exhale()} */}
-                    Send
+                    {m.true_empty_larva_intend()}
                 </Button>
             </form>
         </Form>
