@@ -1,36 +1,36 @@
 import Image from "next/image";
 import { Logo } from "../logo";
-
-const navigation = {
-    connect: [
-        {
-            name: "Book Meeting",
-            href: "https://www.linkedin.com/company/hoppla1/",
-        },
-        {
-            name: "Facebook",
-            href: "https://www.facebook.com/hoppla.ge",
-        },
-        {
-            name: "Instagram",
-            href: "https://www.instagram.com/hoppla.ge/",
-        },
-        {
-            name: "LinkedIn",
-            href: "https://www.linkedin.com/company/hoppla1/",
-        },
-    ],
-    company: [
-        { name: "Terms & Conditions", href: "/terms" },
-        { name: "Privacy", href: "/terms" },
-        {
-            name: "Join FB Group",
-            href: "https://www.facebook.com/groups/139807159557518",
-        },
-    ],
-};
+import * as m from "@/paraglide/messages.js";
 
 const TwoColumnFooter = () => {
+    const navigation = {
+        connect: [
+            {
+                name: m.clean_sunny_shad_intend(),
+                href: "https://www.linkedin.com/company/hoppla1/",
+            },
+            {
+                name: "Facebook",
+                href: "https://www.facebook.com/hoppla.ge",
+            },
+            {
+                name: "Instagram",
+                href: "https://www.instagram.com/hoppla.ge/",
+            },
+            {
+                name: "LinkedIn",
+                href: "https://www.linkedin.com/company/hoppla1/",
+            },
+        ],
+        company: [
+            { name: m.each_last_buzzard_talk(), href: "/terms" },
+            { name: m.stock_noble_carp_chop(), href: "/terms" },
+            {
+                name: m.mild_this_parrot_launch(),
+                href: "https://www.facebook.com/groups/139807159557518",
+            },
+        ],
+    };
     return (
         <footer
             aria-labelledby="footer-heading"
@@ -44,19 +44,17 @@ const TwoColumnFooter = () => {
                     <div className="space-y-8">
                         <Logo />
                         <p className="text-md max-w-xs leading-6 text-gray-700 dark:text-gray-300">
-                            Travel to your desired destination with the help of
-                            HOPPLA. Get the latest information and book a ticket
-                            with your smartphone.
+                            {m.quick_even_termite_roam()}
                         </p>
                         <div className="flex space-x-6 text-sm text-gray-700  dark:text-gray-300">
-                            <div>Made with ❤️ by Hoppla.</div>
+                            <div>{m.east_weak_racoon_roam()}</div>
                         </div>
                     </div>
                     {/* Navigations */}
                     <div className="mt-16 grid grid-cols-2 gap-14 md:grid-cols-2 lg:mt-0 xl:col-span-2">
                         <div className="md:mt-0">
                             <h3 className="text-sm font-semibold leading-6 text-gray-900  dark:text-gray-200">
-                                Connect
+                                {m.deft_wacky_gadfly_sew()}
                             </h3>
                             <div className="mt-6 space-y-4">
                                 {navigation.connect.map((item) => (
@@ -76,7 +74,7 @@ const TwoColumnFooter = () => {
                         <div>
                             <div>
                                 <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">
-                                    Website
+                                    {m.tiny_mild_warthog_cut()}
                                 </h3>
                                 <div className="mt-6 space-y-4">
                                     {navigation.company.map((item) => (
@@ -96,7 +94,8 @@ const TwoColumnFooter = () => {
                 </div>
                 <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-100/10">
                     <p className="text-xs leading-5 text-gray-700 dark:text-gray-300">
-                        &copy; 2024 Hoppla Group. All rights reserved.
+                        &copy; 2024 Hoppla Group.{" "}
+                        {m.mealy_green_dragonfly_trip()}
                     </p>
                 </div>
             </div>

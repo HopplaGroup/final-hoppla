@@ -28,6 +28,7 @@ import {
 import ContentWithReviews from "./content-with-reviews";
 import Link from "next/link";
 import SearchBarLanding from "../../serch-bar-landing";
+import * as m from "@/paraglide/messages.js";
 
 type UserPageProps = {
     params: { userId: string };
@@ -128,7 +129,8 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                                         />
                                         {/* TODO: Misho aq reviewebis raodenoba unda iyos */}
                                         <div className="text-xs">
-                                            {userReviews?.length} Ratings
+                                            {userReviews?.length}{" "}
+                                            {m.cozy_ok_gull_strive()}
                                         </div>
                                     </p>
                                 </div>
@@ -144,7 +146,7 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                             <div className="RIGHT SIDE w-full">
                                 <div className="flex justify-center sm:justify-start">
                                     <span className="pt-6 sm:pt-0 text-xl font-semibold">
-                                        About User
+                                        {m.fancy_quick_macaw_dance()}
                                     </span>
                                 </div>
                                 <div className="flex items-center ">
@@ -164,24 +166,24 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                                                 //   },
                                                 {
                                                     icon: <User size={20} />,
-                                                    label: "Sex",
+                                                    label: m.big_solid_bulldog_borrow(),
                                                     value: user.sex,
                                                 },
                                                 {
                                                     icon: (
                                                         <Calendar size={20} />
                                                     ),
-                                                    label: "Age",
+                                                    label: m.frail_jumpy_kitten_gulp(),
                                                     value: `${
                                                         new Date().getFullYear() -
                                                         new Date(
                                                             user.birthDate
                                                         ).getFullYear()
-                                                    } years old`,
+                                                    } ${m.kind_new_alligator_bake()}`,
                                                 },
                                                 {
                                                     icon: <Stars size={20} />,
-                                                    label: "Rating",
+                                                    label: m.arable_direct_crab_kiss(),
                                                     value: averageUserRating.toFixed(
                                                         1
                                                     ),
@@ -220,7 +222,9 @@ export default function UserPage({ params, searchParams }: UserPageProps) {
                     {/* ask gpt what is the best use case to do here how to handle bussiness logic hmm */}
                 </>
             ) : (
-                <div className="text-xl font-semibold">User Not Found</div>
+                <div className="text-xl font-semibold">
+                    {m.tense_fuzzy_mongoose_jump()}
+                </div>
             )}
         </ContentWithReviews>
     );

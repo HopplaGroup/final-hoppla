@@ -1,7 +1,7 @@
 import { UpdateUserForm } from "./update-user-form";
-import * as m from "@/paraglide/messages.js";
 import { getUser } from "@/lib/utils/auth";
 import { redirect } from "next/navigation";
+import * as m from "@/paraglide/messages.js";
 
 export default async function OnBoardingPage() {
     const user = await getUser();
@@ -24,7 +24,9 @@ export default async function OnBoardingPage() {
                 <main className="overflow-auto lg:h-screen flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
                     <div className="max-w-xl lg:max-w-3xl">
                         <a className="block text-blue-600" href="#">
-                            <span className="sr-only">Home</span>
+                            <span className="sr-only">
+                                {m.novel_male_ox_jump()}
+                            </span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 height="55"
@@ -101,12 +103,11 @@ export default async function OnBoardingPage() {
                         </a>
 
                         <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                            Welcome to Hoppla 🚗
+                            {m.mellow_orange_fireant_dust()} 🚗
                         </h1>
 
                         <p className="mt-4 leading-relaxed text-gray-500">
-                            Fill some information about yourself to create an
-                            account and start your journey with us.
+                            {m.flaky_mealy_wombat_walk()}
                         </p>
 
                         <div className="mt-4">

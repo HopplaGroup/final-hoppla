@@ -2,13 +2,14 @@ import Image from "next/image";
 import mariami from "../../../public/assets/mari2.webp";
 import ilia from "../../../public/assets/ilia.webp";
 import gaioz from "../../../public/assets/gaioz.jpg";
+import * as m from "@/paraglide/messages.js";
 
 export function Testimonials() {
     return (
         <div className="my-12 mt-32 container">
             <div className=" text-center">
                 <h2 className="text-4xl font-extrabold text-gray-800">
-                    What our happy client say
+                    {m.large_bad_swan_zoom()}
                 </h2>
                 <p className="text-sm mt-4 leading-relaxed text-gray-800 md:max-w-xl mx-auto">
                     {` Hear from our satisfied passengers. Discover how our
@@ -29,7 +30,7 @@ export function Testimonials() {
                         />
                         <div className="mt-6 font-semibold leading-tight">
                             <h4 className="text-sm font-extrabold text-gray-800 md:max-w-sm">
-                                Mariam Shonia
+                                {m.loose_odd_macaw_love()}
                             </h4>
                         </div>
                     </div>
@@ -95,7 +96,7 @@ export function Testimonials() {
                         />
                         <div className="mt-6 font-semibold leading-tight">
                             <h4 className="text-sm font-extrabold text-gray-800 md:max-w-sm">
-                                Ilia Grdzelidze
+                                {m.watery_formal_mantis_fear()}
                             </h4>
                         </div>
                     </div>
@@ -163,7 +164,7 @@ export function Testimonials() {
                         />
                         <div className="mt-6 font-semibold leading-tight">
                             <h4 className="text-sm font-extrabold text-gray-800 md:max-w-sm">
-                                Gaioz Tabatadze
+                                {m.loose_flat_dove_nourish()}
                             </h4>
                         </div>
                     </div>

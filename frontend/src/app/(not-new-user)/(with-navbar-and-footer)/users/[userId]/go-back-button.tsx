@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import * as m from "@/paraglide/messages.js";
 
 export default function GoBackButton() {
     const router = useRouter();
@@ -11,7 +12,7 @@ export default function GoBackButton() {
             variant="ghost"
             className="flex items-center gap-2 font-semibold"
         >
-            <ChevronLeft size={24} /> <span>Go Back</span>
+            <ChevronLeft size={24} /> <span>{m.full_lost_swan_win()}</span>
         </Button>
     );
 }

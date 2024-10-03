@@ -13,17 +13,15 @@ export async function Hero() {
         <div className="grid items-center md:grid-cols-2 gap-8 lg:gap-12">
           <div>
             <p className="inline-block text-sm font-medium bg-clip-text bg-gradient-to-l from-primary to-orange-500 text-transparent">
-              Hoppla: #1 in transportation
+              {m.flaky_awful_polecat_honor()}
             </p>
 
             <div className="mt-4 md:mb-12 max-w-2xl">
               <h1 className="mb-4 font-semibold text-gray-800 text-4xl lg:text-5xl">
-                Use Hoppla to travel where you want
+                {m.slow_factual_marlin_pray()}
               </h1>
               <p className="text-gray-600">
-                Hoppla connects you to top transportation options in your area,
-                from buses to carpooling, ensuring a smooth and enjoyable travel
-                experience for you.
+                {m.tame_agent_antelope_file()}
               </p>
             </div>
 
@@ -45,8 +43,7 @@ export async function Hero() {
 
               <div className="relative z-10">
                 <p className="text-xl italic text-gray-800">
-                  Amazing service, I have been using Hoppla for a while now and
-                  it has been a great experience.
+                  {m.polite_least_florian_wave()}
                 </p>
               </div>
 
@@ -62,10 +59,10 @@ export async function Hero() {
                   </div>
                   <div className="grow">
                     <div className="font-semibold text-gray-800">
-                      Gaioz Tabatadze
+                      {m.left_game_mule_hope()}
                     </div>
                     <div className="text-xs text-gray-500">
-                      Traveler at Hoppla
+                      {m.super_dry_grizzly_view()}
                     </div>
                   </div>
                 </div>
@@ -79,15 +76,15 @@ export async function Hero() {
                 <div className="p-4 sm:p-7 flex flex-col bg-white rounded-lg">
                   <div className="text-center">
                     <h1 className="block text-2xl font-bold text-gray-800">
-                      Start travel with Hoppla
+                      {m.super_honest_cat_ripple()}
                     </h1>
                     <p className="mt-2 text-sm text-gray-600">
-                      Want to become a driver?{" "}
+                      {m.giant_chunky_mallard_bloom()}{" "}
                       <Link
                         className="text-primary decoration-2 hover:underline focus:outline-none focus:underline font-medium"
                         href="/become-driver"
                       >
-                        Learn more
+                        {m.drab_honest_tiger_pop()}
                       </Link>
                     </p>
                   </div>
@@ -126,7 +123,7 @@ export async function Hero() {
                             fill="#EB4335"
                           ></path>
                         </svg>
-                        Sign in with Google
+                        {m.heavy_lower_poodle_imagine()}
                       </RegisterLink>
                     )}
                     {user && (
@@ -149,7 +146,7 @@ export async function Hero() {
                       </Link>
                     )}
                     <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
-                      Or
+                      {m.white_sea_carp_jolt()}
                     </div>
 
                     <div className="mt-1">
@@ -157,7 +154,7 @@ export async function Hero() {
                         type="submit"
                         className="w-full py-3 h-12 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-primary text-white hover:bg-primary/80 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
                       >
-                        Search Rides
+                        {m.wild_drab_penguin_clip()}
                       </button>
                     </div>
                   </div>
@@ -168,7 +165,7 @@ export async function Hero() {
         </div>
 
         <div className="mt-6 md:mt-12 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
-          A lot of people are already using Hoppla
+          {m.cozy_gray_trout_quell()}
         </div>
 
         <div className="flex flex-wrap gap-x-6 sm:gap-x-12 lg:gap-x-24">

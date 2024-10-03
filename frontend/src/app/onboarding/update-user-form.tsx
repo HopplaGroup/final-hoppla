@@ -66,7 +66,7 @@ export function UpdateUserForm({ userId }: { userId: string }) {
             sex: "OTHER",
             birthDate: undefined,
             mobileNumber: "",
-            bio: "My small bio...",
+            bio: m.polite_lofty_liger_surge(),
         },
     });
 
@@ -203,20 +203,20 @@ export function UpdateUserForm({ userId }: { userId: string }) {
                 />
                 <div className="col-span-6">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        By creating an account, you agree to our{" "}
+                        {m.aware_tense_dolphin_grow()}{" "}
                         <a
                             href="#"
                             className="text-gray-700 underline dark:text-gray-200"
                         >
-                            terms and conditions{" "}
+                            {m.bald_knotty_nils_fond()}{" "}
                         </a>
-                        and
+                        {m.male_bold_robin_spur()}
                         <a
                             href="#"
                             className="text-gray-700 underline dark:text-gray-200"
                         >
                             {" "}
-                            privacy policy{" "}
+                            {m.careful_gaudy_cobra_clap()}{" "}
                         </a>
                         .
                     </p>
