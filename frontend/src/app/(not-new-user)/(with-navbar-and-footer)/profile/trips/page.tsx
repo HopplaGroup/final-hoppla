@@ -1,14 +1,15 @@
 import TripsTable from "./trips-table/rides-table";
+import * as m from "@/paraglide/messages.js";
 
 export default function ProfileTripsPage() {
   return (
     <div className="">
       <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-        My Trips
+        {m.agent_awful_parrot_enrich()}
       </h1>
 
       <p className="mt-4 leading-relaxed text-gray-500 max-w-xl lg:max-w-3xl">
-        The table below shows all the rides you are a part of as a passenger
+        {m.tired_wise_boar_commend()}
       </p>
 
       <div className="mt-4 w-full">

@@ -15,6 +15,8 @@ import React from "react";
 import { SidebarNavigationLink } from "./side-navigation-link";
 import db from "@/lib/utils/db";
 
+import * as m from "@/paraglide/messages.js";
+
 type LayoutProps = {
   children: React.ReactNode;
 };
@@ -57,16 +59,14 @@ export default async function ProfileLayout({ children }: LayoutProps) {
       </div>
 
       <p className="mt-2 text-sm  max-w-xl lg:max-w-3xl">
-        To post rides, please register as a driver. Your rides will be private
-        until your account is verified. You can publish a ride now, but it will
-        only be visible to you until verification.
+        {m.green_cool_gull_fear()}
       </p>
       <div className="mt-4">
         <Link
           href="/send-driver-verification"
           className="text-green-600 underline"
         >
-          Verify now
+          {m.quaint_mushy_wasp_learn()}
         </Link>
       </div>
     </div>
@@ -89,20 +89,20 @@ export default async function ProfileLayout({ children }: LayoutProps) {
 const NAV_LINKS: SidebarNavigationLink[] = [
   {
     icon: <Home size={22} />,
-    label: "Home",
-    description: "Stats and Cars",
+    label: m.caring_topical_jackal_slurp(),
+    description: m.big_patient_hawk_dance(),
     href: "/profile",
   },
   {
     icon: <Milestone size={22} />,
-    label: "Rides",
-    description: "Check your rides",
+    label: m.candid_silly_stingray_tear(),
+    description: m.ago_happy_kitten_snip(),
     href: "/profile/rides",
   },
   {
     icon: <Ticket size={22} />,
-    label: "Trips",
-    description: "See your trips",
+    label: m.long_upper_seal_revive(),
+    description: m.flat_fresh_duck_bake(),
     href: "/profile/trips",
   },
 ];
@@ -110,8 +110,8 @@ const NAV_LINKS: SidebarNavigationLink[] = [
 const MANAGE_LINKS: SidebarNavigationLink[] = [
   {
     icon: <Settings size={22} />,
-    label: "Settings",
-    description: "Edit user details",
+    label: m.elegant_whole_crocodile_foster(),
+    description: m.lazy_front_bird_feast(),
     href: "/profile/settings",
   },
 ];
@@ -150,13 +150,13 @@ function SidebarNavigation() {
   return (
     <aside className="bg-white border-2  rounded-md p-5 hidden md:block h-fit">
       <div>
-        <h3 className="text-sm font-semibold">Navigation</h3>
+        <h3 className="text-sm font-semibold">{m.alive_civil_skate_quiz()}</h3>
         {NAV_LINKS.map((props, index) => (
           <SidebarNavigationLink key={index} {...props} />
         ))}
       </div>
       <div className="mt-4">
-        <h3 className="text-sm font-semibold">Manage</h3>
+        <h3 className="text-sm font-semibold">{m.drab_front_snake_ascend()}</h3>
         {MANAGE_LINKS.map((props, index) => (
           <SidebarNavigationLink key={index} {...props} />
         ))}

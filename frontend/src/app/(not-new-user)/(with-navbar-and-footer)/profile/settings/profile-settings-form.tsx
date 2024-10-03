@@ -157,7 +157,6 @@ export function ProfileSettingsForm({ user }: { user: User }) {
                 <FormControl>
                   <PhoneInput {...field} />
                 </FormControl>
-                {/* <FormDescription>{m.new_neat_porpoise_fetch()}</FormDescription> */}
                 <FormMessage errorMessage={m.teal_top_starfish_pout()} />
               </FormItem>
             )}
@@ -210,7 +209,7 @@ export function ProfileSettingsForm({ user }: { user: User }) {
 
         <div className="flex items-center gap-2">
           <Button disabled={isPending} type="submit">
-            Save Profile
+            {m.loved_heroic_javelina_hug()}
           </Button>
         </div>
       </form>

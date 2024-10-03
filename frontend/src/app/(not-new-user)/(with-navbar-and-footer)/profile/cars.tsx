@@ -5,6 +5,7 @@ import { Car, Prisma } from "@zenstackhq/runtime/models";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils/cn";
 import { Delete, Ellipsis, LoaderCircle, Stars, Trash } from "lucide-react";
+import * as m from "@/paraglide/messages.js";
 
 export default function Cars({ userId }: { userId: string }) {
   const { data: cars, isLoading } = useFindManyCar({
@@ -69,11 +70,15 @@ function CarCard({
         <div className="flex h-5 items-center space-x-4 text-sm">
           <div>
             {car.status === "APPROVED" ? (
-              <span className="text-green-500">APPROVED</span>
+              <span className="text-green-500">
+                {m.sour_gray_nuthatch_strive()}
+              </span>
             ) : car.status === "PENDING" ? (
-              <span className="text-orange-500">PENDING</span>
+              <span className="text-orange-500">
+                {m.short_mad_firefox_trust()}
+              </span>
             ) : (
-              <span className="text-red-500">REJECTED</span>
+              <span className="text-red-500">{m.trite_livid_finch_spur()}</span>
             )}
           </div>
           <Separator orientation="vertical" />
@@ -91,7 +96,7 @@ function CarCard({
                 }}
                 className="text-red-600 hover:underline cursor-pointer"
               >
-                Delete
+                {m.agent_tasty_squirrel_pick()}
               </div>
             </>
           )}

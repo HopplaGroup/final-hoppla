@@ -4,27 +4,27 @@ import { DataTable } from "./data-table";
 import db from "@/lib/utils/db";
 
 async function getData(): Promise<Row[]> {
-    const user = await getUser();
+  const user = await getUser();
 
-    return await db.ride.findMany({
-        where: {
-            ridePassengerRequests: {
-                some: {
-                    passengerId: user?.id,
-                },
-            },
+  return await db.ride.findMany({
+    where: {
+      ridePassengerRequests: {
+        some: {
+          passengerId: user?.id,
         },
-        include: {
-            car: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
+      },
+    },
+    include: {
+      car: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }
 
 export default async function RidesTable() {
-    const data = await getData();
+  const data = await getData();
 
-    return <DataTable columns={columns} data={data} />;
+  return <DataTable columns={columns} data={data} />;
 }

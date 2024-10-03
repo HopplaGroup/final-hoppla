@@ -6,6 +6,7 @@ import {
   useFindManyUserReview,
 } from "@/lib/hooks";
 import { Milestone, Sparkles, TicketCheck, Wallet } from "lucide-react";
+import * as m from "@/paraglide/messages.js";
 
 export function Stats({ userId }: { userId: string }) {
   const { data: userReviews, isLoading: isUserReviewsLoading } =
@@ -83,7 +84,7 @@ export function Stats({ userId }: { userId: string }) {
               <div className="grow">
                 <div className="flex items-center gap-x-2">
                   <p className="text-xs uppercase tracking-wide font-semibold">
-                    Finished Rides
+                    {m.zesty_yummy_osprey_enjoy()}
                   </p>
                 </div>
                 <div className="mt-1 flex items-center gap-x-2">
@@ -108,7 +109,7 @@ export function Stats({ userId }: { userId: string }) {
               <div className="grow">
                 <div className="flex items-center gap-x-2">
                   <p className="text-xs uppercase tracking-wide font-semibold">
-                    Total Earnings
+                    {m.tidy_sad_moth_pick()}
                   </p>
                 </div>
                 <div className="mt-1 flex items-center gap-x-2">
@@ -133,7 +134,7 @@ export function Stats({ userId }: { userId: string }) {
               <div className="grow">
                 <div className="flex items-center gap-x-2">
                   <p className="text-xs uppercase tracking-wide font-semibold">
-                    Avg. Rating
+                    {m.icy_loud_loris_kick()}
                   </p>
                 </div>
                 <div className="mt-1 flex items-center gap-x-2">

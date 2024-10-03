@@ -18,6 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import * as m from "@/paraglide/messages.js";
+
 import { useCreateCar, useFindUniqueCar } from "@/lib/hooks";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -167,7 +169,9 @@ export default function AddCar() {
             className="space-y-8 overflow-auto"
           >
             <AlertDialogHeader>
-              <AlertDialogTitle>Add New Car</AlertDialogTitle>
+              <AlertDialogTitle>
+                {m.jolly_sunny_parakeet_spin()}
+              </AlertDialogTitle>
             </AlertDialogHeader>
             <div className="space-y-4">
               <FormField
@@ -175,7 +179,7 @@ export default function AddCar() {
                 name="licencePhotos"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>License Photos</FormLabel>
+                    <FormLabel>{m.mushy_deft_zebra_buy()}</FormLabel>
                     <FormControl>
                       <div className="grid md:grid-cols-2 gap-4">
                         <UploadForm
@@ -207,7 +211,7 @@ export default function AddCar() {
                       </div>
                     </FormControl>
                     <FormDescription>
-                      {`Upload photos of the front and back of your driver's license.`}
+                      {m.kind_white_macaw_hush()}
                     </FormDescription>
                     <FormMessage errorMessage="Both front and back license photos are required. Please upload them." />
                   </FormItem>
@@ -218,7 +222,7 @@ export default function AddCar() {
                 name="photos"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Car Photo</FormLabel>
+                    <FormLabel>{m.level_royal_kestrel_amuse()}</FormLabel>
                     <FormControl>
                       <UploadForm
                         defaultUrl={field.value?.[0]}
@@ -227,9 +231,9 @@ export default function AddCar() {
                       />
                     </FormControl>
                     <FormDescription>
-                      Upload a clear and recent photo of your car for listing.
+                      {m.hour_zesty_kitten_work()}
                     </FormDescription>
-                    <FormMessage errorMessage="Car photo is required. Please upload a clear and recent photo." />
+                    <FormMessage errorMessage={m.lower_elegant_leopard_win()} />
                   </FormItem>
                 )}
               />
@@ -239,14 +243,17 @@ export default function AddCar() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Car Name</FormLabel>
+                    <FormLabel>{m.even_agent_clownfish_nudge()}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="My BMW" />
+                      <Input
+                        {...field}
+                        placeholder={m.formal_less_elephant_amuse()}
+                      />
                     </FormControl>
                     <FormDescription>
-                      {`Provide a name for your car, like "My BMW" or "Family Van."`}
+                      {m.new_such_swallow_rush()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please enter a name for your car." />
+                    <FormMessage errorMessage={m.main_fine_turtle_dust()} />
                   </FormItem>
                 )}
               />
@@ -256,7 +263,7 @@ export default function AddCar() {
                 name="mark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Car Make</FormLabel>
+                    <FormLabel>{m.seemly_zany_puma_bask()}</FormLabel>
                     <FormControl>
                       <Autocomplete
                         items={CAR_LIST}
@@ -274,9 +281,9 @@ export default function AddCar() {
                       />
                     </FormControl>
                     <FormDescription>
-                      Select the make of your car, e.g., BMW, Toyota.
+                      {m.zany_smart_beetle_peel()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please select a valid car make." />
+                    <FormMessage errorMessage={m.frail_such_goldfish_pave()} />
                   </FormItem>
                 )}
               />
@@ -286,7 +293,7 @@ export default function AddCar() {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Car Type</FormLabel>
+                    <FormLabel>{m.bold_male_warbler_hurl()}</FormLabel>
                     <FormControl>
                       <Select
                         value={field.value}
@@ -318,9 +325,11 @@ export default function AddCar() {
                       </Select>
                     </FormControl>
                     <FormDescription>
-                      Choose the type of your car, such as Sedan or Minivan.
+                      {m.stale_curly_shark_dash()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please select a valid car type." />
+                    <FormMessage
+                      errorMessage={m.crisp_strong_clownfish_talk()}
+                    />
                   </FormItem>
                 )}
               />
@@ -330,7 +339,7 @@ export default function AddCar() {
                 name="fuelType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fuel Type</FormLabel>
+                    <FormLabel>{m.vivid_moving_weasel_advise()}</FormLabel>
                     <FormControl>
                       <Select
                         value={field.value}
@@ -339,7 +348,7 @@ export default function AddCar() {
                         }}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a type" />
+                          <SelectValue placeholder={m.ok_full_duck_edit()} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
@@ -353,9 +362,9 @@ export default function AddCar() {
                       </Select>
                     </FormControl>
                     <FormDescription>
-                      Choose the type of your car, such as Sedan or Minivan.
+                      {m.key_ornate_marlin_propel()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please select a valid car type." />
+                    <FormMessage errorMessage={m.mild_late_capybara_kiss()} />
                   </FormItem>
                 )}
               />
@@ -365,7 +374,7 @@ export default function AddCar() {
                 name="capacity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Seating Capacity</FormLabel>
+                    <FormLabel>{m.lost_zippy_mule_fall()}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(v) => {
@@ -375,9 +384,11 @@ export default function AddCar() {
                       >
                         <SelectTrigger className="w-full">
                           {field.value ? (
-                            <SelectValue placeholder="Select a capacity" />
+                            <SelectValue
+                              placeholder={m.bold_tangy_bird_soar()}
+                            />
                           ) : (
-                            " Select a capacity"
+                            m.bold_tangy_bird_soar()
                           )}
                         </SelectTrigger>
                         <SelectContent>
@@ -392,9 +403,9 @@ export default function AddCar() {
                       </Select>
                     </FormControl>
                     <FormDescription>
-                      Specify how many passengers your car can seat.
+                      {m.antsy_clear_marten_compose()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please select a seating capacity." />
+                    <FormMessage errorMessage={m.dirty_direct_myna_pray()} />
                   </FormItem>
                 )}
               />
@@ -404,7 +415,7 @@ export default function AddCar() {
                 name="plate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Plate Number</FormLabel>
+                    <FormLabel>{m.zany_wacky_sloth_hint()}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -417,16 +428,18 @@ export default function AddCar() {
                       />
                     </FormControl>
                     <FormDescription>
-                      {`Enter your car's plate number in the format AB-000-AB.`}
+                      {m.yummy_ideal_penguin_enchant()}
                     </FormDescription>
-                    <FormMessage errorMessage="Please enter a valid plate number in the format AB-000-AB." />
+                    <FormMessage errorMessage={m.lime_helpful_macaw_buzz()} />
                   </FormItem>
                 )}
               />
             </div>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <Button type="submit">Submit</Button>
+              <AlertDialogCancel>
+                {m.last_caring_snail_dream()}
+              </AlertDialogCancel>
+              <Button type="submit">{m.novel_this_cuckoo_mix()}</Button>
             </AlertDialogFooter>
           </form>
         </Form>
