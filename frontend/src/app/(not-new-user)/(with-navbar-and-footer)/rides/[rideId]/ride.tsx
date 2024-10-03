@@ -790,7 +790,8 @@ export function Ride({
                                         {ride.driverId === userId &&
                                             ride.ridePassengerRequests.some(
                                                 (r) => r.status !== "ACCEPTED"
-                                            ) && (
+                                            ) &&
+                                            ride.status == "ACTIVE" && (
                                                 <div className="mt-6">
                                                     <Separator />
                                                     <div className="text-center">
@@ -997,7 +998,7 @@ export function Ride({
                                                                 {passenger.name}
                                                             </div>
 
-                                                            <div className="hidden sm:block">
+                                                            <div className="">
                                                                 {status ===
                                                                     "PENDING" && (
                                                                     <span className="text-yellow-500 font-bold">
@@ -1008,6 +1009,12 @@ export function Ride({
                                                                     "REJECTED" && (
                                                                     <span className="text-red-500 font-bold">
                                                                         Rejected
+                                                                    </span>
+                                                                )}
+                                                                {status ===
+                                                                    "CANCELLED" && (
+                                                                    <span className="text-gray-500 font-bold">
+                                                                        Cancelled
                                                                     </span>
                                                                 )}
                                                             </div>
@@ -1340,7 +1347,27 @@ export function Ride({
                                                 </AlertDialogContent>
                                             </AlertDialog>
                                         )}
-
+                                    {ride.status === "ACTIVE" &&
+                                        userId &&
+                                        ride.driverId !== userId &&
+                                        !rideStartedConfirmation &&
+                                        ride.ridePassengerRequests
+                                            .filter(
+                                                (r) => r.status === "PENDING"
+                                            ) // Filter accepted requests
+                                            .some(
+                                                (r) => r.passengerId === userId
+                                            ) && (
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    disabled={isCancelingRide}
+                                                    onClick={onCancelRide} // Function to cancel the ride
+                                                    className="bg-red-500 w-full text-white py-2 px-4 rounded-md"
+                                                >
+                                                    Cancel Ride
+                                                </Button>
+                                            </div>
+                                        )}
                                     {ride.status === "ACTIVE" &&
                                         userId &&
                                         ride.driverId !== userId &&
