@@ -9,46 +9,39 @@ import { useState } from "react";
 import NavigationDrawer from "./drawer";
 import * as m from "@/paraglide/messages.js";
 
-import * as m from "@/paraglide/messages";
 type NavbarProps = {
-    driverHasCar?: boolean;
+  driverHasCar?: boolean;
 };
 
 const NAV_ITEMS = [
-    { href: "/", label: "Home" },
-    // { href: "/search", label: "Search" },
-    { href: "/terms", label: "About" },
-    { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  // { href: "/search", label: "Search" },
+  { href: "/terms", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 // TODO: NAVBARS RO AKLIKEB CONTEXT MENUZE, LEPTOPIS ZOMAZE, DATAMASHOBS IQET AQET
 export function Navbar({ driverHasCar }: NavbarProps) {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
-    return (
-        <nav
-            style={{
-                paddingLeft: "calc(100vw - 100%)",
-            }}
-            className="top-0 left-0 w-full fixed z-[100] bg-background"
-        >
-            <div className="container">
-                <NavigationDrawer
-                    isOpen={isDrawerOpen}
-                    toggleDrawer={toggleDrawer}
-                />
+  return (
+    <nav
+      style={{
+        paddingLeft: "calc(100vw - 100%)",
+      }}
+      className="top-0 left-0 w-full fixed z-[100] bg-background"
+    >
+      <div className="container">
+        <NavigationDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
 
-                <div className="flex h-20 items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <button
-                            className="block md:hidden"
-                            onClick={toggleDrawer}
-                        >
-                            <AlignJustify />
-                        </button>
-                        <NavbarLogo />
-                        {/* <div className="items-center gap-2 hidden md:flex">
+        <div className="flex h-20 items-center justify-between">
+          <div className="flex items-center gap-6">
+            <button className="block md:hidden" onClick={toggleDrawer}>
+              <AlignJustify />
+            </button>
+            <NavbarLogo />
+            {/* <div className="items-center gap-2 hidden md:flex">
                             {NAV_ITEMS.slice(1).map(({ href, label }) => (
                                 <Link
                                     key={href}
@@ -59,38 +52,38 @@ export function Navbar({ driverHasCar }: NavbarProps) {
                                 </Link>
                             ))}
                         </div> */}
-                    </div>
+          </div>
 
-                    <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            className="hidden md:flex items-center gap-2 font-semibold pl-2 pr-2"
-                            href={"/search/current-rides"}
-                        >
-                            <Ticket />
-                        </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              className="hidden md:flex items-center gap-2 font-semibold pl-2 pr-2"
+              href={"/search/current-rides"}
+            >
+              <Ticket />
+            </Button>
 
-                        {driverHasCar && (
-                            <Button
-                                variant="ghost"
-                                className="flex items-center gap-2 font-semibold"
-                                href={"/add-ride"}
-                            >
-                                <Plus />{" "}
-                                <span className="hidden md:inline">
-                                    {m.actual_watery_fireant_foster()}
-                                </span>
-                            </Button>
-                        )}
-                        <AuthBlock />
-                        <LanguageSwitcher />
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+            {driverHasCar && (
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 font-semibold"
+                href={"/add-ride"}
+              >
+                <Plus />{" "}
+                <span className="hidden md:inline">
+                  {m.actual_watery_fireant_foster()}
+                </span>
+              </Button>
+            )}
+            <AuthBlock />
+            <LanguageSwitcher />
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
 function NavbarLogo() {
-    return <Logo />;
+  return <Logo />;
 }
