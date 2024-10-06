@@ -353,7 +353,7 @@ export function Ride({
                       <div>{averageUserRating}</div>
                     </p>
                     <p>
-                      Member since{" "}
+                      {m.orange_this_mayfly_mix()}
                       {new Date(ride.driver.createdAt).getFullYear()}
                     </p>
                   </div>
@@ -456,7 +456,9 @@ export function Ride({
               </div>
             </div>
 
-            <h2 className="mt-2 font-semibold text-xl">Ride Rules</h2>
+            <h2 className="mt-2 font-semibold text-xl">
+              {m.free_agent_snail_work()}
+            </h2>
 
             <div className=" grid grid-cols-2 ">
               {ride.rideRules.length > 0 ? (
@@ -472,11 +474,13 @@ export function Ride({
                 ))
               ) : (
                 <div className="text-gray-500 text-sm">
-                  Driver skipped filling details
+                  {m.tiny_topical_vole_charm()}
                 </div>
               )}
             </div>
-            <h2 className="mt-2 font-semibold text-xl">Car Details</h2>
+            <h2 className="mt-2 font-semibold text-xl">
+              {m.silly_late_cow_gulp()}
+            </h2>
 
             <div className="mt-2 flex flex-col gap-2 lg:flex-row">
               <div className="lg:w-1/2">
@@ -492,7 +496,7 @@ export function Ride({
                   <div className="flex items-center justify-between py-3">
                     <dt className="font-medium text-gray-900 flex items-center gap-2">
                       <Type size={22} />
-                      Type
+                      {m.mean_strong_shell_edit()}
                     </dt>
                     <dd className="text-gray-700">{ride.car.type}</dd>
                   </div>
@@ -500,7 +504,7 @@ export function Ride({
                   <div className="flex items-center justify-between py-3">
                     <dt className="font-medium text-gray-900 flex items-center gap-2">
                       <PanelTopDashed size={22} />
-                      Plate
+                      {m.equal_left_tiger_nail()}
                     </dt>
                     <dd className="text-gray-700">{ride.car.plate}</dd>
                   </div>
@@ -508,7 +512,7 @@ export function Ride({
                   <div className="flex items-center justify-between py-3">
                     <dt className="font-medium text-gray-900 flex items-center gap-2">
                       <CarTaxiFront size={22} />
-                      Mark
+                      {m.sound_giant_fly_breathe()}
                     </dt>
                     <dd className="text-gray-700">{ride.car.mark}</dd>
                   </div>
@@ -516,7 +520,7 @@ export function Ride({
                   <div className="flex items-center justify-between py-3">
                     <dt className="font-medium text-gray-900 flex items-center gap-2">
                       <Users size={22} />
-                      Capacity
+                      {m.royal_large_butterfly_delight()}
                     </dt>
                     <dd className="text-gray-700">{ride.car.capacity}</dd>
                   </div>
@@ -527,7 +531,9 @@ export function Ride({
 
           <div className="p-4 md:pl-28 md:pr-28">
             <div className="xl:w-[460px] flex flex-col justify-center ">
-              <h2 className="font-semibold text-xl mb-2">Book the ride</h2>
+              <h2 className="font-semibold text-xl mb-2">
+                {m.seemly_same_fish_revive()}
+              </h2>
               <div
                 className={cn(
                   "border mt-2 w-full shadow-sm bg-white rounded-2xl mb-4 p-0 relative",
@@ -540,7 +546,7 @@ export function Ride({
                   <h2 className="text-lg mt-0 mb-1 text-center">
                     {ride.status === "CANCELLED" ? (
                       <div className="text-red-500 font-semibold">
-                        Ride is cancelled
+                        {m.lower_stale_lamb_aim()}
                       </div>
                     ) : (
                       <>
@@ -555,7 +561,7 @@ export function Ride({
                               ride.ridePassengerRequests.filter(
                                 (r) => r.status === "ACCEPTED"
                               ).length
-                            } seats available`}
+                            } ${m.agent_inner_midge_launch()}`}
                       </>
                     )}
                   </h2>
@@ -591,7 +597,7 @@ export function Ride({
                               ) : (
                                 <div className="flex items-center">
                                   <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                                  <div>{"Available Seat"} </div>
+                                  <div> {m.blue_sunny_weasel_achieve()}</div>
                                 </div>
                               )}
                             </li>
@@ -627,7 +633,7 @@ export function Ride({
                               ) : (
                                 <div className="flex items-center">
                                   <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                                  <div>{"You? "} </div>
+                                  <div>{m.heavy_known_liger_fond()}</div>
                                 </div>
                               )}
                             </li>
@@ -636,7 +642,7 @@ export function Ride({
 
                     <div className="mb-4 mt-4 flex">
                       <div className="flex-grow flex items-center">
-                        {`Driver's price for one seat`}
+                        {m.sweet_proof_dragonfly_arrive()}
                       </div>
                       <div>
                         <span className="text-2xl font-bold">
@@ -653,7 +659,7 @@ export function Ride({
                         }}
                       >
                         <Button className="flex w-full justify-center items-center gap-2 bg-primary text-white p-3 rounded-lg">
-                          Sign In To Book
+                          {m.alive_weak_mongoose_conquer()}
                         </Button>
                       </RegisterLink>
                     )}
@@ -664,13 +670,13 @@ export function Ride({
                           <AlertDialog open={open} onOpenChange={setOpen}>
                             <AlertDialogTrigger className="w-full">
                               <div className="flex justify-center items-center gap-2 hover:bg-primary bg-gray-400 text-white p-3 rounded-lg">
-                                Cancel Ride
+                                {m.maroon_light_grebe_engage()}
                               </div>
                             </AlertDialogTrigger>
                             <AlertDialogContent className="rounded-md">
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                  Are you sure, you want to cancel the ride?
+                                  {m.broad_stout_parrot_cut()}
                                 </AlertDialogTitle>
                               </AlertDialogHeader>
                               <Separator />
@@ -678,19 +684,20 @@ export function Ride({
                               <div>
                                 <div className="text-2xl"></div>
                                 <p>
-                                  <strong>Note: </strong>
-                                  Canceling will inform future passengers and
-                                  may affect your rating.
+                                  <strong>{m.fuzzy_any_bird_exhale()}</strong>
+                                  {m.sweet_away_jaguar_charm()}
                                 </p>
                               </div>
 
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Back</AlertDialogCancel>
+                                <AlertDialogCancel>
+                                  {m.major_dull_porpoise_cut()}
+                                </AlertDialogCancel>
                                 <Button
                                   disabled={isCancelingRideDriver}
                                   onClick={onCancelRideDriver}
                                 >
-                                  Cancel
+                                  {m.sad_away_osprey_embrace()}
                                 </Button>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -705,7 +712,9 @@ export function Ride({
                       ride.status == "ACTIVE" && (
                         <div className="mt-6">
                           <Separator />
-                          <div className="text-center">Requests</div>
+                          <div className="text-center">
+                            {m.petty_upper_mole_file()}
+                          </div>
                         </div>
                       )}
 
@@ -785,7 +794,7 @@ export function Ride({
                                   status === "REJECTED" && (
                                     <div className="flex items-center gap-2">
                                       <span className="text-red-500 font-bold">
-                                        Rejected
+                                        {m.livid_keen_ocelot_devour()}
                                       </span>
                                     </div>
                                   )}
@@ -801,7 +810,8 @@ export function Ride({
                               {preferredPrice && preferredPrice > 0 && (
                                 <div className="flex items-center justify-end w-full mt-2 gap-2">
                                   <span className="text-gray-500 text-lg">
-                                    Asks for {preferredPrice} ₾
+                                    {m.grand_smug_capybara_animate()}{" "}
+                                    {preferredPrice} ₾
                                   </span>
                                 </div>
                               )}
@@ -816,7 +826,9 @@ export function Ride({
                       ) && (
                         <div className="mt-6">
                           <Separator />
-                          <div className="text-center">Request</div>
+                          <div className="text-center">
+                            {m.misty_empty_coyote_offer()}
+                          </div>
                         </div>
                       )}
 
@@ -851,17 +863,17 @@ export function Ride({
                             <div className="">
                               {status === "PENDING" && (
                                 <span className="text-yellow-500 font-bold">
-                                  Pending
+                                  {m.sound_seemly_goldfish_build()}
                                 </span>
                               )}
                               {status === "REJECTED" && (
                                 <span className="text-red-500 font-bold">
-                                  Rejected
+                                  {m.weird_safe_mule_fear()}
                                 </span>
                               )}
                               {status === "CANCELLED" && (
                                 <span className="text-gray-500 font-bold">
-                                  Cancelled
+                                  {m.mealy_real_seal_heart()}
                                 </span>
                               )}
                             </div>
@@ -883,7 +895,7 @@ export function Ride({
                                   }}
                                   className="ml-auto bg-red-500 text-white py-2 px-4 rounded-md"
                                 >
-                                  Confirm Start
+                                  {m.plane_top_elephant_attend()}
                                 </Button>
                               )}
                             {passenger.id === userId &&
@@ -925,7 +937,7 @@ export function Ride({
                                       }
                                       className="ml-auto bg-primary text-white py-2 px-4 rounded-md"
                                     >
-                                      Delete
+                                      {m.mealy_factual_manatee_amaze()}
                                     </Button>
                                   </div>
                                 </>
@@ -975,7 +987,7 @@ export function Ride({
                       <AlertDialog open={open} onOpenChange={setOpen}>
                         <AlertDialogTrigger className="w-full">
                           <div className="flex justify-center items-center gap-2 bg-primary text-white p-3 rounded-lg">
-                            Start Booking
+                            {m.ornate_blue_martin_race()}
                           </div>
                         </AlertDialogTrigger>
                         <AlertDialogContent className="rounded-md">
@@ -986,7 +998,7 @@ export function Ride({
                             >
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                  Send booking request
+                                  {m.direct_flat_wombat_radiate()}
                                 </AlertDialogTitle>
                               </AlertDialogHeader>
                               <div className="space-y-4">
@@ -995,17 +1007,21 @@ export function Ride({
                                   name="description"
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>Request Details</FormLabel>
+                                      <FormLabel>
+                                        {m.awful_slimy_firefox_stir()}
+                                      </FormLabel>
                                       <FormControl>
                                         <Input
-                                          placeholder="You can leave this empty"
+                                          placeholder={m.noble_least_tuna_dine()}
                                           {...field}
                                         />
                                       </FormControl>
                                       <FormDescription>
-                                        {`Tell the driver if you have any special requests`}
+                                        {m.salty_giant_gecko_build()}
                                       </FormDescription>
-                                      <FormMessage errorMessage="Please enter a valid description" />
+                                      <FormMessage
+                                        errorMessage={m.steep_maroon_quail_startle()}
+                                      />
                                     </FormItem>
                                   )}
                                 />
@@ -1020,7 +1036,7 @@ export function Ride({
                                       }
                                     />
                                     <span className="select-none">
-                                      Need price negotitation?
+                                      {m.witty_agent_worm_twirl()}
                                     </span>
                                   </label>
                                 </div>
@@ -1031,7 +1047,9 @@ export function Ride({
                                     name="preferredPrice"
                                     render={({ field }) => (
                                       <FormItem>
-                                        <FormLabel>Prefered Price</FormLabel>
+                                        <FormLabel>
+                                          {m.fit_tasty_insect_enchant()}
+                                        </FormLabel>
                                         <FormControl>
                                           <NumericFormat
                                             className={cn()}
@@ -1051,7 +1069,7 @@ export function Ride({
                                           />
                                         </FormControl>
                                         <FormDescription>
-                                          {`If the driver accepts your booking, it might not guarantee the discount, make sure to contact them after`}
+                                          {m.game_wacky_marlin_trim()}
                                         </FormDescription>
                                         <FormMessage errorMessage="Please enter a valid price" />
                                       </FormItem>
@@ -1062,11 +1080,8 @@ export function Ride({
                                 <Separator />
 
                                 <FormDescription>
-                                  <strong>Note:</strong>{" "}
-                                  {` You will pay the
-                                  booking fee now and get a refund if the driver
-                                  declines. If accepted, you'll be able to
-                                  contact the driver.`}
+                                  <strong>{m.slimy_born_alpaca_blink()}</strong>{" "}
+                                  {m.glad_real_crow_approve()}
                                 </FormDescription>
                                 {/* <FormField
                                   control={form.control}
@@ -1095,12 +1110,14 @@ export function Ride({
                                 /> */}
                               </div>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>
+                                  {m.mealy_red_anteater_advise()}
+                                </AlertDialogCancel>
                                 <Button
                                   disabled={isCreatingPassengerRequest}
                                   type="submit"
                                 >
-                                  Submit
+                                  {m.that_giant_whale_smile()}
                                 </Button>
                               </AlertDialogFooter>
                             </form>
@@ -1121,7 +1138,7 @@ export function Ride({
                           onClick={onCancelRide} // Function to cancel the ride
                           className="bg-red-500 w-full text-white py-2 px-4 rounded-md"
                         >
-                          Cancel Ride
+                          {m.flat_each_fly_jump()}
                         </Button>
                       </div>
                     )}
@@ -1148,7 +1165,7 @@ export function Ride({
                           }
                           className="bg-green-500 w-1/2 text-white py-2 px-4 rounded-md"
                         >
-                          Start Ride
+                          {m.legal_candid_insect_enjoy()}
                         </Button>
 
                         <Button
@@ -1156,7 +1173,7 @@ export function Ride({
                           onClick={onCancelRide} // Function to cancel the ride
                           className="bg-red-500 w-1/2 text-white py-2 px-4 rounded-md"
                         >
-                          Cancel Ride
+                          {m.zippy_same_termite_jolt()}
                         </Button>
                       </div>
                     )}
@@ -1166,7 +1183,7 @@ export function Ride({
           </div>
         </div>
       ) : (
-        "Ride does not exist"
+        m.round_raw_shad_read()
       )}
     </>
   );
