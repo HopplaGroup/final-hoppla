@@ -48,8 +48,7 @@ export default async function RootLayout({
                         <p className="">{m.light_weary_rooster_relish()}</p>
                         <div className="flex flex-col items-center justify-center mt-6 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                             <a
-                                href="mailto:
-                                m@gmail.com"
+                                href="mailto:hopplagroup@gmail.com"
                                 className="flex items-center justify-center w-full px-6 py-3 text-sm text-white bg-primary rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-primary/60"
                             >
                                 {m.elegant_direct_barbel_inspire()}
