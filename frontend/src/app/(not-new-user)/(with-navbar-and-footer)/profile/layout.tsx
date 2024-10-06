@@ -72,11 +72,41 @@ export default async function ProfileLayout({ children }: LayoutProps) {
     </div>
   );
 
+  const NAV_LINKS: SidebarNavigationLink[] = [
+    {
+      icon: <Home size={22} />,
+      label: m.caring_topical_jackal_slurp(),
+      description: m.big_patient_hawk_dance(),
+      href: "/profile",
+    },
+    {
+      icon: <Milestone size={22} />,
+      label: m.candid_silly_stingray_tear(),
+      description: m.ago_happy_kitten_snip(),
+      href: "/profile/rides",
+    },
+    {
+      icon: <Ticket size={22} />,
+      label: m.long_upper_seal_revive(),
+      description: m.flat_fresh_duck_bake(),
+      href: "/profile/trips",
+    },
+  ];
+
+  const MANAGE_LINKS: SidebarNavigationLink[] = [
+    {
+      icon: <Settings size={22} />,
+      label: m.elegant_whole_crocodile_foster(),
+      description: m.lazy_front_bird_feast(),
+      href: "/profile/settings",
+    },
+  ];
+
   return (
     <div className="container">
-      <MobileNavigation />
+      <MobileNavigation navLinks={NAV_LINKS} manageLinks={MANAGE_LINKS} />
       <div className="grid md:grid-cols-[300px,1fr]  gap-6 mt-5">
-        <SidebarNavigation />
+        <SidebarNavigation navLinks={NAV_LINKS} manageLinks={MANAGE_LINKS} />
         <div>
           <div>{children}</div>
           {showDriverAlert && notDriverAlert}
@@ -86,35 +116,10 @@ export default async function ProfileLayout({ children }: LayoutProps) {
   );
 }
 
-const NAV_LINKS: SidebarNavigationLink[] = [
-  {
-    icon: <Home size={22} />,
-    label: m.caring_topical_jackal_slurp(),
-    description: m.big_patient_hawk_dance(),
-    href: "/profile",
-  },
-  {
-    icon: <Milestone size={22} />,
-    label: m.candid_silly_stingray_tear(),
-    description: m.ago_happy_kitten_snip(),
-    href: "/profile/rides",
-  },
-  {
-    icon: <Ticket size={22} />,
-    label: m.long_upper_seal_revive(),
-    description: m.flat_fresh_duck_bake(),
-    href: "/profile/trips",
-  },
-];
-
-const MANAGE_LINKS: SidebarNavigationLink[] = [
-  {
-    icon: <Settings size={22} />,
-    label: m.elegant_whole_crocodile_foster(),
-    description: m.lazy_front_bird_feast(),
-    href: "/profile/settings",
-  },
-];
+type NavigationParams = {
+  navLinks: SidebarNavigationLink[];
+  manageLinks: SidebarNavigationLink[];
+};
 
 type SidebarNavigationLink = {
   icon: React.ReactNode;
@@ -123,11 +128,11 @@ type SidebarNavigationLink = {
   href: string;
 };
 
-function MobileNavigation() {
+function MobileNavigation({ navLinks, manageLinks }: NavigationParams) {
   return (
     <div className="block md:hidden fixed bottom-0 z-50 w-full left-0 bg-white border-t border-gray-200">
       <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
-        {[...NAV_LINKS, ...MANAGE_LINKS].map(
+        {[...navLinks, ...manageLinks].map(
           ({ description, href, icon, label }, index) => (
             <Link
               key={index}
@@ -146,18 +151,18 @@ function MobileNavigation() {
   );
 }
 
-function SidebarNavigation() {
+function SidebarNavigation({ navLinks, manageLinks }: NavigationParams) {
   return (
     <aside className="bg-white border-2  rounded-md p-5 hidden md:block h-fit">
       <div>
         <h3 className="text-sm font-semibold">{m.alive_civil_skate_quiz()}</h3>
-        {NAV_LINKS.map((props, index) => (
+        {navLinks.map((props, index) => (
           <SidebarNavigationLink key={index} {...props} />
         ))}
       </div>
       <div className="mt-4">
         <h3 className="text-sm font-semibold">{m.drab_front_snake_ascend()}</h3>
-        {MANAGE_LINKS.map((props, index) => (
+        {manageLinks.map((props, index) => (
           <SidebarNavigationLink key={index} {...props} />
         ))}
       </div>
