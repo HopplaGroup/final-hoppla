@@ -1,7 +1,7 @@
 // components/RideCard.tsx
 import Link from "next/link";
 import { format } from "date-fns";
-import { Stars } from "lucide-react";
+import { Divide, Stars } from "lucide-react";
 
 import Image from "next/image";
 import { SVGCarMinivan, SVGCarStandard, SVGSeat } from "./svgs";
@@ -25,6 +25,8 @@ const formatDuration = (seconds: number) => {
 
   return `${paddedHours}:${paddedMinutes}`;
 };
+
+import * as m from "@/paraglide/messages.js";
 
 const RideCard: React.FC<RideCardProps> = ({ ride }) => {
   const maxSeats = ride.availableSeats;
@@ -180,6 +182,9 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
           {ride.car.type === "STANDARD" && (
             <SVGCarStandard className="fill-gray-500" />
           )}
+          {ride.car.type === "MINIVAN" && (
+            <SVGCarMinivan className="fill-gray-500" />
+          )}
           <img
             className="w-10 bg-gray-400 h-10 rounded-full mr-4"
             src={ride.driver.profileImg}
@@ -202,21 +207,27 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
           </div>
 
           <div className="flex flex-row gap-1 sm:gap-2 lgx:gap-8 ">
-            {ride.rules.slice(0, 3).map(({ description }, index) => (
-              <div
-                className="flex justify-center lgx:justify-evenly"
-                key={index}
-              >
-                <div className="flex items-center">
-                  {ruleToIcon[description]}
-                </div>
-                <div className="flex items-center">
-                  <div className="text-gray-500 text-sm hidden lgx:block">
-                    {description}
+            {ride.rules.length > 0 ? (
+              ride.rules.slice(0, 3).map(({ description }, index) => (
+                <div
+                  className="flex justify-center lgx:justify-evenly"
+                  key={index}
+                >
+                  <div className="flex items-center">
+                    {ruleToIcon[description]}
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-gray-500 text-sm hidden lgx:block">
+                      {description}
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="text-gray-500 text-sm">
+                {m.mushy_north_mole_harbor()}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </Link>

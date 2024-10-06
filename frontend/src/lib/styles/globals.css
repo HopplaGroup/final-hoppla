@@ -65,6 +65,15 @@
     } */
 }
 
+
+
+@font-face {
+    font-family: 'BPG MRGVLovani';
+    src: url('/fonts/bpg-mrgvlovani-caps-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer base {
     * {
         @apply border-gray-200;
@@ -134,19 +143,19 @@
         align-items: stretch;
     }
 
-    .join-horizontal > :not(:first-child):not(:last-child).join-item,
-    .join-horizontal > :not(:first-child):not(:last-child) .join-item {
+    .join-horizontal> :not(:first-child):not(:last-child).join-item,
+    .join-horizontal> :not(:first-child):not(:last-child) .join-item {
         border-radius: 0;
     }
 
-    .join-horizontal > :first-child.join-item,
-    .join-horizontal > :first-child .join-item {
+    .join-horizontal> :first-child.join-item,
+    .join-horizontal> :first-child .join-item {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .join-horizontal > :last-child.join-item,
-    .join-horizontal > :last-child .join-item {
+    .join-horizontal> :last-child.join-item,
+    .join-horizontal> :last-child .join-item {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
@@ -157,19 +166,19 @@
         flex-direction: column;
     }
 
-    .join-vertical > :not(:first-child):not(:last-child).join-item,
-    .join-vertical > :not(:first-child):not(:last-child) .join-item {
+    .join-vertical> :not(:first-child):not(:last-child).join-item,
+    .join-vertical> :not(:first-child):not(:last-child) .join-item {
         border-radius: 0;
     }
 
-    .join-vertical > :first-child.join-item,
-    .join-vertical > :first-child .join-item {
+    .join-vertical> :first-child.join-item,
+    .join-vertical> :first-child .join-item {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .join-vertical > :last-child.join-item,
-    .join-vertical > :last-child .join-item {
+    .join-vertical> :last-child.join-item,
+    .join-vertical> :last-child .join-item {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
     }
