@@ -178,7 +178,7 @@
   "honest_ideal_jan_bump": "Select",
   "heroic_moving_firefox_jest": "Please enter the departure time",
   "mushy_home_cougar_embrace": "Choose available seats",
-  "early_factual_shrike_revive": "Please enter the type",
+  "early_factual_shrike_revive": "Please enter how many passengers you would like to have.",
   "just_clear_reindeer_gleam": "The departure time is not valid",
   "trite_novel_sheep_intend": "The type is not valid",
   "aqua_broad_bison_glow": "Departure Time",
@@ -249,10 +249,10 @@
   "aloof_safe_hamster_zip": "Upload Cropped Image",
   "tiny_direct_gecko_lock": "Send Driver Request",
   "sleek_petty_stork_blink": "We will verify your driver request and get back to you soon via email.",
-  "plane_proof_cow_promise": "Succesffyly sent",
+  "plane_proof_cow_promise": "Successfully sent",
   "sour_grassy_skate_gasp": "Failed to send...",
   "short_curly_shad_bubble": "Sending...",
-  "aware_dirty_wasp_arrive": "Succesffyly sent",
+  "aware_dirty_wasp_arrive": "Successfully sent",
   "cute_polite_weasel_mend": "Failed to send...",
   "true_day_sparrow_kiss": "Selfie",
   "funny_muddy_lionfish_pat": " Upload a clear and recent selfie for identity\r\n                                verification.",
@@ -341,5 +341,9 @@
   "trick_polite_frog_gleam": "Becoming a driver",
   "jolly_slow_camel_earn": "Select",
   "whole_fresh_macaw_cure": "*If we notice your mobile number anywhere else, your account will get banned.",
-  "alert_spry_worm_honor": "Select a type"
+  "alert_spry_worm_honor": "Select a type",
+  "teary_nice_swan_adapt": "With Hoppla, I can plan my trips in advance, no more standing by the roadside. It's the most affordable and fun way to travel for me.",
+  "teal_yummy_kangaroo_care": "Hoppla made finding travel companions so much\r\n                            easier and faster. Now my long trips are no longer\r\n                            tiring or dull.",
+  "active_that_reindeer_thrive": "Hear from our satisfied passengers. Discover how our\r\n                    platform has made their journeys smoother and more\r\n                    enjoyable.",
+  "bad_bland_swan_taste": "Hoppla has been a game-changer for my daily commute between home and university. It's affordable, easy to use, and makes the trips much more enjoyable."
 }

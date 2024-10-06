@@ -67,7 +67,7 @@ function CarCard({
           </p>
         </div>
         <Separator className="my-2" />
-        <div className="flex h-5 items-center space-x-4 text-sm">
+        <div className="flex h-5 items-center space-x-2 text-sm">
           <div>
             {car.status === "APPROVED" ? (
               <span className="text-green-500">
