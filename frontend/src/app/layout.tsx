@@ -43,21 +43,19 @@ export default async function RootLayout({
                     </div>
                     <div className="w-full text-center p-6 ">
                         <h1 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                            Your account is blocked!
+                            {m.less_candid_cheetah_charm()}
                         </h1>
-                        <p className="">
-                            Please contact support to resolve this issue.
-                        </p>
+                        <p className="">{m.light_weary_rooster_relish()}</p>
                         <div className="flex flex-col items-center justify-center mt-6 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                             <a
                                 href="mailto:
                                 m@gmail.com"
                                 className="flex items-center justify-center w-full px-6 py-3 text-sm text-white bg-primary rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-primary/60"
                             >
-                                Contact Support
+                                {m.elegant_direct_barbel_inspire()}
                             </a>
                             <LogoutLink className="flex items-center justify-center w-full px-6 py-3 text-sm text-primary bg-gray-100 rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-gray-200 font-semibold">
-                                Logout
+                                {m.civil_every_ant_fold()}
                             </LogoutLink>
                         </div>
                     </div>

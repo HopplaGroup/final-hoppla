@@ -7,7 +7,7 @@ export default async function OnBoardingPage() {
     const user = await getUser();
 
     if (!user || !user.isNewUser) {
-        redirect("/profile");
+        redirect("/");
     }
 
     return (
