@@ -7,28 +7,28 @@ export const sortByOptions = [
     value: "driverAverageRating:desc",
     label: {
       en: "Driver Rating",
-      ka: "Driver შეფასება",
+      ka: "მძღოლის შეფასება",
     },
   },
   {
     value: "price:asc",
     label: {
       en: "Price (low to high)",
-      ka: "ფასი (დაბალიდან მაღალისკენ)",
+      ka: "ფასი ზრდადობით",
     },
   },
   {
     value: "price:desc",
     label: {
       en: "Price (high to low)",
-      ka: "ფასი (მაღალიდან დაბალისკენ)",
+      ka: "ფასი კლებადობით",
     },
   },
   {
     value: "departure:asc",
     label: {
       en: "Departure (earliest first)",
-      ka: "გასვლა (საკვანძოდ პირველი)",
+      ka: "გასვლა (უახლოესი)",
     },
   },
 ];
