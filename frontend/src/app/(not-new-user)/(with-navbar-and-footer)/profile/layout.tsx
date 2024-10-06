@@ -55,7 +55,9 @@ export default async function ProfileLayout({ children }: LayoutProps) {
     >
       <div className="flex items-center gap-2 text-green-600">
         <ShieldQuestion size={24} />
-        <strong className="block font-medium">Becoming a driver</strong>
+        <strong className="block font-medium">
+          {m.trick_polite_frog_gleam()}
+        </strong>
       </div>
 
       <p className="mt-2 text-sm  max-w-xl lg:max-w-3xl">

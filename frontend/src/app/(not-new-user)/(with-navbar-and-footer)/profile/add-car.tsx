@@ -264,8 +264,9 @@ export default function AddCar() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{m.seemly_zany_puma_bask()}</FormLabel>
-                    <FormControl>
+                    <FormControl >
                       <Autocomplete
+                      
                         items={CAR_LIST}
                         displayValue={(c) => c}
                         getKey={(c) => c}
@@ -311,7 +312,9 @@ export default function AddCar() {
                         }}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a type" />
+                          <SelectValue
+                            placeholder={m.alert_spry_worm_honor()}
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>

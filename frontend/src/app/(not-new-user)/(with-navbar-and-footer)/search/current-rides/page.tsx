@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useFindManyRide } from "@/lib/hooks";
 import { useUser } from "@/lib/providers/user-provider";
 
+import * as m from "@/paraglide/messages.js";
 const fakeRide: RideResponse = {
   id: "ride123",
   availableSeats: 3,
@@ -125,7 +126,9 @@ const CurrentRides = () => {
   );
   return (
     <div className="container">
-      <div className="text-2xl text-center mt-4">Your current rides</div>
+      <div className="text-2xl text-center mt-4">
+        {m.full_same_gecko_express()}
+      </div>
       <Separator className="mt-4 mb-8" />
 
       {mappedCurrentRides && mappedCurrentRides.length > 0 ? (
@@ -143,10 +146,10 @@ const CurrentRides = () => {
       ) : (
         <>
           {isLoading ? (
-            <div className="text-center text-gray-500">Loading...</div>
+            <div className="text-center text-gray-500">{`${m.wide_tired_shell_favor()}...`}</div>
           ) : (
             <div className="text-center text-gray-500">
-              You have not booked any rides yet.
+              {m.cuddly_small_samuel_pride()}
             </div>
           )}
         </>
