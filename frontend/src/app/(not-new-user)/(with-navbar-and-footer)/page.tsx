@@ -33,6 +33,7 @@ export default function Home() {
       </div>
       <Features />
       <HowItWorks />
+      {/* here is available rides */}
       <AvailableRides />
       <Testimonials />
       <Partners />

@@ -16,6 +16,7 @@ import { useFindManyRide } from "@/lib/hooks";
 type AvailableRidesProps = {};
 
 export default function AvailableRides({}: AvailableRidesProps) {
+  const availableRides = [];
   const { data: currentRides } = useFindManyRide({
     include: {
       car: true,
