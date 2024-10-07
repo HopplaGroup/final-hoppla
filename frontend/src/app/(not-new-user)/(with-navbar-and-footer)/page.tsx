@@ -32,8 +32,8 @@ export default function Home() {
         </div>
       </div>
       <Features />
-      <AvailableRides />
       <HowItWorks />
+      {/* <AvailableRides /> */}
       <Testimonials />
       <Partners />
       <div className="mb-20"></div>
