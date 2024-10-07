@@ -81,9 +81,7 @@ export default function AvailableRides({}: AvailableRidesProps) {
         <div className="container">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
             {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
-              <div>
-                <RideCard ride={ride} key={index} forceCompact />
-              </div>
+              <RideCard ride={ride} key={index} forceCompact />
             ))}
           </div>
         </div>
