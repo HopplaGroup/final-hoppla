@@ -1,23 +1,21 @@
 import { sendEmail } from "../send-email";
 import { User } from "@prisma/client";
 import { Html, Head } from "@react-email/components";
+import HopplaMailTemplate from "./main";
 
-export async function sendBanNotificationToUserEmail({
+export async function sendBanNotificationToUserEmail({ to }: { to: User[] }) {
+  await sendEmail({
     to,
-}: {
-    to: User[];
-}) {
-    await sendEmail({
-        to,
-        subject: "Your account has been banned",
-        senderName: "Hoppla",
-        htmlRender: ({ user }: { user: User }) => {
-            return (
-                // EMAIL_TODO: Add the email template here
-                <Html>
-                    <Head></Head>
-                </Html>
-            );
-        },
-    });
+    subject: "Your account has been banned",
+    senderName: "Hoppla",
+    htmlRender: ({ user }: { user: User }) => {
+      return (
+        <HopplaMailTemplate
+          previewMessage="თქვენი ანგარიში დაიხურა"
+          mainMessage="გადავხედეთ თქვენს აქტივობას და დავხურეთ თქვენი ანგარიში"
+          secondaryMessage="Hoppla ❤ ბედნიერ მგზავრობას გისურვებთ 😎. კითხვების შემთხვევაში, გთხოვთ, დაგვიკავშირდით"
+        />
+      );
+    },
+  });
 }
