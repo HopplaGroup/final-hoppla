@@ -9,7 +9,7 @@ import { useUser } from "@/lib/providers/user-provider";
 import * as m from "@/paraglide/messages.js";
 
 const CurrentRides = () => {
-    // const currentRides: RideResponse[] = [fakeRide];
+    //= const currentRides: RideResponse[] = [fakeRide];
 
     const { user } = useUser();
     const { data: currentRides, isLoading } = useFindManyRide(

@@ -313,6 +313,7 @@ export function CreateRideForm({
                       (bestPriceValue || 0) /
                         (form.watch("availableSeats") || 1),
                   })}
+                  placeholder={m.weak_vivid_moth_flop()}
                   decimalScale={2}
                   customInput={Input}
                   value={field.value}

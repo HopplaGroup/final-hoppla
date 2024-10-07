@@ -20,7 +20,6 @@ const NAV_ITEMS = [
   { href: "/contact", label: "Contact" },
 ];
 
-// TODO: NAVBARS RO AKLIKEB CONTEXT MENUZE, LEPTOPIS ZOMAZE, DATAMASHOBS IQET AQET
 export function Navbar({ driverHasCar }: NavbarProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
