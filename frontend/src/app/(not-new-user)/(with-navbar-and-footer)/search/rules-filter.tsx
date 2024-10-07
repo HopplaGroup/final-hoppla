@@ -2,6 +2,8 @@
 import { useFindManyRule } from "@/lib/hooks";
 import { Rule } from "@prisma/client";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { ruleToLabel } from "./_components/rule-icons";
+import { languageTag } from "@/paraglide/runtime";
 
 export default function RulesFilter({ search }: { search: any }) {
     const [ruleIds, setRuleIds] = useQueryState(
@@ -34,7 +36,7 @@ export default function RulesFilter({ search }: { search: any }) {
                             className="shrink-0 mt-0.5  rounded-full text-primary focus:ring-primary disabled:opacity-50 disabled:pointer-events-none "
                         />
                         <span className="text-sm  ms-3">
-                            {rule.description}
+                            {ruleToLabel[rule.description][languageTag()]}
                         </span>
                     </label>
                 ))}
