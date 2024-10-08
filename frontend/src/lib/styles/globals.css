@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-/* @import url("//cdn.web-fonts.ge/fonts/bpg-banner/css/bpg-banner.min.css"); */
+@import url("//cdn.web-fonts.ge/fonts/bpg-banner/css/bpg-banner.min.css");
 
 @tailwind base;
 @tailwind components;
@@ -65,11 +65,9 @@
     } */
 }
 
-
-
 @font-face {
-    font-family: 'BPG MRGVLovani';
-    src: url('/fonts/bpg-mrgvlovani-caps-webfont.ttf') format('truetype');
+    font-family: "BPG MRGVLovani";
+    src: url("/fonts/bpg-mrgvlovani-caps-webfont.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -77,7 +75,7 @@
 @layer base {
     * {
         @apply border-gray-200;
-        font-family: "Poppins", sans-serif;
+        font-family: "Poppins", "BPG Banner", sans-serif;
         /* font-family: "BPG Banner", sans-serif; */
     }
 
@@ -143,19 +141,19 @@
         align-items: stretch;
     }
 
-    .join-horizontal> :not(:first-child):not(:last-child).join-item,
-    .join-horizontal> :not(:first-child):not(:last-child) .join-item {
+    .join-horizontal > :not(:first-child):not(:last-child).join-item,
+    .join-horizontal > :not(:first-child):not(:last-child) .join-item {
         border-radius: 0;
     }
 
-    .join-horizontal> :first-child.join-item,
-    .join-horizontal> :first-child .join-item {
+    .join-horizontal > :first-child.join-item,
+    .join-horizontal > :first-child .join-item {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .join-horizontal> :last-child.join-item,
-    .join-horizontal> :last-child .join-item {
+    .join-horizontal > :last-child.join-item,
+    .join-horizontal > :last-child .join-item {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
@@ -166,19 +164,19 @@
         flex-direction: column;
     }
 
-    .join-vertical> :not(:first-child):not(:last-child).join-item,
-    .join-vertical> :not(:first-child):not(:last-child) .join-item {
+    .join-vertical > :not(:first-child):not(:last-child).join-item,
+    .join-vertical > :not(:first-child):not(:last-child) .join-item {
         border-radius: 0;
     }
 
-    .join-vertical> :first-child.join-item,
-    .join-vertical> :first-child .join-item {
+    .join-vertical > :first-child.join-item,
+    .join-vertical > :first-child .join-item {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .join-vertical> :last-child.join-item,
-    .join-vertical> :last-child .join-item {
+    .join-vertical > :last-child.join-item,
+    .join-vertical > :last-child .join-item {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
     }

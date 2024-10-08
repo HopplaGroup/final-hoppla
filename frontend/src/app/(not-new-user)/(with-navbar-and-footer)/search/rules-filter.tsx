@@ -4,7 +4,7 @@ import { Rule } from "@prisma/client";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { ruleToLabel } from "./_components/rule-icons";
 import { languageTag } from "@/paraglide/runtime";
-
+import * as m from "@/paraglide/messages.js";
 export default function RulesFilter({ search }: { search: any }) {
     const [ruleIds, setRuleIds] = useQueryState(
         "rules",
@@ -13,7 +13,9 @@ export default function RulesFilter({ search }: { search: any }) {
     const { data: rules } = useFindManyRule();
     return (
         <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Rules</h3>
+            <h3 className="text-lg font-semibold">
+                {m.clean_neat_polecat_aid()}
+            </h3>
             <div className="w-[calc(100vw-5rem)] lg:flex flex-col lg:w-auto space-x-2 lg:space-x-0 gap-2 overflow-x-auto min-w-0 whitespace-nowrap">
                 {rules?.map((rule) => (
                     <label

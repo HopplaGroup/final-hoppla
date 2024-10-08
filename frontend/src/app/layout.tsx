@@ -24,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
             locale: languageTag(),
             images: "/assets/opengraph-image.jpg",
         },
+        
     };
 }
 

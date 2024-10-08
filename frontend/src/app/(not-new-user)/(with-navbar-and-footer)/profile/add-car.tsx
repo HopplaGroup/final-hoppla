@@ -82,21 +82,26 @@ export default function AddCar() {
         name: "licencePhotos",
     });
 
+    console.log(form.formState.errors);
+
     function onSubmit(values: z.infer<typeof FormSchema>) {
+        console.log(values);
         form.reset();
-        setOpen(false);
-        mutate({
-            data: {
-                capacity: values.capacity,
-                mark: values.mark,
-                name: values.name,
-                plate: values.plate,
-                type: values.type,
-                photos: values.photos,
-                fuelType: values.fuelType,
-                licensePhotos: values.licencePhotos.map((p) => p.value),
-            },
-        });
+        console.log(values);
+
+        // setOpen(false);
+        // mutate({
+        //     data: {
+        //         capacity: values.capacity,
+        //         mark: values.mark,
+        //         name: values.name,
+        //         plate: values.plate,
+        //         type: values.type,
+        //         photos: values.photos,
+        //         fuelType: values.fuelType,
+        //         licensePhotos: values.licencePhotos.map((p) => p.value),
+        //     },
+        // });
     }
 
     const inputRef = useMask({
