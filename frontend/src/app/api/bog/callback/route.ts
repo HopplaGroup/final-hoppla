@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { PaymentDetailsResponse } from "@/lib/bog/types";
 import refundPayment from "@/lib/bog/refund-payment";
 import { RIDE_PRICE } from "@/lib/bog/constants";
+import { sendSeatRequestToDriverEmail } from "@/lib/functions/emails/templates/send-seat-request-to-driver-email";
 
 const PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu4RUyAw3+CdkS3ZNILQh
@@ -69,6 +70,13 @@ export async function POST(req: NextRequest) {
             }
 
             try {
+                const ride = await db.ride.findUnique({
+                    where: { id: rideId },
+                    select: { driverId: true },
+                });
+                if (!ride) {
+                    throw new Error("Ride not found");
+                }
                 await db.ridePassengerRequest.update({
                     where: {
                         passengerId_rideId: {
@@ -81,6 +89,12 @@ export async function POST(req: NextRequest) {
                         bogOrderId: order_id,
                     },
                 });
+
+                try {
+                    sendSeatRequestToDriverEmail({
+                        to: [ride.driverId],
+                    });
+                } catch (error) {}
 
                 return NextResponse.json(
                     { message: "Passenger successfully added to the ride." },

@@ -1,11 +1,12 @@
 import { sendEmail } from "../send-email";
 import { User } from "@prisma/client";
 import { Html, Head } from "@react-email/components";
+import HopplaMailTemplate from "./main";
 
 export async function sendRideCancellationToDriverEmail({
     to,
 }: {
-    to: User[];
+    to: string[];
 }) {
     await sendEmail({
         to,
@@ -13,10 +14,13 @@ export async function sendRideCancellationToDriverEmail({
         senderName: "Hoppla",
         htmlRender: ({ user }: { user: User }) => {
             return (
-                // EMAIL_TODO: Add the email template here
-                <Html>
-                    <Head></Head>
-                </Html>
+                <HopplaMailTemplate
+                    previewMessage={"თქვენი მგზავრობა გაუქმდა"}
+                    mainMessage={
+                        "სამწუხაროდ, თქვენი მგზავრობა გაუქმებულია, ჩვენ მიერ, სავარაუდოდ, პლატფორმის წესების დარღვევასთან დაკავშირებით"
+                    }
+                    secondaryMessage="Hoppla ❤ ბედნიერ მგზავრობას გისურვებთ 😎. კითხვების შემთხვევაში, გთხოვთ, დაგვიკავშირდით"
+                />
             );
         },
     });

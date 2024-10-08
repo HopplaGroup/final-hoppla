@@ -1,6 +1,7 @@
 "use server";
 import { RIDE_PRICE } from "@/lib/bog/constants";
 import refundPayment from "@/lib/bog/refund-payment";
+import { sendBanNotificationToUserEmail } from "@/lib/functions/emails/templates/send-ban-notification-to-user-email";
 import { getUser } from "@/lib/utils/auth";
 import { createServerAction } from "@/lib/utils/create-server-action";
 import db from "@/lib/utils/db";
@@ -15,16 +16,16 @@ const blockUser = createServerAction(
         await db.$transaction(async (trx) => {
             const user = await getUser();
 
-            if (!user || user.role !== "ADMIN") {
-                throw new Error("You are not allowed to do this action");
-            }
-
             await trx.user.update({
                 where: { id: userId },
                 data: { status: blocked ? "BLOCKED" : "ACTIVE" },
             });
 
             if (!blocked) return;
+
+            await sendBanNotificationToUserEmail({
+                to: [userId],
+            });
 
             const rides = await trx.ride.findMany({
                 where: {

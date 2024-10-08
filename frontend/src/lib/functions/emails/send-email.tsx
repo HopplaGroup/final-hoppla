@@ -3,6 +3,7 @@ import { User } from "@prisma/client";
 // @ts-ignore
 import nodemailer from "nodemailer";
 import { render } from "@react-email/components";
+import db from "@/lib/utils/db";
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -20,14 +21,22 @@ export async function sendEmail({
     htmlRender,
     senderName = "Hoppla Booking",
 }: {
-    to: User[];
+    to: string[];
     subject: string;
     htmlRender: ({ user }: { user: User }) => JSX.Element;
     senderName?: string;
 }) {
     if (to.length === 0) throw new Error("No recipients provided");
 
-    for (const user of to) {
+    const users = await db.user.findMany({
+        where: {
+            id: {
+                in: to,
+            },
+        },
+    });
+
+    for (const user of users) {
         await transporter.sendMail({
             from: `"${senderName}" <hopplagroup@gmail.com>`,
             to: user.email,

@@ -1,5 +1,6 @@
 "use server";
 
+import { sendRideStatusToPassengerEmail } from "../functions/emails/templates/send-ride-status-to-passenger-email";
 import { getUser } from "../utils/auth";
 import db from "../utils/db";
 
@@ -53,6 +54,13 @@ export default async function acceptPassenger(
                     status: "ACCEPTED",
                 },
             });
+
+            try {
+                sendRideStatusToPassengerEmail({
+                    status: "accepted",
+                    to: [passengerId],
+                });
+            } catch (error) {}
         });
         return {
             success: true,

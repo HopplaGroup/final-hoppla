@@ -14,7 +14,7 @@ import {
     Link,
 } from "@react-email/components";
 
-export async function sendEmailToDriverThatCarIsFull({ to }: { to: User[] }) {
+export async function sendEmailToDriverThatCarIsFull({ to }: { to: string[] }) {
     await sendEmail({
         to,
         subject: "Your car is full",
@@ -53,7 +53,7 @@ export async function sendEmailToDriverThatCarIsFull({ to }: { to: User[] }) {
 export async function sendEmailToPassengersThatRideIsCancelled({
     to,
 }: {
-    to: User[];
+    to: string[];
 }) {
     await sendEmail({
         to,

@@ -6,6 +6,7 @@ import { RIDE_PRICE } from "./constants";
 import db from "../utils/db";
 import { revalidatePath } from "next/cache";
 import { sendEmailToDriverThatCarIsFull } from "../functions/emails/templates";
+import { sendSeatRequestToDriverEmail } from "../functions/emails/templates/send-seat-request-to-driver-email";
 
 const CALLBACK_URL = "https://hoppla.ge/api/bog/callback";
 
@@ -71,6 +72,12 @@ export default async function bookRide(rideId: string) {
                         },
                     },
                 });
+
+                try {
+                    sendSeatRequestToDriverEmail({
+                        to: [ride.driverId],
+                    });
+                } catch (error) {}
             });
             return {
                 success: true,

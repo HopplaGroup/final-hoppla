@@ -10,6 +10,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { sendCarVerificationResultEmail } from "@/lib/functions/emails/templates/send-car-verification-result-email";
 import { useUpdateCar, useUpdateDriverVerificationRequest } from "@/lib/hooks";
 import { cn } from "@/lib/utils/cn";
 import { Prisma } from "@zenstackhq/runtime/models";
@@ -138,14 +139,28 @@ export default function RequestCard({
                                 <Button
                                     disabled={isApprovingUser}
                                     onClick={() => {
-                                        approveRequest({
-                                            where: {
-                                                id: request.id,
+                                        approveRequest(
+                                            {
+                                                where: {
+                                                    id: request.id,
+                                                },
+                                                data: {
+                                                    status: "APPROVED",
+                                                },
                                             },
-                                            data: {
-                                                status: "APPROVED",
-                                            },
-                                        });
+                                            {
+                                                onSuccess: () => {
+                                                    sendCarVerificationResultEmail(
+                                                        {
+                                                            isAccepted: true,
+                                                            to: [
+                                                                request.ownerId,
+                                                            ],
+                                                        }
+                                                    );
+                                                },
+                                            }
+                                        );
                                     }}
                                 >
                                     Approve
@@ -155,14 +170,28 @@ export default function RequestCard({
                                 <Button
                                     disabled={isApprovingUser}
                                     onClick={() => {
-                                        approveRequest({
-                                            where: {
-                                                id: request.id,
+                                        approveRequest(
+                                            {
+                                                where: {
+                                                    id: request.id,
+                                                },
+                                                data: {
+                                                    status: "REJECTED",
+                                                },
                                             },
-                                            data: {
-                                                status: "REJECTED",
-                                            },
-                                        });
+                                            {
+                                                onSuccess: () => {
+                                                    sendCarVerificationResultEmail(
+                                                        {
+                                                            isAccepted: false,
+                                                            to: [
+                                                                request.ownerId,
+                                                            ],
+                                                        }
+                                                    );
+                                                },
+                                            }
+                                        );
                                     }}
                                 >
                                     Reject

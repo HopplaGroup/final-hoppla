@@ -1,12 +1,15 @@
+"use server"
+
 import { sendEmail } from "../send-email";
 import { User } from "@prisma/client";
 import { Html, Head } from "@react-email/components";
+import HopplaMailTemplate from "./main";
 
 export async function sendDriverVerificationResultEmail({
     to,
     isAccepted,
 }: {
-    to: User[];
+    to: string[];
     isAccepted: boolean;
 }) {
     await sendEmail({
@@ -17,10 +20,19 @@ export async function sendDriverVerificationResultEmail({
         senderName: "Hoppla",
         htmlRender: ({ user }: { user: User }) => {
             return (
-                // EMAIL_TODO: Add the email template here
-                <Html>
-                    <Head></Head>
-                </Html>
+                <HopplaMailTemplate
+                    previewMessage={
+                        isAccepted
+                            ? "მძღოლის მოთხოვნის დასტური"
+                            : "მძღოლის მოთხოვნის უარყოფა"
+                    }
+                    mainMessage={`გადავხედეთ თქვენ მიერ ატვირთულ მასალას, შესაბამისად, ${
+                        isAccepted
+                            ? "დაგიდასტურდათ მძღოლობის მოთხოვნა. ახლა თქვენი გამოქვეყნებული მგზავრობები ყველასათვის ხილული იქნება ❤"
+                            : "სამწუხაროდ, ვერ დაგიდასტურებთ მძღოლის მოთხოვნას, თავიდან ცადეთ"
+                    }`}
+                    secondaryMessage="Hoppla ❤ ბედნიერ მგზავრობას გისურვებთ 😎. კითხვების შემთხვევაში, გთხოვთ, დაგვიკავშირდით"
+                />
             );
         },
     });

@@ -1,5 +1,6 @@
 "use server";
 
+import { sendRideStatusToPassengerEmail } from "../functions/emails/templates/send-ride-status-to-passenger-email";
 import { getUser } from "../utils/auth";
 import db from "../utils/db";
 import { RIDE_PRICE } from "./constants";
@@ -68,6 +69,13 @@ export default async function rejectPassenger(
                     },
                 });
             }
+
+            try {
+                sendRideStatusToPassengerEmail({
+                    status: "rejected",
+                    to: [passengerId],
+                });
+            } catch (error) {}
         });
         return {
             success: true,

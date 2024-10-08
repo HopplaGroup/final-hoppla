@@ -1,12 +1,14 @@
+"use server";
+
 import { sendEmail } from "../send-email";
 import { User } from "@prisma/client";
-import { Html, Head } from "@react-email/components";
+import HopplaMailTemplate from "./main";
 
 export async function sendCarVerificationResultEmail({
     to,
     isAccepted,
 }: {
-    to: User[];
+    to: string[];
     isAccepted: boolean;
 }) {
     await sendEmail({
@@ -15,10 +17,19 @@ export async function sendCarVerificationResultEmail({
         senderName: "Hoppla",
         htmlRender: ({ user }: { user: User }) => {
             return (
-                // EMAIL_TODO: Add the email template here
-                <Html>
-                    <Head></Head>
-                </Html>
+                <HopplaMailTemplate
+                    previewMessage={
+                        isAccepted
+                            ? "მანქანის დამატების დასტური"
+                            : "მანქანის დამატების უარყოფა"
+                    }
+                    mainMessage={`გადავხედეთ თქვენ მიერ ატვირთულ მასალას, შესაბამისად, ${
+                        isAccepted
+                            ? "დაგიდასტურდათ მანქანა"
+                            : "ვერ დაგიდასტურდათ მანქანა"
+                    }`}
+                    secondaryMessage="Hoppla ❤ ბედნიერ მგზავრობას გისურვებთ 😎. კითხვების შემთხვევაში, გთხოვთ, დაგვიკავშირდით"
+                />
             );
         },
     });
