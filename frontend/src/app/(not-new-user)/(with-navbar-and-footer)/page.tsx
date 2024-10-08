@@ -10,33 +10,34 @@ import * as m from "@/paraglide/messages.js";
 import AvailableRides from "@/components/sections/available-rides";
 
 export default function Home() {
-    return (
-        <>
-            <div className="relative w-full min-h-80">
-                <div className="absolute left-0 top-0 h-full min-h-80 w-full overflow-hidden">
-                    <Image
-                        className="object-cover object-center h-full w-full"
-                        src={highWay}
-                        alt="Picture of the author"
-                    />
-                </div>
-                <div className="bg-[#ff5733] h-full min-h-80 bg-opacity-20 p-4 relative">
-                    <div className="mt-10 mb-20">
-                        <p className="text-white stroke-red-500 text-center text-5xl font-bold">
-                            {m.ago_clean_fireant_zoom()}
-                        </p>
-                    </div>
-                    <div className="flex justify-center">
-                        <SearchBarLanding />
-                    </div>
-                </div>
-            </div>
-            <Features />
-            <HowItWorks />
-            <AvailableRides />
-            <Testimonials />
-            <Partners />
-            <div className="mb-20"></div>
-        </>
-    );
+  return (
+    <>
+      <div className="relative w-full min-h-80">
+        <div className="absolute left-0 top-0 h-full min-h-80 w-full overflow-hidden">
+          <Image
+            className="object-cover object-center h-full w-full"
+            src={highWay}
+            alt="Picture of the author"
+          />
+        </div>
+        <div className="bg-[#ff5733] h-full min-h-80 bg-opacity-20 p-4 relative">
+          <div className="mt-10 mb-20">
+            <p className="text-white stroke-red-500 text-center text-5xl font-bold">
+              {m.ago_clean_fireant_zoom()}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <SearchBarLanding />
+          </div>
+        </div>
+      </div>
+      <Features />
+      <HowItWorks />
+      {/* here is available rides */}
+      <AvailableRides />
+      <Testimonials />
+      <Partners />
+      <div className="mb-20"></div>
+    </>
+  );
 }

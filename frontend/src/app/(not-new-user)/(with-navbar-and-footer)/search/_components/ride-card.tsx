@@ -38,7 +38,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, forceCompact = false }) => {
     <div
       className={cn(
         "bg-white hover:outline hover:outline-1 hover:outline-primary shadow-md rounded-md",
-        forceCompact ? "max-w-sm" : ""
+        forceCompact ? "" : ""
       )}
     >
       <Link href={`/rides/${ride.id}`}>
