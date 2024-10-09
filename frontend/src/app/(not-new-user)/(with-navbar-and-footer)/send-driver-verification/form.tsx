@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/actions/button";
 import toast from "react-hot-toast";
@@ -19,51 +19,53 @@ import { DriverVerificationRequest, User } from "@prisma/client";
 import { UploadForm } from "@/components/S3UploadForm";
 import { DriverVerificationRequestCreateSchema } from "@zenstackhq/runtime/zod/models";
 import {
-  useCreateDriverVerificationRequest,
-  useUpdateDriverVerificationRequest,
+    useCreateDriverVerificationRequest,
+    useUpdateDriverVerificationRequest,
 } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 
 const FormSchema = DriverVerificationRequestCreateSchema.extend({
-  licencePhotos: z.tuple([
-    z.object({
-      value: z.string().min(1),
-    }),
-    z.object({
-      value: z.string().min(1),
-    }),
-  ]),
+    licencePhotos: z.tuple([
+        z.object({
+            value: z.string().min(1),
+        }),
+        z.object({
+            value: z.string().min(1),
+        }),
+    ]),
 });
 
 export function SendDriverRequestForm({
-  driverVerificationRequest,
-  user,
+    driverVerificationRequest,
+    user,
 }: {
-  driverVerificationRequest: DriverVerificationRequest | null;
-  user: User;
+    driverVerificationRequest: DriverVerificationRequest | null;
+    user: User;
 }) {
-  const router = useRouter();
-  const { mutate: create, isPending: isCreating } =
-    useCreateDriverVerificationRequest();
-  const { mutate: update, isPending: isUpdating } =
-    useUpdateDriverVerificationRequest();
+    const router = useRouter();
+    const { mutate: create, isPending: isCreating } =
+        useCreateDriverVerificationRequest();
+    const { mutate: update, isPending: isUpdating } =
+        useUpdateDriverVerificationRequest();
 
-  const isSubmitting = isCreating || isUpdating;
+    const isSubmitting = isCreating || isUpdating;
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      selfie: driverVerificationRequest?.selfie || undefined,
-      licencePhotos: (driverVerificationRequest?.licencePhotos?.map((m) => ({
-        value: m,
-      })) as [{ value: string }, { value: string }]) || [
-        { value: "" },
-        { value: "" },
-      ],
-      driverId: user.id,
-      status: "PENDING",
-    },
-  });
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            selfie: driverVerificationRequest?.selfie || undefined,
+            licencePhotos: (driverVerificationRequest?.licencePhotos?.map(
+                (m) => ({
+                    value: m,
+                })
+            ) as [{ value: string }, { value: string }]) || [
+                { value: "" },
+                { value: "" },
+            ],
+            driverId: user.id,
+            status: "PENDING",
+        },
+    });
 
     async function onSubmit(values: z.infer<typeof FormSchema>) {
         const toastId = toast.loading(m.short_curly_shad_bubble());
@@ -81,7 +83,7 @@ export function SendDriverRequestForm({
                 },
                 {
                     onSuccess: () => {
-                        router.refresh();
+                        router.push("/profile");
                         toast.success(m.plane_proof_cow_promise(), {
                             id: toastId,
                         });
@@ -104,7 +106,7 @@ export function SendDriverRequestForm({
                 },
                 {
                     onSuccess: () => {
-                        router.refresh();
+                        router.push("/profile");
                         toast.success(m.aware_dirty_wasp_arrive(), {
                             id: toastId,
                         });
@@ -119,12 +121,12 @@ export function SendDriverRequestForm({
         }
     }
 
-  const { fields, update: updateLP } = useFieldArray<
-    z.infer<typeof FormSchema>
-  >({
-    control: form.control,
-    name: "licencePhotos",
-  });
+    const { fields, update: updateLP } = useFieldArray<
+        z.infer<typeof FormSchema>
+    >({
+        control: form.control,
+        name: "licencePhotos",
+    });
 
     // console.log(form.formState.errors);
     return (

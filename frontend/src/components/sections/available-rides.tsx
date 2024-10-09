@@ -35,6 +35,12 @@ export default function AvailableRides({}: AvailableRidesProps) {
                 },
             },
         },
+        where: {
+            status: "ACTIVE",
+            startedConfirmations: {
+                none: {},
+            },
+        },
         orderBy: {
             departure: "desc",
         },
@@ -73,22 +79,23 @@ export default function AvailableRides({}: AvailableRidesProps) {
                 })),
             } as RideResponse)
     );
+
+    if (!mappedCurrentRides || mappedCurrentRides.length === 0) return null;
+
     return (
-        mappedCurrentRides && (
-            <div className="mt-32">
-                <div className="max-w-2xl mb-4 mx-auto text-center ">
-                    <h2 className="text-xl font-bold text-gray-800">
-                        {m.game_tiny_crossbill_devour()}
-                    </h2>
-                </div>
-                <div className="container">
-                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                        {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
-                            <RideCard ride={ride} key={index} forceCompact />
-                        ))}
-                    </div>
+        <div className="mt-32">
+            <div className="max-w-2xl mb-4 mx-auto text-center ">
+                <h2 className="text-xl font-bold text-gray-800">
+                    {m.game_tiny_crossbill_devour()}
+                </h2>
+            </div>
+            <div className="container">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                    {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
+                        <RideCard ride={ride} key={index} forceCompact />
+                    ))}
                 </div>
             </div>
-        )
+        </div>
     );
 }
