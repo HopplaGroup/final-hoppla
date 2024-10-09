@@ -240,6 +240,10 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'car',
+                }, demetre: {
+                    name: "demetre",
+                    type: "Int",
+                    isOptional: true,
                 },
             }
             , uniqueConstraints: {

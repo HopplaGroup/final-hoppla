@@ -323,7 +323,7 @@ export function useSuspenseCountCar<TArgs extends Prisma.CarCountArgs, TQueryFnD
 }
 import type { CarType, CarStatus, CarFuelType } from '@zenstackhq/runtime/models';
 
-export function useCheckCar<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; name?: string; type?: CarType; plate?: string; mark?: string; capacity?: number; status?: CarStatus; photos?: string; licensePhotos?: string; fuelType?: CarFuelType; ownerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCar<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; name?: string; type?: CarType; plate?: string; mark?: string; capacity?: number; status?: CarStatus; photos?: string; licensePhotos?: string; fuelType?: CarFuelType; ownerId?: string; demetre?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Car', `${endpoint}/car/check`, args, options, fetch);
 }

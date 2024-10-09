@@ -169,6 +169,7 @@ model Car {
   owner         User        @relation(fields: [ownerId], references: [id])
   ownerId       String
   rides         Ride[]
+  demetre       Int?
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')
