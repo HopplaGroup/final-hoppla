@@ -102,7 +102,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
         />
       </div>
       <div className="grid lg:grid-cols-[300px,1fr] gap-5 mt-5">
-        <div className="w-full">
+        <div className="w-full grid grid-cols-2 lg:grid-cols-1 gap-2">
           <SortBy search={search} />
           <RulesFilter search={search} />
         </div>
