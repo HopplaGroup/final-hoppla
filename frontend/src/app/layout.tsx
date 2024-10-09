@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils/cn";
 import { MainProvider } from "@/lib/providers/mainProvider";
 import { Toaster } from "react-hot-toast";
 import { getUser } from "@/lib/utils/auth";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
@@ -24,9 +24,15 @@ export async function generateMetadata(): Promise<Metadata> {
             locale: languageTag(),
             images: "/assets/opengraph-image.jpg",
         },
-        
     };
 }
+
+export const viewport: Viewport = {
+    themeColor: "#000000",
+    initialScale: 1,
+    width: "device-width",
+    maximumScale: 1,
+};
 
 export default async function RootLayout({
     children,

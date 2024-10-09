@@ -4,11 +4,11 @@ import { RideResponse } from "@/app/(not-new-user)/(with-navbar-and-footer)/sear
 import * as m from "@/paraglide/messages.js";
 
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
 import { useFindManyRide } from "@/lib/hooks";
@@ -16,76 +16,76 @@ import { useFindManyRide } from "@/lib/hooks";
 type AvailableRidesProps = {};
 
 export default function AvailableRides({}: AvailableRidesProps) {
-  const availableRides = [];
-  const { data: currentRides } = useFindManyRide({
-    include: {
-      car: true,
-      driver: true,
-      ridePassengerRequests: {
+    const availableRides = [];
+    const { data: currentRides } = useFindManyRide({
         include: {
-          passenger: true,
+            car: true,
+            driver: true,
+            ridePassengerRequests: {
+                include: {
+                    passenger: true,
+                },
+            },
+            rideRules: {
+                include: {
+                    rule: true,
+                },
+            },
         },
-      },
-      rideRules: {
-        include: {
-          rule: true,
+        orderBy: {
+            departure: "desc",
         },
-      },
-    },
-    orderBy: {
-      departure: "desc",
-    },
-    take: 10,
-  });
+        take: 10,
+    });
 
-  const mappedCurrentRides = currentRides?.map(
-    (ride) =>
-      ({
-        availableSeats: ride.availableSeats,
-        departure: new Date(ride.departure),
-        distance: ride.distance,
-        to: ride.to,
-        duration: ride.duration,
-        from: ride.from,
-        id: ride.id,
-        price: String(ride.price),
-        car: {
-          id: ride.car.id,
-          type: ride.car.type,
-        },
-        driver: {
-          id: ride.driver.id,
-          name: ride.driver.name,
-          profileImg: ride.driver.profileImg,
-          averageRating: 0,
-        },
-        passengers: ride.ridePassengerRequests.map((passenger) => ({
-          id: passenger.passenger.id,
-          name: passenger.passenger.name,
-          profileImg: passenger.passenger.profileImg,
-        })),
-        rules: ride.rideRules.map((rule) => ({
-          id: rule.id,
-          description: rule.rule.description,
-        })),
-      } as RideResponse)
-  );
-  return (
-    mappedCurrentRides && (
-      <div className="mt-32">
-        <div className="max-w-2xl mb-4 mx-auto text-center ">
-          <h2 className="text-2xl font-bold text-gray-800">
-            {m.game_tiny_crossbill_devour()}
-          </h2>
-        </div>
-        <div className="container">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-            {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
-              <RideCard ride={ride} key={index} forceCompact />
-            ))}
-          </div>
-        </div>
-      </div>
-    )
-  );
+    const mappedCurrentRides = currentRides?.map(
+        (ride) =>
+            ({
+                availableSeats: ride.availableSeats,
+                departure: new Date(ride.departure),
+                distance: ride.distance,
+                to: ride.to,
+                duration: ride.duration,
+                from: ride.from,
+                id: ride.id,
+                price: String(ride.price),
+                car: {
+                    id: ride.car.id,
+                    type: ride.car.type,
+                },
+                driver: {
+                    id: ride.driver.id,
+                    name: ride.driver.name,
+                    profileImg: ride.driver.profileImg,
+                    averageRating: 0,
+                },
+                passengers: ride.ridePassengerRequests.map((passenger) => ({
+                    id: passenger.passenger.id,
+                    name: passenger.passenger.name,
+                    profileImg: passenger.passenger.profileImg,
+                })),
+                rules: ride.rideRules.map((rule) => ({
+                    id: rule.id,
+                    description: rule.rule.description,
+                })),
+            } as RideResponse)
+    );
+    return (
+        mappedCurrentRides && (
+            <div className="mt-32">
+                <div className="max-w-2xl mb-4 mx-auto text-center ">
+                    <h2 className="text-xl font-bold text-gray-800">
+                        {m.game_tiny_crossbill_devour()}
+                    </h2>
+                </div>
+                <div className="container">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                        {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
+                            <RideCard ride={ride} key={index} forceCompact />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    );
 }

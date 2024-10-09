@@ -21,7 +21,7 @@ export default async function WithNavbarLayout({
 
     return (
         <>
-            <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
+            <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
                 <header>
                     <Navbar driverHasCar={driverHasCar} />
                 </header>
