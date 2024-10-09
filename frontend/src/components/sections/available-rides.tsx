@@ -25,6 +25,9 @@ export default function AvailableRides({}: AvailableRidesProps) {
                 include: {
                     passenger: true,
                 },
+                where: {
+                    status: "ACCEPTED",
+                },
             },
             rideRules: {
                 include: {

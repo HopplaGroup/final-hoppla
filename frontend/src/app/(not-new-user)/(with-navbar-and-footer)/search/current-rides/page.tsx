@@ -39,6 +39,9 @@ const CurrentRides = () => {
                     include: {
                         passenger: true,
                     },
+                    where: {
+                        status: "ACCEPTED",
+                    },
                 },
                 rideRules: {
                     include: {
