@@ -20,10 +20,7 @@ export default function NotDriverAlert() {
             }
         );
 
-    if (
-        !driverVerificationRequest ||
-        driverVerificationRequest.status !== "REJECTED"
-    ) {
+    if (driverVerificationRequest) {
         return null;
     }
 
