@@ -36,6 +36,9 @@ export default function AvailableRides({}: AvailableRidesProps) {
             },
         },
         where: {
+            departure: {
+                gt: new Date().toISOString(),
+            },
             status: "ACTIVE",
             startedConfirmations: {
                 none: {},
