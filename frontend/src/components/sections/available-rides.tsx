@@ -44,6 +44,14 @@ export default function AvailableRides({}: AvailableRidesProps) {
             departure: {
                 gt: date,
             },
+            driver: {
+                driverVerificationRequest: {
+                    status: "APPROVED",
+                },
+            },
+            car: {
+                status: "APPROVED",
+            },
         },
         orderBy: {
             departure: "desc",
