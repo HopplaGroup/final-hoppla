@@ -13,6 +13,7 @@ import {
 import { Separator } from "../ui/separator";
 import { useFindManyRide } from "@/lib/hooks";
 import { useMemo } from "react";
+import RideCardEmpty from "@/app/(not-new-user)/(with-navbar-and-footer)/search/_components/ride-card-empty";
 
 type UpcomingRidesLandingProps = {};
 
@@ -108,6 +109,12 @@ export default function UpcomingRidesLanding({}: UpcomingRidesLandingProps) {
           {mappedCurrentRides?.slice(0, 3).map((ride, index) => (
             <RideCard ride={ride} key={index} forceCompact showDate />
           ))}
+
+          {[...Array(Math.max(0, 3 - (mappedCurrentRides?.length || 0)))].map(
+            (_, index) => (
+              <RideCardEmpty key={`empty-${index}`} />
+            )
+          )}
         </div>
       </div>
     </div>
