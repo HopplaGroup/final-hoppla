@@ -12,11 +12,12 @@ import {
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
 import { useFindManyRide } from "@/lib/hooks";
+import { useMemo } from "react";
 
 type AvailableRidesProps = {};
 
 export default function AvailableRides({}: AvailableRidesProps) {
-    const availableRides = [];
+    const date = useMemo(() => new Date(), []);
     const { data: currentRides } = useFindManyRide({
         include: {
             car: true,
@@ -36,12 +37,12 @@ export default function AvailableRides({}: AvailableRidesProps) {
             },
         },
         where: {
-            departure: {
-                gt: new Date().toISOString(),
-            },
             status: "ACTIVE",
             startedConfirmations: {
                 none: {},
+            },
+            departure: {
+                gt: date,
             },
         },
         orderBy: {
@@ -49,6 +50,8 @@ export default function AvailableRides({}: AvailableRidesProps) {
         },
         take: 10,
     });
+
+    console.log("currentRides", currentRides);
 
     const mappedCurrentRides = currentRides?.map(
         (ride) =>
