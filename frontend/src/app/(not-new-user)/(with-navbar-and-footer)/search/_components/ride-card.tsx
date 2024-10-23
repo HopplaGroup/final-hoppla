@@ -80,7 +80,7 @@ const RideCard: React.FC<RideCardProps> = ({
           {/* <span className="text-gray-400">Today</span> */}
           {/* I want this to be displayed on top of them in the mobile view (As it is displayed in the desktop view) */}
           {showDate && (
-            <div className="font-semibold text-sm sm:text-md">
+            <div className="font-semibold pb-2 text-sm sm:text-md">
               {format(ride.departure, "d MMMM", {
                 locale,
               })}
