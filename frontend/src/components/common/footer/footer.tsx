@@ -23,8 +23,8 @@ const TwoColumnFooter = () => {
       },
     ],
     company: [
-      { name: m.each_last_buzzard_talk(), href: "onboarding/terms" },
-      { name: m.stock_noble_carp_chop(), href: "onboarding/privacy" },
+      { name: m.each_last_buzzard_talk(), href: "/terms" },
+      { name: m.stock_noble_carp_chop(), href: "/privacy" },
       {
         name: m.mild_this_parrot_launch(),
         href: "https://www.facebook.com/groups/139807159557518",
