@@ -1,37 +1,37 @@
 services:
     # MAIL SERVER
-    mailserver:
-        image: ghcr.io/docker-mailserver/docker-mailserver:latest
-        container_name: mailserver
-        hostname: mail.hoppla.ge
-        ports:
-            - "25:25"
-            - "587:587"
-            - "465:465"
-            - "993:993"
-        volumes:
-            - ./data/dms/mail-data/:/var/mail/
-            - ./data/dms/mail-state/:/var/mail-state/
-            - ./data/dms/mail-logs/:/var/log/mail/
-            - ./data/dms/config/:/tmp/docker-mailserver/
-            - /etc/localtime:/etc/localtime:ro
-            - ./data/nginx/certs:/etc/letsencrypt/live:ro
-        restart: always
-        stop_grace_period: 1m
-        environment:
-            - ENABLE_FAIL2BAN=1
-            - SSL_TYPE=manual
-            - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
-            - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
-            - PERMIT_DOCKER=network
-            - SPOOF_PROTECTION=0
-        cap_add:
-            - NET_ADMIN
-        healthcheck:
-            test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
-            timeout: 3s
-            retries: 0
-        # --NGINX-------------------------------------
+    # mailserver:
+    #     image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    #     container_name: mailserver
+    #     hostname: mail.hoppla.ge
+    #     ports:
+    #         - "25:25"
+    #         - "587:587"
+    #         - "465:465"
+    #         - "993:993"
+    #     volumes:
+    #         - ./data/dms/mail-data/:/var/mail/
+    #         - ./data/dms/mail-state/:/var/mail-state/
+    #         - ./data/dms/mail-logs/:/var/log/mail/
+    #         - ./data/dms/config/:/tmp/docker-mailserver/
+    #         - /etc/localtime:/etc/localtime:ro
+    #         - ./data/nginx/certs:/etc/letsencrypt/live:ro
+    #     restart: always
+    #     stop_grace_period: 1m
+    #     environment:
+    #         - ENABLE_FAIL2BAN=1
+    #         - SSL_TYPE=manual
+    #         - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
+    #         - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
+    #         - PERMIT_DOCKER=network
+    #         - SPOOF_PROTECTION=0
+    #     cap_add:
+    #         - NET_ADMIN
+    #     healthcheck:
+    #         test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+    #         timeout: 3s
+    #         retries: 0
+    # --NGINX-------------------------------------
     nginx:
         image: nginx:latest
         container_name: nginx
@@ -125,7 +125,7 @@ services:
     # --MAIN-POSTGRES-------------------------------------
     postgres:
         container_name: postgres-for-next-app
-        image: postgres:latest
+        image: postgres:16
         restart: always
         environment:
             POSTGRES_DB: ${POSTGRES_DB}
