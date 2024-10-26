@@ -106,6 +106,9 @@ services:
         container_name: next-app
         build:
             context: ./frontend
+        args:
+            NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE: ${NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE}
+            NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
         restart: always
         depends_on:
             postgres:
