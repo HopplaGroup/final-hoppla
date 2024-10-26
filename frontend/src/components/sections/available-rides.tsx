@@ -59,7 +59,7 @@ export default function AvailableRides({}: AvailableRidesProps) {
         take: 10,
     });
 
-    console.log("currentRides", currentRides);
+    // console.log("currentRides", currentRides);
 
     const mappedCurrentRides = currentRides?.map(
         (ride) =>

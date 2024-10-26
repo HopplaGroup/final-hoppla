@@ -82,7 +82,7 @@ export default function AddCar() {
         name: "licencePhotos",
     });
 
-    console.log(form.formState.errors);
+    // console.log(form.formState.errors);
 
     function onSubmit(values: z.infer<typeof FormSchema>) {
         mutate({

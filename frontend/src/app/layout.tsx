@@ -70,8 +70,6 @@ export default async function RootLayout({
         </div>
     );
 
-    // console.log("user", user);
-
     return (
         <LanguageProvider>
             <html lang={languageTag()} suppressHydrationWarning>

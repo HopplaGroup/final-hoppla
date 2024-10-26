@@ -51,9 +51,9 @@ export async function POST(req: NextRequest) {
             },
         } = body;
 
-        console.log(
-            `Payment callback for order ${order_id}, status: ${orderStatusKey}, code: ${code}`
-        );
+        // console.log(
+        //     `Payment callback for order ${order_id}, status: ${orderStatusKey}, code: ${code}`
+        // );
 
         if (orderStatusKey === "completed" && code === "100") {
             const [userId, rideId] = external_order_id.split("_");
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
                 );
             }
         } else {
-            console.log(`Payment failed or incomplete for order ${order_id}`);
+            // console.log(`Payment failed or incomplete for order ${order_id}`);
             return NextResponse.json(
                 { message: "Payment not completed." },
                 { status: 200 }

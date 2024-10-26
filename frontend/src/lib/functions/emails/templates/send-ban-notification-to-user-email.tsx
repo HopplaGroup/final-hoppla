@@ -4,7 +4,7 @@ import { Html, Head } from "@react-email/components";
 import HopplaMailTemplate from "./main";
 
 export async function sendBanNotificationToUserEmail({ to }: { to: string[] }) {
-    console.log("to", to);
+    // console.log("to", to);
     await sendEmail({
         to,
         subject: "Your account has been banned",

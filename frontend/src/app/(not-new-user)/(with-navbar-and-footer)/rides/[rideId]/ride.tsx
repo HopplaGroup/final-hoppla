@@ -149,9 +149,9 @@ export function Ride({
             }
         );
 
-    console.log({
-        rideStartedConfirmation,
-    });
+    // console.log({
+    //     rideStartedConfirmation,
+    // });
 
     const { data: userReviews } = useFindManyUserReview(
         {
@@ -247,7 +247,6 @@ export function Ride({
                 toast.error(m.smart_candid_stork_pray());
             }
         });
-        
     }
 
     function onRejectPassenger(passengerId: string) {

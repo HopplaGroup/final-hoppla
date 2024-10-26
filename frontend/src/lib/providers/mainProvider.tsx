@@ -4,13 +4,14 @@ import { LoadingProvider } from "./loading-provider";
 import { ThemeProvider } from "./theme-provider";
 import { UserProvider } from "./user-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PushNotificationProvider } from "./push-notification-provider";
 
 type MainProviderProps = {
     children: React.ReactNode;
     user: User | null;
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({});
 
 export function MainProvider({ children, user }: MainProviderProps) {
     return (
@@ -23,7 +24,11 @@ export function MainProvider({ children, user }: MainProviderProps) {
                     themes={["light"]}
                     disableTransitionOnChange
                 >
-                    <LoadingProvider>{children}</LoadingProvider>
+                    <LoadingProvider>
+                        <PushNotificationProvider>
+                            {children}
+                        </PushNotificationProvider>
+                    </LoadingProvider>
                 </ThemeProvider>
             </UserProvider>
         </QueryClientProvider>

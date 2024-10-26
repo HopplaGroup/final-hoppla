@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You are offline</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Full-page layout */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Icon styling */
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            fill: #333;
+        }
+
+        /* Message box styling */
+        .message {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="message" id="offline-message">
+        <img src="/favicon.svg" class="icon" alt="" srcset="">
+
+        <h1 id="offline-title">You are offline</h1>
+        <p id="offline-message-text">It seems like you have lost your internet connection. Please check it and try reloading the page.</p>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "You are offline",
+                message: "It seems like you have lost your internet connection. Please check it and try reloading the page."
+            },
+            ka: {
+                title: "თქვენ არ ხართ ინტერნეტში",
+                message: "ინტერნეტის კავშირის პორბლემაა. გთხოვთ, შეამოწმეთ და სცადეთ გვერდის გადატვირთვა."
+            }
+        };
+
+        const userLang = navigator.language || navigator.userLanguage; 
+        console.log(userLang);
+        const lang = userLang.split('-')[0];
+
+        const { title, message } = translations[lang] || translations.en;
+        document.getElementById('offline-title').innerText = title;
+        document.getElementById('offline-message-text').innerText = message;
+    </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import { BarChart, FileQuestion, Milestone, Users } from "lucide-react";
 
 export default function MySidebar() {
     const [broken, setBroken] = useState(false);
-    console.log(broken);
+    // console.log(broken);
     return (
         <Sidebar
             // collapsed={true}

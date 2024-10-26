@@ -22,6 +22,6 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          */
-        "/((?!api|_next/static|_next/image|favicon.ico).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|sw.js|web-app-manifest-192x192.png|web-app-manifest-512x512.png|apple-touch-icon.png|favicon-48x48.png|favicon.svg|site.webmanifest|offline.html).*)",
     ],
 };
