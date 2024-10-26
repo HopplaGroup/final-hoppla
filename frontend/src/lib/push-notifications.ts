@@ -2,16 +2,17 @@
 
 import webpush from "web-push";
 import { getUser } from "./utils/auth";
+import { menv } from "./utils/menv";
 
 webpush.setVapidDetails(
     "https://hoppla.ge",
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    process.env.VAPID_PRIVATE_KEY!
+    menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    menv.VAPID_PRIVATE_KEY
 );
 
 // TODO: if there a lot of for exampel 10 for one user then delete the oldest one
 // also expired ones should be deleted
-// also check if clicks denied then this notification box should be removed and only show that to turn on it from setting of browser    
+// also check if clicks denied then this notification box should be removed and only show that to turn on it from setting of browser
 type EnhancedPushSubscriptionJSON = {
     createdAt: string;
 } & PushSubscriptionJSON;
@@ -26,7 +27,7 @@ let subscriptions: Record<string, EnhancedPushSubscriptionJSON[]> =
 let userHasSubscription: Record<string, boolean> =
     global.userHasSubscription || {};
 
-if (process.env.NODE_ENV === "development") {
+if (menv.NODE_ENV === "development") {
     global.subscriptions = subscriptions;
     global.userHasSubscription = userHasSubscription;
 }

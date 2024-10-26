@@ -16,6 +16,7 @@ import {
 import { useUser } from "@/lib/providers/user-provider";
 import toast from "react-hot-toast";
 import { Bell, X } from "lucide-react";
+import { menv } from "../utils/menv";
 
 interface PushNotificationContextProps {
     isSupported: boolean;
@@ -68,11 +69,12 @@ export const PushNotificationProvider = ({
             await clientSub.unsubscribe();
         } else if (!clientSub && userHasSubscription.hasSubscription) {
             console.log("subscribing");
-            console.log(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
+            console.log("VAPID Key:", process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
+            console.log("VAPID Key:", menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
             const sub = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(
-                    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+                    menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
                 ),
             });
             await subscribeUser(sub.toJSON());
@@ -88,10 +90,14 @@ export const PushNotificationProvider = ({
         if (!isLoaded) return;
         setIsLoading(true);
         const registration = await navigator.serviceWorker.ready;
+
+        console.log("subscribing");
+        console.log("VAPID Key:", process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
+        console.log("VAPID Key:", menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
         const sub = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(
-                process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+                menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
             ),
         });
         await subscribeUser(sub.toJSON());
