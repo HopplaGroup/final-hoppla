@@ -9,6 +9,9 @@ webpush.setVapidDetails(
     process.env.VAPID_PRIVATE_KEY!
 );
 
+// TODO: if there a lot of for exampel 10 for one user then delete the oldest one
+// also expired ones should be deleted
+// also check if clicks denied then this notification box should be removed and only show that to turn on it from setting of browser    
 type EnhancedPushSubscriptionJSON = {
     createdAt: string;
 } & PushSubscriptionJSON;
@@ -20,15 +23,16 @@ declare global {
 let subscriptions: Record<string, EnhancedPushSubscriptionJSON[]> =
     global.subscriptions || {};
 
-if (process.env.NODE_ENV === "development") {
-    global.subscriptions = subscriptions;
-}
-
 let userHasSubscription: Record<string, boolean> =
     global.userHasSubscription || {};
 
+if (process.env.NODE_ENV === "development") {
+    global.subscriptions = subscriptions;
+    global.userHasSubscription = userHasSubscription;
+}
+
 export async function doesUserHasSubscription(userId: string) {
-    return { hasSubscription: userHasSubscription[userId] };
+    return { hasSubscription: !!userHasSubscription[userId] };
 }
 
 export async function subscribeUser(sub: PushSubscriptionJSON) {

@@ -67,6 +67,8 @@ export const PushNotificationProvider = ({
         if (clientSub && !userHasSubscription.hasSubscription) {
             await clientSub.unsubscribe();
         } else if (!clientSub && userHasSubscription.hasSubscription) {
+            console.log("subscribing");
+            console.log(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
             const sub = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(
@@ -97,7 +99,6 @@ export const PushNotificationProvider = ({
         toast.success("Subscribed to push notifications");
         setIsLoading(false);
     }
-
 
     async function unsubscribeFromPush() {
         if (!isLoaded) return;
