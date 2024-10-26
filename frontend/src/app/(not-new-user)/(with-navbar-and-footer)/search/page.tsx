@@ -107,7 +107,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
           <RulesFilter search={search} />
         </div>
         <div>
-          <div className="text-xl mb-2 font-semibold">
+          <div className="text-xl mb-4 font-semibold">
             {m.slow_smug_ant_love()}
           </div>
           {!isLoading && (

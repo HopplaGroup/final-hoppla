@@ -81,7 +81,7 @@ export default function SortBy({ search }: { search: any }) {
         </Drawer>
       </div>
       <div className="hidden lg:block">
-        <Accordion type="single" collapsible>
+        <Accordion type="single" collapsible defaultValue="item-2">
           <AccordionItem value="item-1">
             <AccordionTrigger className="pt-0 pb-2">
               <div className="text-xl font-semibold mb-2">
