@@ -20,7 +20,6 @@ export function MainProvider({ children, user }: MainProviderProps) {
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="light"
-                    // enableSystem
                     themes={["light"]}
                     disableTransitionOnChange
                 >
