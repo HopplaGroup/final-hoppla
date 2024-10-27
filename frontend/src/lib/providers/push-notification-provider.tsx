@@ -21,13 +21,12 @@ import { menv } from "../utils/menv";
 interface PushNotificationContextProps {
     isSupported: boolean;
     hasUserSubscription: boolean;
-    // hasGrantedNotifications: boolean;
+    getNotificationPermission: () => NotificationPermission;
     subscribeToPush: () => Promise<void>;
     unsubscribeFromPush: () => Promise<void>;
     showSubscribeToast: () => void;
     isLoaded: boolean;
     isLoading: boolean;
-    // triggerNotification: (message: string) => void;
 }
 
 const PushNotificationContext = createContext<
@@ -44,7 +43,11 @@ export const PushNotificationProvider = ({
     const [isLoaded, setIsLoaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useUser();
-    // TODO: also check if users allowed granted notifications if not just dont do anything, dont show button even
+    const getNotificationPermission = () =>
+        typeof Notification !== "undefined"
+            ? Notification.permission
+            : "default";
+
     useEffect(() => {
         setIsLoaded(false);
         setIsLoading(true);
@@ -53,31 +56,46 @@ export const PushNotificationProvider = ({
             registerServiceWorker();
         }
     }, []);
-
     async function registerServiceWorker() {
         const registration = await navigator.serviceWorker.register("/sw.js", {
             scope: "/",
             updateViaCache: "none",
         });
         if (!user) return;
-        // TODO: fix that imeddiatly asks for permission of notification when opend
-        // this should be only when user clicks on button
         const clientSub = await registration.pushManager.getSubscription();
         const userHasSubscription = await doesUserHasSubscription(user.id);
+
+        if (getNotificationPermission() === "denied") {
+            if (clientSub) {
+                await clientSub.unsubscribe();
+            }
+            setHasUserSubscription(userHasSubscription.hasSubscription);
+            setIsLoaded(true);
+            setIsLoading(false);
+            return;
+        }
 
         if (clientSub && !userHasSubscription.hasSubscription) {
             await clientSub.unsubscribe();
         } else if (!clientSub && userHasSubscription.hasSubscription) {
-            console.log("subscribing");
-            console.log("VAPID Key:", process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
-            console.log("VAPID Key:", menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
-            const sub = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(
-                    menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
-                ),
-            });
-            await subscribeUser(sub.toJSON());
+            try {
+                const sub = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(
+                        menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+                    ),
+                });
+                await subscribeUser(sub.toJSON());
+            } catch (error) {
+                setHasUserSubscription(userHasSubscription.hasSubscription);
+                setIsLoaded(true);
+                setIsLoading(false);
+                console.log(
+                    Notification.permission,
+                    getNotificationPermission()
+                );
+                return;
+            }
         } else if (clientSub && userHasSubscription.hasSubscription) {
             await subscribeUser(clientSub.toJSON());
         }
@@ -90,16 +108,20 @@ export const PushNotificationProvider = ({
         if (!isLoaded) return;
         setIsLoading(true);
         const registration = await navigator.serviceWorker.ready;
+        let sub;
+        try {
+            sub = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(
+                    menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+                ),
+            });
+        } catch (error) {
+            console.error("Error subscribing to push notifications", error);
+            setIsLoading(false);
+            return;
+        }
 
-        console.log("subscribing");
-        console.log("VAPID Key:", process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
-        console.log("VAPID Key:", menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
-        const sub = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(
-                menv.NEXT_PUBLIC_VAPID_PUBLIC_KEY
-            ),
-        });
         await subscribeUser(sub.toJSON());
         setHasUserSubscription(true);
         toast.success("Subscribed to push notifications");
@@ -183,6 +205,7 @@ export const PushNotificationProvider = ({
                 showSubscribeToast,
                 isLoaded,
                 isLoading,
+                getNotificationPermission,
             }}
         >
             {children}

@@ -10,6 +10,7 @@ export default function Page() {
         hasUserSubscription,
         isSupported,
         isLoading,
+        getNotificationPermission,
         subscribeToPush,
         unsubscribeFromPush,
     } = usePushNotification();
@@ -20,6 +21,15 @@ export default function Page() {
 
     if (!isSupported) {
         return <div>Push notifications are not supported in your browser.</div>;
+    }
+
+    if (getNotificationPermission() === "denied") {
+        return (
+            <div>
+                Push notifications are blocked in your browser. Please enable
+                them to use this feature.
+            </div>
+        );
     }
 
     return (

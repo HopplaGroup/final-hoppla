@@ -62,6 +62,7 @@ export async function unsubscribeUser() {
     const user = await getUser();
     if (user) {
         subscriptions[user.id] = [];
+        userHasSubscription[user.id] = false;
     }
     return { success: true };
 }
