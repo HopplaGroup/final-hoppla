@@ -17,5 +17,10 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "fullscreen",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ]
 }
