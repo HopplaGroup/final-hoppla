@@ -6,8 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: "Hoppla",
         description: "Ride sharing app",
         start_url: "/",
-        display: "fullscreen",
-        display_override: ["window-controls-overlay", "standalone", "browser"],
+        display: "standalone",
         background_color: "#ffffff",
         theme_color: "#ffffff",
         icons: [
