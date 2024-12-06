@@ -105,6 +105,7 @@ model User {
   sex                       UserSex                    @default(OTHER)
   role                      UserRole                   @default(USER)
   status                    UserStatus                 @default(ACTIVE)
+  /// @allow('read', auth() == this)
   balance                   Float                      @default(0)
   /// @allow('read', auth() == this)
   IDPhotos                  String[]

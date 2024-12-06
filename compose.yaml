@@ -1,51 +1,18 @@
 services:
-    # MAIL SERVER
-    # mailserver:
-    #     image: ghcr.io/docker-mailserver/docker-mailserver:latest
-    #     container_name: mailserver
-    #     hostname: mail.hoppla.ge
+    # nginx:
+    #     image: nginx:latest
+    #     container_name: nginx
     #     ports:
-    #         - "25:25"
-    #         - "587:587"
-    #         - "465:465"
-    #         - "993:993"
+    #         - "80:80"
+    #         - "443:443"
     #     volumes:
-    #         - ./data/dms/mail-data/:/var/mail/
-    #         - ./data/dms/mail-state/:/var/mail-state/
-    #         - ./data/dms/mail-logs/:/var/log/mail/
-    #         - ./data/dms/config/:/tmp/docker-mailserver/
-    #         - /etc/localtime:/etc/localtime:ro
-    #         - ./data/nginx/certs:/etc/letsencrypt/live:ro
+    #         - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    #         - ./data/nginx/certs:/etc/nginx/certs:ro
+    #     depends_on:
+    #         - next-app
+    #         - umami
+    #         # - backend-app
     #     restart: always
-    #     stop_grace_period: 1m
-    #     environment:
-    #         - ENABLE_FAIL2BAN=1
-    #         - SSL_TYPE=manual
-    #         - SSL_CERT_PATH=/etc/letsencrypt/live/hoppla.ge.pem
-    #         - SSL_KEY_PATH=/etc/letsencrypt/live/hoppla.ge.key
-    #         - PERMIT_DOCKER=network
-    #         - SPOOF_PROTECTION=0
-    #     cap_add:
-    #         - NET_ADMIN
-    #     healthcheck:
-    #         test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
-    #         timeout: 3s
-    #         retries: 0
-    # --NGINX-------------------------------------
-    nginx:
-        image: nginx:latest
-        container_name: nginx
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./data/nginx/certs:/etc/nginx/certs:ro
-        depends_on:
-            - next-app
-            - umami
-            # - backend-app
-        restart: always
     # --UNAMI-------------------------------------
     umami:
         image: ghcr.io/umami-software/umami:postgresql-latest
@@ -58,6 +25,8 @@ services:
             umami-db:
                 condition: service_healthy
         restart: always
+        ports:
+            - "3001:3000"
         healthcheck:
             test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
             interval: 5s
@@ -81,26 +50,6 @@ services:
             interval: 5s
             timeout: 5s
             retries: 5
-    # --BACKEND-------------------------------------
-    # backend-app:
-    #   container_name: backend-app
-    #   build:
-    #     context: ./backend
-    #   restart: always
-    #   depends_on:
-    #     postgres:
-    #       condition: service_healthy
-    #   environment:
-    #     DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-    #     NOMINATIM_URL: http://nominatim:8080
-    #     ORS_URL: http://ors-app:8082
-    #   healthcheck:
-    #     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-    #     interval: 30s
-    #     timeout: 10s
-    #     retries: 3
-    #     start_period: 40s
-
     # --FRONTEND-------------------------------------
     next-app:
         container_name: next-app
@@ -115,9 +64,10 @@ services:
                 condition: service_healthy
         env_file:
             - frontend.env
+        ports:
+            - "3000:3000"
         environment:
             DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-            # BACKEND_URL: http://backend-app:3000
             ORS_URL: http://ors-app:8082
         healthcheck:
             test: ["CMD", "wget", "-q0", "http://localhost:3000/api/health"]

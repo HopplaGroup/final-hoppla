@@ -96,7 +96,7 @@ model User extends Base {
   sex                       UserSex                    @default(OTHER)
   role                      UserRole                   @default(USER)
   status                    UserStatus                 @default(ACTIVE)
-  balance                   Float                      @default(0)
+  balance                   Float                      @default(0) @allow('read', auth() == this)
   IDPhotos                  String[]                   @allow('read', auth() == this)
   isUserVerified            Boolean                    @default(false)
 
