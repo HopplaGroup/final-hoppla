@@ -7,13 +7,16 @@ export default function Partners({}: PartnersProps) {
         <>
             <section className="mt-32 container">
                 <div className="mx-auto max-w-7xl">
-                    <div className="max-w-2xl mx-auto text-center">
-                        <h2 className="text-4xl font-extrabold text-gray-800">
+                    <div className="max-w-2xl mx-auto text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                             {m.white_salty_ox_zoom()}
                         </h2>
-                        <p className="text-sm mt-4 leading-relaxed text-gray-800 md:max-w-xl mx-auto">
+                        <p className="text-lg text-gray-600 mb-6">
                             {m.game_tasty_skunk_greet()}
                         </p>
+                        <div
+                            className={`h-1 w-20 bg-primary mx-auto rounded-full`}
+                        ></div>
                     </div>
 
                     <section className=" ">
@@ -22,7 +25,7 @@ export default function Partners({}: PartnersProps) {
                                 <div className="flex justify-center items-center">
                                     <Link href="https://www.google.com">
                                         <svg
-                                            className="h-9 hover:cursor-pointer hover:text-primary transition-all duration-200"
+                                            className="h-12 hover:cursor-pointer hover:text-primary transition-all duration-200"
                                             viewBox="0 0 86 29"
                                             fill="currentColor"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +47,7 @@ export default function Partners({}: PartnersProps) {
                                             width="110"
                                             height="33"
                                             fill="currentColor"
-                                            className="h-9 hover:cursor-pointer hover:text-primary transition-all duration-200"
+                                            className="h-12 hover:cursor-pointer hover:text-primary transition-all duration-200"
                                             viewBox="0 0 110 33"
                                         >
                                             <g

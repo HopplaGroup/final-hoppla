@@ -61,11 +61,11 @@ export function Navbar({}: NavbarProps) {
 
     return (
         <nav
-            className={`top-0 left-0 w-full fixed z-[100] transition-all duration-300 ${
+            className={`top-0 left-0 right-0 w-screen fixed z-[100] transition-all duration-300 ${
                 scrolled ? "bg-white shadow-md" : "bg-white "
             }`}
         >
-            <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
+            <div className="container">
                 <NavigationDrawer
                     isOpen={isDrawerOpen}
                     toggleDrawer={toggleDrawer}

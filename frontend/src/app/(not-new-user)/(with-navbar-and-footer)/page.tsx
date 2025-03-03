@@ -16,11 +16,11 @@ export default function Home() {
             <Hero backgroundImage={highWay} />
 
             {/* <Features /> */}
-            {/* <UpcomingRidesLanding /> */}
-            {/* <HowItWorks /> */}
+            <UpcomingRidesLanding />
+            <HowItWorks />
             {/* here is available rides */}
-            {/* <Testimonials /> */}
-            {/* <Partners /> */}
+            <Testimonials />
+            <Partners />
             <div className="mb-20"></div>
         </>
     );
