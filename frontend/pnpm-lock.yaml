@@ -56,12 +56,6 @@ importers:
       '@mui/x-date-pickers':
         specifier: ^7.7.0
         version: 7.7.0(@emotion/react@11.11.4(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.1)(date-fns@3.6.0)(dayjs@1.11.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@paypal/checkout-server-sdk':
-        specifier: ^1.0.3
-        version: 1.0.3
-      '@paypal/react-paypal-js':
-        specifier: ^8.5.0
-        version: 8.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@prisma/adapter-libsql':
         specifier: ^5.14.0
         version: 5.14.0(@libsql/client@0.6.0)
@@ -276,9 +270,6 @@ importers:
       '@types/node':
         specifier: ^20
         version: 20.14.10
-      '@types/paypal__checkout-server-sdk':
-        specifier: ^1.0.8
-        version: 1.0.8
       '@types/react':
         specifier: ^18
         version: 18.3.1
@@ -1837,26 +1828,6 @@ packages:
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
-  '@paypal/checkout-server-sdk@1.0.3':
-    resolution: {integrity: sha512-UEdq8akEdMz0Vs4qoQFU2gMp8PpyE/HKyMwiZuK4vIWUKl8jfd1fWKjQN5cDFm9NkFUIp5U7h++rdMOVj9WMNA==}
-    engines: {node: '>=8'}
-
-  '@paypal/paypal-js@8.1.0':
-    resolution: {integrity: sha512-f64bom5xYwmxyeKPJUFS/XpM0tXojQEgjRIADPqe1R9WmK+PFqL4SEkT85cGU0ZXLVx4EGbjwREHhqEOR+OstA==}
-
-  '@paypal/paypalhttp@1.0.1':
-    resolution: {integrity: sha512-DC7AHxTT7drF6dUi3YaFdPVuT15sIkpD5H2eHmdtFgxM4UanS1o1ZDfMhR9mpxd8o+X6pz2r+EZVRRq+n1cssQ==}
-    engines: {node: '>=4'}
-
-  '@paypal/react-paypal-js@8.5.0':
-    resolution: {integrity: sha512-YIAyLw4OiUoHHoUgXvibrBDdluzqnqVMGsJXyBcoOzlWHQIe5zhh8dgYezNNRXjXwy6t22YmPljjw7lr+eD9cw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  '@paypal/sdk-constants@1.0.149':
-    resolution: {integrity: sha512-oHdaRg2fP9LINMDJ8fMTtRvvW2QJVifoEoq7YPOP5Sk50edWX6tyATZTfgSnJmLHHq3OE6OF1aKa7hz09frVxw==}
-
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -3083,12 +3054,6 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/paypal__checkout-server-sdk@1.0.8':
-    resolution: {integrity: sha512-PNmNBlcany7Dh42Qb5mkl+KqYfR39aVcalLm3FXHCozKtDyfLE1JAig7C2mANPdC3fmQhdvcs0n3ym6K10CLnw==}
-
-  '@types/paypal__paypalhttp@1.0.3':
-    resolution: {integrity: sha512-Zen2JyaCOPRkPFxXetopbYWsSpi3VlWWYBZKNEXruxp6vzh7f/an/IaeZ23tmd11rg56zYtmXS2e1PfllVRZtQ==}
-
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
@@ -4198,9 +4163,6 @@ packages:
   header-case@2.0.4:
     resolution: {integrity: sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==}
 
-  hi-base32@0.5.1:
-    resolution: {integrity: sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==}
-
   highlight.js@10.4.1:
     resolution: {integrity: sha512-yR5lWvNz7c85OhVAEAeFhVCc/GV4C30Fjzc/rCP0aCWzc1UUOPUk55dK/qdwTZHBvMZo+eZ2jpk62ndX/xMFlg==}
 
@@ -4981,9 +4943,6 @@ packages:
   prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
     engines: {node: '>=6'}
-
-  promise-polyfill@8.3.0:
-    resolution: {integrity: sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==}
 
   prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
@@ -7774,27 +7733,6 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.4.0
 
-  '@paypal/checkout-server-sdk@1.0.3':
-    dependencies:
-      '@paypal/paypalhttp': 1.0.1
-
-  '@paypal/paypal-js@8.1.0':
-    dependencies:
-      promise-polyfill: 8.3.0
-
-  '@paypal/paypalhttp@1.0.1': {}
-
-  '@paypal/react-paypal-js@8.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@paypal/paypal-js': 8.1.0
-      '@paypal/sdk-constants': 1.0.149
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@paypal/sdk-constants@1.0.149':
-    dependencies:
-      hi-base32: 0.5.1
-
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -9170,14 +9108,6 @@ snapshots:
       undici-types: 5.26.5
 
   '@types/parse-json@4.0.2': {}
-
-  '@types/paypal__checkout-server-sdk@1.0.8':
-    dependencies:
-      '@types/paypal__paypalhttp': 1.0.3
-
-  '@types/paypal__paypalhttp@1.0.3':
-    dependencies:
-      '@types/node': 20.14.10
 
   '@types/prop-types@15.7.12': {}
 
@@ -10589,8 +10519,6 @@ snapshots:
       capital-case: 1.0.4
       tslib: 2.6.2
 
-  hi-base32@0.5.1: {}
-
   highlight.js@10.4.1: {}
 
   hoist-non-react-statics@3.3.2:
@@ -11343,8 +11271,6 @@ snapshots:
       fsevents: 2.3.3
 
   prismjs@1.29.0: {}
-
-  promise-polyfill@8.3.0: {}
 
   prompts@2.4.2:
     dependencies:
