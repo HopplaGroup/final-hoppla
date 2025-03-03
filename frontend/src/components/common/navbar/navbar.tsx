@@ -3,9 +3,17 @@ import { Button } from "@/components/ui/actions/button";
 import AuthBlock from "./auth-block";
 import { Logo } from "../logo";
 import { LanguageSwitcher } from "../language-switcher";
-import { AlignJustify, Plus, Ticket } from "lucide-react";
+import {
+    AlignJustify,
+    Plus,
+    Ticket,
+    Search,
+    X,
+    User,
+    Menu,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationDrawer from "./drawer";
 import * as m from "@/paraglide/messages.js";
 import { useUser } from "@/lib/providers/user-provider";
@@ -15,17 +23,17 @@ type NavbarProps = {
     driverHasCar?: boolean;
 };
 
-const NAV_ITEMS = [
-    { href: "/", label: "Home" },
-    // { href: "/search", label: "Search" },
-    { href: "/terms", label: "About" },
-    { href: "/contact", label: "Contact" },
-];
-
 export function Navbar({}: NavbarProps) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
     const { user } = useUser();
+
+    const NAV_ITEMS = [
+        { href: "/", label: m.lofty_nimble_goat_succeed() },
+        { href: "/about", label: m.tense_every_swallow_clap() },
+        { href: "/contact", label: m.round_sour_gazelle_peel() },
+    ];
 
     const { data: carsCount } = useCountCar(
         {
@@ -38,71 +46,114 @@ export function Navbar({}: NavbarProps) {
         }
     );
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
         <nav
-            style={{
-                paddingLeft: "calc(100vw - 100%)",
-            }}
-            className="top-0 left-0 w-full fixed z-[100] bg-background"
+            className={`top-0 left-0 w-full fixed z-[100] transition-all duration-300 ${
+                scrolled ? "bg-white shadow-md" : "bg-white "
+            }`}
         >
-            <div className="container">
+            <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                 <NavigationDrawer
                     isOpen={isDrawerOpen}
                     toggleDrawer={toggleDrawer}
                 />
 
-                <div className="flex h-20 items-center justify-between">
+                <div className="flex h-16 md:h-20 items-center justify-between">
+                    {/* Left Side */}
                     <div className="flex items-center gap-6">
                         <button
-                            className="block md:hidden"
+                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 md:hidden"
                             onClick={toggleDrawer}
+                            aria-label="Toggle menu"
                         >
-                            <AlignJustify />
+                            {isDrawerOpen ? (
+                                <X size={20} />
+                            ) : (
+                                <Menu size={20} />
+                            )}
                         </button>
-                        <NavbarLogo />
-                        {/* <div className="items-center gap-2 hidden md:flex">
-                            {NAV_ITEMS.slice(1).map(({ href, label }) => (
+
+                        <div className="flex items-center">
+                            <NavbarLogo />
+                        </div>
+
+                        <div className="items-center space-x-1 hidden md:flex">
+                            {NAV_ITEMS.map(({ href, label }) => (
                                 <Link
                                     key={href}
                                     href={href}
-                                    className="font-medium px-2 py-2 text-base hover:underline"
+                                    className="relative font-medium px-3 py-2 text-sm text-gray-900  transition-colors group"
                                 >
-                                    {label}
+                                    <span>{label}</span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                                 </Link>
                             ))}
-                        </div> */}
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            className="hidden md:flex items-center gap-2 font-semibold pl-2 pr-2"
-                            href={"/search/current-rides"}
-                        >
-                            <Ticket />
-                        </Button>
+                    {/* Right Side */}
+                    <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
 
                         {carsCount !== undefined && carsCount > 0 && (
                             <Button
                                 variant="ghost"
-                                className="flex items-center gap-2 font-semibold"
+                                className="flex items-center gap-2 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full px-4 transition-colors duration-200"
                                 href={"/add-ride"}
                             >
-                                <Plus />{" "}
-                                <span className="hidden md:inline">
+                                <Plus size={18} />
+                                <span className="hidden md:inline font-medium text-sm">
                                     {m.actual_watery_fireant_foster()}
                                 </span>
                             </Button>
                         )}
-                        <AuthBlock />
-                        <LanguageSwitcher />
+
+                        <div className="h-6 w-px bg-gray-300 hidden md:block"></div>
+
+                        <div className="flex items-center gap-0">
+                            <Button
+                                variant="ghost"
+                                className="hidden md:flex items-center justify-center gap-2 rounded-full px-4 transition-colors duration-200"
+                                href={"/search/current-rides"}
+                            >
+                                <Ticket size={18} />
+                                <span className="font-medium text-sm">
+                                    {m.odd_sleek_mink_taste()}
+                                </span>
+                            </Button>
+                            <AuthBlock />
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Bottom border - only visible on scroll */}
+            <div
+                className={`h-px bg-gray-200 dark:bg-gray-800 transition-opacity duration-300 ${
+                    scrolled ? "opacity-0" : "opacity-100"
+                }`}
+            ></div>
         </nav>
     );
 }
 
 function NavbarLogo() {
-    return <Logo />;
+    return (
+        <div className="transition-transform duration-200 hover:scale-105">
+            <Logo />
+        </div>
+    );
 }

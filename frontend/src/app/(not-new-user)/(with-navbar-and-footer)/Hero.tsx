@@ -13,7 +13,7 @@ export function Hero({ primaryColor = "primary", backgroundImage }: HeroProps) {
     return (
         <section className="relative w-full">
             {/* Background image container */}
-            <div className="absolute inset-0 h-[600px] w-full overflow-hidden">
+            <div className="absolute inset-0 h-[550px] w-full overflow-hidden">
                 <Image
                     className="object-cover object-center h-full w-full"
                     src={backgroundImage}
@@ -25,15 +25,15 @@ export function Hero({ primaryColor = "primary", backgroundImage }: HeroProps) {
             </div>
 
             {/* Content container */}
-            <div className="relative h-[600px] z-10">
+            <div className="relative h-[550px] z-10">
                 <div className="container mx-auto px-4 h-full">
                     <div className="flex flex-col h-full justify-between items-center py-12">
                         {/* Top section with headline */}
-                        <div className="max-w-2xl mt-16 text-center">
+                        <div className="max-w-2xl mt-12 text-center">
                             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
                                 {m.ago_clean_fireant_zoom()}
                             </h1>
-                            <p className="text-xl text-white/90 max-w-xl">
+                            <p className="text-xl text-white/90">
                                 {m.steep_north_mongoose_feel()}
                             </p>
                         </div>
