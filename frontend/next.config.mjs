@@ -1,7 +1,7 @@
 import { paraglide } from "@inlang/paraglide-next/plugin";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "standalone",
+    // output: "standalone",
     images: {
         remotePatterns: [{ hostname: "**", pathname: "**", protocol: "https" }],
     },

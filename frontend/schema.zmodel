@@ -154,7 +154,7 @@ model Car extends Base {
   ownerId       String      @default(auth().id)
   rides         Ride[]
 
-  demetre Int?
+  demetre       Int?
   @@allow('create', auth() == owner && status == "PENDING")
   @@allow('read', true)
   @@allow('update', false)
