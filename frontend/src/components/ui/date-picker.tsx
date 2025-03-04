@@ -64,7 +64,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                         disabled={disabled}
                         variant={"outline"}
                         className={cn(
-                            "w-full pl-3 text-left font-normal justify-start",
+                            "w-full pl-3 text-left justify-start",
                             !value && "text-muted-foreground"
                         )}
                         startContent={<CalendarIcon size={18} />}

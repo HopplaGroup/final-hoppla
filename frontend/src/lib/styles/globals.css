@@ -146,6 +146,14 @@
         border-radius: 0;
     }
 
+    .join-horizontal > .join-item:not(:last-child) {
+        border-right: 0 !important; /* Remove right border from all but last */
+    }
+
+    .join-vertical > .join-item:not(:last-child) {
+        border-bottom: 0; /* Remove bottom border from all but last */
+    }
+
     .join-horizontal > :first-child.join-item,
     .join-horizontal > :first-child .join-item {
         border-top-right-radius: 0;
@@ -207,6 +215,12 @@
     align-items: center !important;
     border: 0 !important;
     font-size: 18px !important;
+}
+
+.css-bw88rr-MuiPickersMonth-monthButton.Mui-selected,
+.css-innj4t-MuiPickersYear-yearButton.Mui-selected,
+.css-1wy8uaa-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+    background-color: rgb(230, 78, 61) !important;
 }
 
 .page-item.active .page-link {

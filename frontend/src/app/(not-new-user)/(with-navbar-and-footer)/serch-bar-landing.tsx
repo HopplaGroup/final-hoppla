@@ -36,43 +36,46 @@ export default function SearchBarLanding() {
     return (
         <div className="join-md grid md:grid-cols-4">
             <Autocomplete
-                startContent={<Circle size={18} />}
-                items={PLACES}
+                startIcon={<Circle size={18} />}
+                items={PLACES.filter((place) => place.osm !== toOsm)}
                 defaultSelected={PLACES.find((place) => place.osm === fromOsm)}
                 displayValue={(item) => item.name[languageTag()]}
                 onChange={(place) => setFromOsm(place?.osm || null)}
                 getKey={(item) => item.osm}
-                showMax={10}
+                // showMax={10}
+
                 filterItems={(items, query) =>
                     items.filter(
                         (item) =>
-                            item.name.en
+                            (item.name.en
                                 .toLowerCase()
                                 .startsWith(query.toLowerCase()) ||
-                            item.name.ka
-                                .toLowerCase()
-                                .startsWith(query.toLowerCase())
+                                item.name.ka
+                                    .toLowerCase()
+                                    .startsWith(query.toLowerCase())) &&
+                            item.osm !== toOsm
                     )
                 }
                 placeholder={m.sad_livid_octopus_express()}
             />
             <Autocomplete
-                startContent={<MapPin size={18} />}
-                items={PLACES}
+                startIcon={<MapPin size={18} />}
+                items={PLACES.filter((place) => place.osm !== fromOsm)}
                 defaultSelected={PLACES.find((place) => place.osm === toOsm)}
                 displayValue={(item) => item.name[languageTag()]}
-                onChange={(place) => setToOsm(place?.osm || null)}
+                onChange={(place) => setToOsm(place ? place.osm : null)}
                 getKey={(item) => item.osm}
-                showMax={10}
+                // showMax={10}
                 filterItems={(items, query) =>
                     items.filter(
                         (item) =>
-                            item.name.en
+                            (item.name.en
                                 .toLowerCase()
                                 .startsWith(query.toLowerCase()) ||
-                            item.name.ka
-                                .toLowerCase()
-                                .startsWith(query.toLowerCase())
+                                item.name.ka
+                                    .toLowerCase()
+                                    .startsWith(query.toLowerCase())) &&
+                            item.osm !== fromOsm
                     )
                 }
                 placeholder={m.early_born_crow_arrive()}
@@ -80,6 +83,8 @@ export default function SearchBarLanding() {
             <DatePicker
                 value={departureDate || undefined}
                 onChange={(newDate) => setDepartureDate(newDate || null)}
+                startDate={new Date()}
+                endDate={new Date(2030, 4, 10)}
             />
 
             <Button onClick={search}>{m.weak_sharp_jan_cry()}</Button>
