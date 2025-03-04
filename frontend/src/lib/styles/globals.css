@@ -217,9 +217,9 @@
     font-size: 18px !important;
 }
 
-.css-bw88rr-MuiPickersMonth-monthButton.Mui-selected,
-.css-innj4t-MuiPickersYear-yearButton.Mui-selected,
-.css-1wy8uaa-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+.Mui-selected,
+.Mui-selected,
+.Mui-selected {
     background-color: rgb(230, 78, 61) !important;
 }
 

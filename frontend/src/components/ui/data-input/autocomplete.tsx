@@ -113,13 +113,6 @@ export function Autocomplete<T>({
         }
     };
 
-    // Calculate the width of the input to use for dropdown width
-    // useEffect(() => {
-    //     if (optionsRef.current && inputRef.current) {
-    //         optionsRef.current.style.width = `${inputRef.current.offsetWidth}px`;
-    //     }
-    // }, [isOpen]);
-
     return (
         <div
             ref={containerRef}
@@ -155,7 +148,10 @@ export function Autocomplete<T>({
                         setIsOpen(true);
                     }}
                     // onClick={handleInputClick}
-                    onFocus={() => setIsOpen(true)}
+                    onFocus={() => {
+                        setHighlightedIndex(0);
+                        setIsOpen(true);
+                    }}
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
                     // readOnly={selected !== null}
