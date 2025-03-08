@@ -11,6 +11,9 @@ import {
     X,
     User,
     Menu,
+    Home,
+    Info,
+    Phone,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -30,9 +33,9 @@ export function Navbar({}: NavbarProps) {
     const { user } = useUser();
 
     const NAV_ITEMS = [
-        { href: "/", label: m.lofty_nimble_goat_succeed() },
-        { href: "/about", label: m.tense_every_swallow_clap() },
-        { href: "/contact", label: m.round_sour_gazelle_peel() },
+        { href: "/", label: m.lofty_nimble_goat_succeed(), icon: Home },
+        { href: "/about", label: m.tense_every_swallow_clap(), icon: Info },
+        { href: "/contact", label: m.round_sour_gazelle_peel(), icon: Phone },
     ];
 
     const { data: carsCount } = useCountCar(
@@ -91,12 +94,13 @@ export function Navbar({}: NavbarProps) {
                         </div>
 
                         <div className="items-center space-x-1 hidden md:flex">
-                            {NAV_ITEMS.map(({ href, label }) => (
+                            {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
                                 <Link
                                     key={href}
                                     href={href}
-                                    className="relative font-medium px-3 py-2 text-sm text-gray-900  transition-colors group"
+                                    className="relative font-medium px-3 py-2 text-sm text-gray-900 flex items-center gap-2 transition-colors group"
                                 >
+                                    {/* <Icon size={18} className="" /> */}
                                     <span>{label}</span>
                                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                                 </Link>
@@ -111,7 +115,7 @@ export function Navbar({}: NavbarProps) {
                         {carsCount !== undefined && carsCount > 0 && (
                             <Button
                                 variant="ghost"
-                                className="flex items-center gap-2 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full px-4 transition-colors duration-200"
+                                className="hidden md:flex items-center justify-center gap-2 rounded-full px-4 transition-colors duration-200"
                                 href={"/add-ride"}
                             >
                                 <Plus size={18} />
