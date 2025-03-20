@@ -11,17 +11,18 @@ import UpcomingRidesLanding from "@/components/sections/upcoming-rides-landing";
 import { Hero } from "./Hero";
 
 export default function Home() {
-    return (
-        <>
-            <Hero backgroundImage={highWay} />
+  return (
+    <>
+      <div className="mt-20"></div>
+      <Hero backgroundImage={highWay} />
 
-            {/* <Features /> */}
-            <UpcomingRidesLanding />
-            <HowItWorks />
-            {/* here is available rides */}
-            <Testimonials />
-            <Partners />
-            <div className="mb-20"></div>
-        </>
-    );
+      {/* <Features /> */}
+      <UpcomingRidesLanding />
+      <HowItWorks />
+      {/* here is available rides */}
+      <Testimonials />
+      <Partners />
+      <div className="mb-20"></div>
+    </>
+  );
 }
