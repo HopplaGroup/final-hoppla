@@ -144,7 +144,7 @@ model DriverVerificationRequest {
 
 /// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('create', auth() == owner && status == 'PENDING')
+/// @@allow('create', auth() == owner)
 /// @@allow('read', true)
 /// @@allow('update', false)
 /// @@allow('delete', auth() == owner)
@@ -161,7 +161,7 @@ model Car {
   mark          String
   /// @gte(1)
   capacity      Int
-  status        CarStatus   @default(PENDING)
+  status        CarStatus   @default(APPROVED)
   /// @length(min: 1)
   photos        String[]
   /// @length(min: 2, max: 2)
@@ -211,7 +211,7 @@ model RidePassengerRequest {
   ride           Ride                       @relation(fields: [rideId], references: [id])
   rideId         String
   bogOrderId     String?
-  status         RidePassengerRequestStatus @default(UNPAID)
+  status         RidePassengerRequestStatus @default(ACCEPTED)
   preferredPrice Float?
   /// @length(min: 1, max: 500)
   description    String?

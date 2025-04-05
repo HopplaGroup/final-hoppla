@@ -60,7 +60,7 @@ export default async function bookRide(rideId: string) {
                         },
                     },
                     data: {
-                        status: "PENDING",
+                        status: "ACCEPTED",
                     },
                 });
 

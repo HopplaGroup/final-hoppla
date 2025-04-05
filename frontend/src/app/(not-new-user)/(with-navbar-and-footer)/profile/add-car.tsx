@@ -309,7 +309,7 @@ export default function AddCar() {
                                                 onChange={(c) =>
                                                     field.onChange(c)
                                                 }
-                                                showMax={10}
+                                                // showMax={10}
                                                 placeholder={m.agent_white_lobster_savor()}
                                                 filterItems={(items, query) =>
                                                     items.filter((c) =>

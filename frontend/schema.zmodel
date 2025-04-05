@@ -146,7 +146,7 @@ model Car extends Base {
   mark          String      @length(min: 1, max: 50)
 
   capacity      Int         @gte(1)
-  status        CarStatus   @default(PENDING)
+  status        CarStatus   @default(APPROVED)
   photos        String[]    @length(min: 1)
   licensePhotos String[]    @length(min: 2, max: 2)
   fuelType      CarFuelType
@@ -155,7 +155,7 @@ model Car extends Base {
   rides         Ride[]
 
   demetre       Int?
-  @@allow('create', auth() == owner && status == "PENDING")
+  @@allow('create', auth() == owner)
   @@allow('read', true)
   @@allow('update', false)
   @@allow('delete', auth() == owner)
@@ -204,7 +204,7 @@ model RidePassengerRequest extends Base {
   ride           Ride                       @relation(fields: [rideId], references: [id])
   rideId         String
   bogOrderId     String?
-  status         RidePassengerRequestStatus @default(UNPAID)
+  status         RidePassengerRequestStatus @default(ACCEPTED)
   preferredPrice Float?
   description    String?                    @length(min: 1, max: 500)
 
