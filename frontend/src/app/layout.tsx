@@ -10,8 +10,8 @@ import { getUser } from "@/lib/utils/auth";
 import type { Metadata, Viewport } from "next";
 import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Logo } from "@/components/common/logo";
+import { menv } from "@/lib/utils/menv";
+import BlockedContent from "./BlockedContent";
 
 export const dynamic = "force-dynamic";
 
@@ -41,35 +41,6 @@ export default async function RootLayout({
 }>) {
     const user = await getUser();
 
-    const blockedContent = (
-        <div className="">
-            <section className="">
-                <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                    <div>
-                        <Logo />
-                    </div>
-                    <div className="w-full text-center p-6 ">
-                        <h1 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                            {m.less_candid_cheetah_charm()}
-                        </h1>
-                        <p className="">{m.light_weary_rooster_relish()}</p>
-                        <div className="flex flex-col items-center justify-center mt-6 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                            <a
-                                href="mailto:hopplagroup@gmail.com"
-                                className="flex items-center justify-center w-full px-6 py-3 text-sm text-white bg-primary rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-primary/60"
-                            >
-                                {m.elegant_direct_barbel_inspire()}
-                            </a>
-                            <LogoutLink className="flex items-center justify-center w-full px-6 py-3 text-sm text-primary bg-gray-100 rounded-lg sm:w-auto sm:px-8 sm:py-4 hover:bg-gray-200 font-semibold">
-                                {m.civil_every_ant_fold()}
-                            </LogoutLink>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    );
-
     return (
         <LanguageProvider>
             <html lang={languageTag()} suppressHydrationWarning>
@@ -79,17 +50,22 @@ export default async function RootLayout({
                     )}
                 >
                     <MainProvider user={user}>
-                        {user && user.status === "BLOCKED"
-                            ? blockedContent
-                            : children}
+                        {user && user.status === "BLOCKED" ? (
+                            <BlockedContent />
+                        ) : (
+                            children
+                        )}
                         <Toaster />
                     </MainProvider>
                 </body>
-                <Script
-                    defer
-                    src="https://umami.hoppla.ge/script.js"
-                    data-website-id="830aaf27-d46b-4952-9620-6d29c00e2617"
-                />
+
+                {menv.NODE_ENV === "production" && (
+                    <Script
+                        defer
+                        src="https://umami.hoppla.ge/script.js"
+                        data-website-id="830aaf27-d46b-4952-9620-6d29c00e2617"
+                    />
+                )}
             </html>
         </LanguageProvider>
     );

@@ -5,38 +5,28 @@ import React, { createContext, useContext } from "react";
 import { useFindUniqueUser } from "../hooks";
 
 type UserContextType = {
-  user: User | null;
+    user: User | null;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within an UserProvider");
-  }
-  return context;
+    const context = useContext(UserContext);
+    if (!context) {
+        throw new Error("useUser must be used within an UserProvider");
+    }
+    return context;
 };
 
 type UserProviderProps = {
-  children: React.ReactNode;
-  user: User | null;
+    children: React.ReactNode;
+    user: User | null;
 };
 
 export function UserProvider({ children, user }: UserProviderProps) {
-  // const { data } = useFindUniqueUser(
-  //   {
-  //     where: {
-  //       id: user?.id,
-  //     },
-  //   },
-  //   {
-  //     enabled: !!user,
-  //   }
-  // );
-  return (
-    <UserContext.Provider value={{ user: (user || null) as User | null }}>
-      {children}
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={{ user: (user || null) as User | null }}>
+            {children}
+        </UserContext.Provider>
+    );
 }
