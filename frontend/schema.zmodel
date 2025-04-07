@@ -124,7 +124,7 @@ model User extends Base {
 
 model DriverVerificationRequest extends Base {
 
-  licencePhotos String[]                        @length(min: 2, max: 2)
+  licencePhotos String[]
 
   selfie        String                          @url
   status        DriverVerificationRequestStatus

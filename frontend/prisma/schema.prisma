@@ -133,7 +133,6 @@ model DriverVerificationRequest {
   id            String                          @id() @default(cuid())
   createdAt     DateTime                        @default(now())
   updatedAt     DateTime                        @updatedAt()
-  /// @length(min: 2, max: 2)
   licencePhotos String[]
   /// @url
   selfie        String

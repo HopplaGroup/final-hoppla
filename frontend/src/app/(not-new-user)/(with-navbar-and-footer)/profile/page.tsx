@@ -1,37 +1,21 @@
-"use client";
+// "use client";
 import AddCar from "./add-car";
 import Cars from "./cars";
 import { getUser } from "@/lib/utils/auth";
-import { Stats } from "./stats";
 import AddCarAlert from "./add-car-alert";
 import * as m from "@/paraglide/messages.js";
 import db from "@/lib/utils/db";
 import Link from "next/link";
 import { useUser } from "@/lib/providers/user-provider";
 import { useFindUniqueDriverVerificationRequest } from "@/lib/hooks";
+import Stats from "./Stats";
 
 export default async function ProfileGeneralPage() {
-    const { user } = useUser();
-    const { data: driverVerificationRequest } =
-        useFindUniqueDriverVerificationRequest(
-            {
-                where: {
-                    driverId: user?.id,
-                },
-            },
-            {
-                enabled: !!user,
-            }
-        );
+    const user = await getUser();
 
     return (
         <div>
-            {/* <AddCarAlert /> */}
-            <Stats userId={user!.id} />
-            {/* {(driverVerificationRequest?.status === "PENDING" ||
-                driverVerificationRequest?.status === "APPROVED") && (
-                
-            )} */}
+            <Stats />
 
             <div className="">
                 <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">

@@ -45,10 +45,10 @@ const FormSchema = CarCreateSchema.extend({
     photos: z.array(z.string()).nonempty(),
     licencePhotos: z.tuple([
         z.object({
-            value: z.string().min(1),
+            value: z.string(),
         }),
         z.object({
-            value: z.string().min(1),
+            value: z.string(),
         }),
     ]),
 });
@@ -177,7 +177,7 @@ export default function AddCar() {
                             </AlertDialogTitle>
                         </AlertDialogHeader>
                         <div className="space-y-4">
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="licencePhotos"
                                 render={({ field }) => (
@@ -241,7 +241,7 @@ export default function AddCar() {
                                         <FormMessage errorMessage="Both front and back license photos are required. Please upload them." />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                             <FormField
                                 control={form.control}
                                 name="photos"
