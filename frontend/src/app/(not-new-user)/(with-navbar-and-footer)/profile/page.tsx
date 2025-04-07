@@ -1,14 +1,8 @@
-// "use client";
 import AddCar from "./add-car";
 import Cars from "./cars";
 import { getUser } from "@/lib/utils/auth";
-import AddCarAlert from "./add-car-alert";
 import * as m from "@/paraglide/messages.js";
-import db from "@/lib/utils/db";
-import Link from "next/link";
-import { useUser } from "@/lib/providers/user-provider";
-import { useFindUniqueDriverVerificationRequest } from "@/lib/hooks";
-import Stats from "./Stats";
+import Stats from "./MyStats";
 
 export default async function ProfileGeneralPage() {
     const user = await getUser();
