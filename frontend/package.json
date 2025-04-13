@@ -31,7 +31,7 @@
     "@mui/material-nextjs": "^5.16.6",
     "@mui/x-date-pickers": "^7.7.0",
     "@prisma/adapter-libsql": "^5.14.0",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "5.18.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -62,6 +62,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "embla-carousel-react": "^8.1.6",
+    "framer-motion": "^12.6.5",
     "google-libphonenumber": "^3.2.37",
     "lucide-react": "^0.397.0",
     "next": "14.2.3",
@@ -111,10 +112,9 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
-    "prisma": "^5.20.0",
+    "prisma": "5.18.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "zenstack": "2.4.1",
-    "zod-prisma": "^0.5.4"
+    "zenstack": "2.4.1"
   }
 }
