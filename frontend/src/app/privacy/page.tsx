@@ -1,9 +1,11 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import * as m from "@/paraglide/messages.js";
 import { languageTag } from "@/paraglide/runtime";
 import { LanguageSwitcher } from "@/components/common/navbar/language-switcher";
+import { useRouter } from "@/lib/i18n";
+import { ArrowBigLeftDash, ArrowLeft, House } from "lucide-react";
 
 const privacyPolicyData = {
     title: {
@@ -284,65 +286,32 @@ export default function PrivacyPage() {
     const router = useRouter();
     const lang = languageTag();
 
-    const [cameFromExternal, setCameFromExternal] = useState(false);
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        const referrer = document.referrer;
-        console.log("Referrer:", referrer); // Log the referrer for debugging
-        if (
-            !referrer ||
-            !referrer.includes(window.location.origin) ||
-            referrer === window.location.href
-        ) {
-            setCameFromExternal(true);
-        }
-    }, []);
-
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto relative ">
                 <div className="flex items-center justify-between mb-3 sticky top-0 z-10 bg-background rounded-b-lg w-full p-3 shadow-md">
-                    {!cameFromExternal && (
+                    <div className="flex items-center justify-between gap-3">
                         <button
-                            onClick={() => router.push(document.referrer)}
+                            onClick={() => router.back()}
                             className="flex items-center text-primary hover:text-primary/80 transition-colors p-3 hover:bg-gray-200 font-bold rounded-full"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            {m.loved_front_polecat_sail()}
+                            <ArrowBigLeftDash className="h-5 w-5 sm:mr-2 stroke-2" />
+
+                            <span className="hidden sm:block">
+                                {m.loved_front_polecat_sail()}
+                            </span>
                         </button>
-                    )}
-                    {cameFromExternal && (
+
                         <button
                             onClick={() => router.push("/")}
-                            className="flex items-center text-primary hover:text-primary/80 transition-colors"
+                            className="flex items-center text-primary hover:text-primary/80 transition-colors p-3 hover:bg-gray-200 font-bold rounded-full"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            {m.gray_odd_panda_cook()}
+                            <House className="h-5 w-5 sm:mr-2 stroke-2" />
+                            <span className="hidden sm:block">
+                                {m.gray_odd_panda_cook()}
+                            </span>
                         </button>
-                    )}
+                    </div>
                     <LanguageSwitcher />
                 </div>
 
