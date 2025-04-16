@@ -55,7 +55,7 @@ export const PushNotificationProvider = ({
             setIsSupported(true);
             registerServiceWorker();
         }
-    }, [registerServiceWorker]);
+    }, []);
 
     async function registerServiceWorker() {
         const registration = await navigator.serviceWorker.register("/sw.js", {

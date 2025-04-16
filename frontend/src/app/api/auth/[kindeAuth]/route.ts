@@ -3,4 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export const GET = handleAuth();
+export const GET = (req: NextRequest, res: NextResponse) => {
+    return handleAuth()(req, res);
+};
