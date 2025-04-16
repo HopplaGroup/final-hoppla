@@ -30,7 +30,7 @@ jobs:
                   USER: ${{ secrets.USER }}
               run: |
                   ssh $USER@$HOST << EOF
-                    cd ~/final-hoppla
+                    cd ~/HopplaWeb
                     git pull
                     timeout 20m sudo docker compose build
                     sudo docker compose up -d --remove-orphans

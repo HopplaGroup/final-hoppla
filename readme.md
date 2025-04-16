@@ -25,8 +25,8 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/HopplaGroup/final-hoppla.git
-    cd final-hoppla
+    git clone https://github.com/HopplaGroup/HopplaWeb.git
+    cd HopplaWeb
     ```
 
 2. Install dependencies:
@@ -52,17 +52,6 @@
 
 5. Open the app at [http://localhost:3000](http://localhost:3000).
 
-## 🛠️ Docker Setup
-
-You can also run the platform with Docker:
-
-1. Build and start services:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-2. Access the app at [http://localhost:3000](http://localhost:3000).
 
 ## 🛤 Roadmap
 
