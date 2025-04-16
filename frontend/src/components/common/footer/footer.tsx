@@ -76,7 +76,7 @@ const TwoColumnFooter = () => {
                                                 className="group flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-200 transition-colors duration-200"
                                             >
                                                 <span className="relative inline-block pr-2">
-                                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-500 group-hover:w-full transition-all duration-300"></span>
+                                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                                                     {item.name}
                                                 </span>
                                                 <svg
@@ -110,7 +110,7 @@ const TwoColumnFooter = () => {
                                                 className="group flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-200 transition-colors duration-200 break-words"
                                             >
                                                 <span className="relative inline-block pr-2">
-                                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-500 group-hover:w-full transition-all duration-300"></span>
+                                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                                                     {item.name}
                                                 </span>
                                             </a>
