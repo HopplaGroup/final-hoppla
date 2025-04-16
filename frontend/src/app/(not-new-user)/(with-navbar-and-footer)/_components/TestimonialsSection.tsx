@@ -1,26 +1,23 @@
 import Image from "next/image";
-import mariami from "../../../public/assets/mari2.webp";
-import ilia from "../../../public/assets/ilia.webp";
-import gaioz from "../../../public/assets/gaioz.jpg";
 import * as m from "@/paraglide/messages.js";
 
-export function Testimonials() {
+export default function TestimonialsSection() {
     const testimonials = [
         {
             name: m.loose_odd_macaw_love(),
-            image: mariami,
+            image: "/assets/mari2.webp",
             alt: "Mariami",
             text: m.teary_nice_swan_adapt(),
         },
         {
             name: m.watery_formal_mantis_fear(),
-            image: ilia,
+            image: "/assets/ilia.webp",
             alt: "Ilia",
             text: m.teal_yummy_kangaroo_care(),
         },
         {
             name: m.loose_flat_dove_nourish(),
-            image: gaioz,
+            image: "/assets/gaioz.jpg",
             alt: "Gaioz",
             text: m.bad_bland_swan_taste(),
         },

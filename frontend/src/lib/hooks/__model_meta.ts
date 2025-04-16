@@ -29,9 +29,11 @@ const metadata = {
                 }, mobileNumber: {
                     name: "mobileNumber",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "value": "+995..." }] }],
                 }, idNumber: {
                     name: "idNumber",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "value": "5900..." }] }],
                 }, birthDate: {
                     name: "birthDate",
                     type: "DateTime",
@@ -42,6 +44,7 @@ const metadata = {
                 }, bio: {
                     name: "bio",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, sex: {
                     name: "sex",
                     type: "UserSex",

@@ -857,6 +857,10 @@ const PLACES: Place[] = [
   },
 ];
 
+
+
+
+
 export const PLACE_MAP: Map<Place["osm"], Place> = new Map(
   PLACES.map((place) => [place.osm, place])
 );

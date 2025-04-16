@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/actions/button";
 import { PhoneInput } from "@/components/ui/data-input/phone-input";
 import { DatePicker } from "@/components/ui/date-picker";
 import toast from "react-hot-toast";
-import { useLoading } from "@/lib/providers/loading-provider";
 import * as m from "@/paraglide/messages.js";
 import {
   Select,
@@ -46,7 +45,6 @@ const RefinedUserUpdateSchema = UserUpdateSchema.pick({
 
 export function ProfileSettingsForm({ user }: { user: User }) {
   const { mutate, isPending } = useUpdateUser();
-  const { push } = useLoading();
   const router = useRouter();
 
   const sexOptions = [

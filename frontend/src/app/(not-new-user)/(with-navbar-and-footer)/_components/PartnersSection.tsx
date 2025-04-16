@@ -1,7 +1,7 @@
 import * as m from "@/paraglide/messages.js";
 import Link from "next/link";
 
-export default function Partners() {
+export default function PartnersSection() {
     return (
         <>
             <section className="mt-32 container">

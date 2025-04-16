@@ -1,15 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/actions/button";
 import AuthBlock from "./auth-block";
-import { Logo } from "../logo";
-import { LanguageSwitcher } from "../language-switcher";
+import { LanguageSwitcher } from "./language-switcher";
 import {
     AlignJustify,
     Plus,
     Ticket,
     Search,
     X,
-    User,
     Menu,
     Home,
     Info,
@@ -20,25 +18,19 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import NavigationDrawer from "./drawer";
 import * as m from "@/paraglide/messages.js";
-import { useUser } from "@/lib/providers/user-provider";
-import { useCountCar } from "@/lib/hooks";
+import { User } from "@prisma/client";
+import Logo from "@/app/_components/Logo";
 
-type NavbarProps = {
-    driverHasCar?: boolean;
-};
-
-export function Navbar({}: NavbarProps) {
+export function Navbar({ user }: { user: User | null }) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
-    const { user } = useUser();
 
     const NAV_ITEMS = [
         { href: "/", label: m.lofty_nimble_goat_succeed(), icon: Home },
         { href: "/about", label: m.tense_every_swallow_clap(), icon: Info },
         { href: "/contact", label: m.round_sour_gazelle_peel(), icon: Phone },
     ];
-
 
     useEffect(() => {
         const handleScroll = () => {
@@ -81,7 +73,9 @@ export function Navbar({}: NavbarProps) {
                         </button>
 
                         <div className="flex items-center">
-                            <NavbarLogo />
+                            <div className="transition-transform duration-200 hover:scale-105">
+                                <Logo />
+                            </div>
                         </div>
 
                         <div className="items-center space-x-1 hidden md:flex">
@@ -130,7 +124,7 @@ export function Navbar({}: NavbarProps) {
                                     {m.odd_sleek_mink_taste()}
                                 </span>
                             </Button>
-                            <AuthBlock />
+                            <AuthBlock user={user} />
                         </div>
                     </div>
                 </div>
@@ -143,13 +137,5 @@ export function Navbar({}: NavbarProps) {
                 }`}
             ></div>
         </nav>
-    );
-}
-
-function NavbarLogo() {
-    return (
-        <div className="transition-transform duration-200 hover:scale-105">
-            <Logo />
-        </div>
     );
 }

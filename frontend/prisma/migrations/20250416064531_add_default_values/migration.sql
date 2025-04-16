@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "mobileNumber" SET DEFAULT '+995...',
+ALTER COLUMN "idNumber" SET DEFAULT '5900...',
+ALTER COLUMN "bio" SET DEFAULT '';

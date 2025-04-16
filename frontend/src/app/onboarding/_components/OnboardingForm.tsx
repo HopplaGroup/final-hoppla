@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import * as m from "@/paraglide/messages";
 import { zodPhoneSchema } from "@/lib/utils/phone-schema";
-import { updateUser } from "./actions";
+import { updateUser } from "../_actions/actions";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import carpoolRegistration from "../../../public/assets/carpool-registration.svg";
+import { Link } from "@/lib/i18n";
 
 // Form schema
 const OnboardingSchema = z.object({
@@ -123,11 +123,12 @@ export default function OnboardingForm() {
     return (
         <section className="bg-white">
             <div className="lg:grid lg:h-screen lg:grid-cols-12">
-                <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
+                <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6 overflow-hidden">
                     <Image
-                        src={carpoolRegistration}
+                        src={"/assets/carpool-registration.svg"}
+                        fill
                         alt="Carpool registration"
-                        className="absolute inset-0 h-full w-full object-cover"
+                        className="absolute inset-0 h-full w-full object-cover lg:object-right-top lg:scale-125 overflow-hidden"
                         priority
                     />
                 </aside>
@@ -325,7 +326,7 @@ export default function OnboardingForm() {
                                         className="space-y-4"
                                     >
                                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                                            Personal Details
+                                            {m.sleek_brave_tortoise_link()}
                                         </h3>
 
                                         {/* Birth Date Field */}
@@ -355,6 +356,17 @@ export default function OnboardingForm() {
                                                 <input
                                                     id="birthDate"
                                                     type="date"
+                                                    // from and to like age should be at least 5 years
+                                                    max={
+                                                        new Date(
+                                                            new Date().setFullYear(
+                                                                new Date().getFullYear() -
+                                                                    5
+                                                            )
+                                                        )
+                                                            .toISOString()
+                                                            .split("T")[0]
+                                                    }
                                                     className={`w-full outline-none rounded-lg border ${
                                                         errors.birthDate
                                                             ? "border-red-500 focus:ring-red-500"
@@ -528,20 +540,22 @@ export default function OnboardingForm() {
                                         <div className="text-sm text-gray-600 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                             <p>
                                                 {m.aware_tense_dolphin_grow()}{" "}
-                                                <a
-                                                    href="/onboarding/terms"
+                                                <Link
+                                                    target="_blank"
+                                                    href="/terms"
                                                     className="text-primary font-medium hover:underline"
                                                 >
                                                     {m.bald_knotty_nils_fond()}{" "}
-                                                </a>
+                                                </Link>
                                                 {m.male_bold_robin_spur()}
-                                                <a
-                                                    href="onboarding/privacy"
+                                                <Link
+                                                    target="_blank"
+                                                    href="/privacy"
                                                     className="text-primary font-medium hover:underline"
                                                 >
                                                     {" "}
                                                     {m.careful_gaudy_cobra_clap()}
-                                                </a>
+                                                </Link>
                                                 .
                                             </p>
                                         </div>

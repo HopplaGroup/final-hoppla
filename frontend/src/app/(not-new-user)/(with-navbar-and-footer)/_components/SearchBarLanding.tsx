@@ -2,10 +2,9 @@
 import { Button } from "@/components/ui/actions/button";
 import { Autocomplete } from "@/components/ui/data-input/autocomplete";
 import PLACES from "@/lib/constants/places";
-import { useLoading } from "@/lib/providers/loading-provider";
 import { languageTag } from "@/paraglide/runtime";
 import { Circle, MapPin } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
     useQueryState,
     parseAsInteger,
@@ -26,11 +25,10 @@ export default function SearchBarLanding() {
         "departure",
         parseAsIsoDateTime.withDefault(date)
     );
-
-    const { push } = useLoading();
+    const router = useRouter();
     const searchParams = useSearchParams();
     const search = () => {
-        push("/search" + "?" + searchParams.toString());
+        router.push("/search" + "?" + searchParams.toString());
     };
 
     return (

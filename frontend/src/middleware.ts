@@ -8,20 +8,13 @@ export function middleware(request: NextRequest) {
         !NEXT_LOCALE &&
         availableLanguageTags.every((tag) => !request.url.startsWith(`/${tag}`))
     ) {
-        request.cookies.set("NEXT_LOCALE", "en");
+        request.cookies.set("NEXT_LOCALE", "ka");
     }
     return _i18nMiddleware(request);
 }
 
 export const config = {
     matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         */
-        "/((?!api|_next/static|_next/image|favicon.ico|sw.js|web-app-manifest-192x192.png|web-app-manifest-512x512.png|apple-touch-icon.png|favicon-48x48.png|favicon.svg|site.webmanifest|offline.html|manifest.webmanifest).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.webp|.*\\.ico|.*\\.woff2?|.*\\.ttf|.*\\.eot|.*\\.json|.*\\.txt|.*\\.html|.*\\.mp4|.*\\.mp3|.*\\.ogg).*)",
     ],
 };

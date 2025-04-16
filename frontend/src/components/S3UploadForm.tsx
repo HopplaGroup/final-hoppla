@@ -210,6 +210,7 @@ export const UploadForm = ({
             >
                 <>
                     <img
+                        alt="upload"
                         className="size-6 w-full h-full object-cover group-hover:opacity-80"
                         src={imageUrl}
                     />
@@ -244,7 +245,9 @@ export const UploadForm = ({
                         onClick={handleUpload}
                         disabled={uploading}
                     >
-                        {uploading ? m.basic_teary_ape_inspire(): m.aloof_safe_hamster_zip()}
+                        {uploading
+                            ? m.basic_teary_ape_inspire()
+                            : m.aloof_safe_hamster_zip()}
                     </button>
                 </div>
             )}

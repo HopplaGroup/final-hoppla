@@ -1,5 +1,3 @@
-import React from "react";
-import Image from "next/image";
 import * as m from "@/paraglide/messages.js";
 
 export default function HowItWorks() {

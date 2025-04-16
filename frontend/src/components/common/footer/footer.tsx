@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Logo } from "../logo";
 import * as m from "@/paraglide/messages.js";
+import Logo from "@/app/_components/Logo";
 
 const TwoColumnFooter = () => {
     const navigation = {

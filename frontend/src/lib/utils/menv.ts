@@ -11,7 +11,6 @@ export const menv = createEnv({
         KINDE_SITE_URL: z.string().min(1),
         KINDE_POST_LOGOUT_REDIRECT_URL: z.string().min(1),
         KINDE_POST_LOGIN_REDIRECT_URL: z.string().min(1),
-        PRISMA_USER_CREATION_REDIRECT_URL: z.string().min(1),
         // FILE UPLOAD
         AWS_S3_REGION: z.string().min(1),
         AWS_S3_ACCESS_KEY_ID: z.string().min(1),
@@ -29,6 +28,7 @@ export const menv = createEnv({
 
     client: {
         NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE: z.string().min(1),
+        NEXT_PUBLIC_URL: z.string().min(1),
         NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().min(1),
     },
 
@@ -43,11 +43,10 @@ export const menv = createEnv({
             process.env.KINDE_POST_LOGOUT_REDIRECT_URL,
         KINDE_POST_LOGIN_REDIRECT_URL:
             process.env.KINDE_POST_LOGIN_REDIRECT_URL,
-        PRISMA_USER_CREATION_REDIRECT_URL:
-            process.env.PRISMA_USER_CREATION_REDIRECT_URL,
 
         NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE:
             process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE,
+        NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
 
         AWS_S3_REGION: process.env.AWS_S3_REGION,
         AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,

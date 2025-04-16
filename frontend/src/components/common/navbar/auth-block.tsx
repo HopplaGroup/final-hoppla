@@ -18,11 +18,9 @@ import { menv } from "@/lib/utils/menv";
 import { cn } from "@/lib/utils/cn";
 import { Coins, PiggyBank } from "lucide-react";
 import { useFindUniqueUser } from "@/lib/hooks";
+import { User } from "@prisma/client";
 
-type AuthBlockProps = {};
-
-export default function AuthBlock({}: AuthBlockProps) {
-    const { user } = useUser();
+export default function AuthBlock({ user }: { user: User | null }) {
     const { data: latestUser } = useFindUniqueUser(
         {
             where: {
@@ -164,7 +162,11 @@ export default function AuthBlock({}: AuthBlockProps) {
                     )}
                 >
                     <>
-                        <img className="size-5" src="/assets/g-logo.png" />{" "}
+                        <img
+                            alt="google logo"
+                            className="size-5"
+                            src="/assets/g-logo.png"
+                        />{" "}
                         <span className="hidden sm:block">
                             {m.plane_weird_macaw_slurp()}
                         </span>

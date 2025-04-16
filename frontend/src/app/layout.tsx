@@ -11,7 +11,7 @@ import type { Metadata, Viewport } from "next";
 import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
 import { menv } from "@/lib/utils/menv";
-import BlockedContent from "./BlockedContent";
+import BlockedUserPage from "./_components/BlockedUserPage";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +40,6 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     const user = await getUser();
-
     return (
         <LanguageProvider>
             <html lang={languageTag()} suppressHydrationWarning>
@@ -51,7 +50,7 @@ export default async function RootLayout({
                 >
                     <MainProvider user={user}>
                         {user && user.status === "BLOCKED" ? (
-                            <BlockedContent />
+                            <BlockedUserPage />
                         ) : (
                             children
                         )}

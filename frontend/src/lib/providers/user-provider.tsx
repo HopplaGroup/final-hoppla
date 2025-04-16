@@ -2,7 +2,6 @@
 
 import { User } from "@prisma/client";
 import React, { createContext, useContext } from "react";
-import { useFindUniqueUser } from "../hooks";
 
 type UserContextType = {
     user: User | null;

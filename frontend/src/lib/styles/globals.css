@@ -202,6 +202,12 @@
     }
 }
 
+@layer components {
+    button {
+        @apply btn-animate;
+    }
+}
+
 .pagination {
     justify-content: start !important;
 }

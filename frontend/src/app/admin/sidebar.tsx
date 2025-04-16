@@ -1,5 +1,4 @@
 "use client";
-import { Logo } from "@/components/common/logo";
 import Link from "next/link";
 import { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
