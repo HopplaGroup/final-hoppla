@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const privacyPolicyData = {
@@ -116,10 +116,16 @@ export default function PrivacyPage() {
     const router = useRouter();
 
     const [cameFromExternal, setCameFromExternal] = useState(false);
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const referrer = document.referrer;
-        if (!referrer || !referrer.includes(window.location.origin)) {
+        console.log("Referrer:", referrer); // Log the referrer for debugging
+        if (
+            !referrer ||
+            !referrer.includes(window.location.origin) ||
+            referrer === window.location.href
+        ) {
             setCameFromExternal(true);
         }
     }, []);
@@ -129,7 +135,7 @@ export default function PrivacyPage() {
             <div className="max-w-3xl mx-auto">
                 {!cameFromExternal && (
                     <button
-                        onClick={() => router.back()}
+                        onClick={() => router.push(document.referrer)}
                         className="mb-6 flex items-center text-primary hover:text-primary/80 transition-colors"
                     >
                         <svg

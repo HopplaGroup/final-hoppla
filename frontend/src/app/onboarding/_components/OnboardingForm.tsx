@@ -70,11 +70,8 @@ export default function OnboardingForm() {
             const result = await updateUser(values);
 
             if (result.success) {
-                // toast.success("Profile updated successfully!");
                 setIsRedirecting(true);
-                setTimeout(() => {
-                    router.push("/profile");
-                }, 800);
+                router.push("/profile");
             } else {
                 toast.error(m.known_every_emu_bless());
                 setIsPending(false);
