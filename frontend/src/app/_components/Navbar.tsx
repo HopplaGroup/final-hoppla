@@ -6,6 +6,7 @@ import * as m from "@/paraglide/messages.js";
 import { User } from "@prisma/client";
 import Logo from "@/app/_components/Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
+import AuthBlock from "./AAuthBlock";
 
 export default function Navbar({
     user,
@@ -107,7 +108,7 @@ export default function Navbar({
                                     {m.odd_sleek_mink_taste()}
                                 </span>
                             </Link>
-                            {/* <AuthBlock user={user} /> */}
+                            <AuthBlock user={user} />
                         </div>
                     </div>
                 </div>
