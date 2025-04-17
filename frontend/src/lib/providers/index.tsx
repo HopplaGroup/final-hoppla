@@ -12,7 +12,7 @@ type MainProviderProps = {
 
 const queryClient = new QueryClient({});
 
-export function MainProvider({ children, user }: MainProviderProps) {
+export default function Providers({ children, user }: MainProviderProps) {
     return (
         <QueryClientProvider client={queryClient}>
             <UserProvider user={user}>

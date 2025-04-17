@@ -11,7 +11,7 @@ import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
 import { menv } from "@/lib/utils/menv";
 import BlockedUserPage from "./_components/BlockedUserPage";
-import { MainProvider } from "@/lib/providers/MainProvider";
+import Providers from "@/lib/providers";
 
 export const dynamic = "force-dynamic";
 
@@ -48,14 +48,14 @@ export default async function RootLayout({
                         "min-h-screen font-sans antialiased bg-gray-100"
                     )}
                 >
-                    <MainProvider user={user}>
+                    <Providers user={user}>
                         {user && user.status === "BLOCKED" ? (
                             <BlockedUserPage />
                         ) : (
                             children
                         )}
                         <Toaster />
-                    </MainProvider>
+                    </Providers>
                 </body>
 
                 {menv.NODE_ENV === "production" && (
