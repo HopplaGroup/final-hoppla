@@ -1,7 +1,6 @@
 import { getUser } from "@/lib/utils/auth";
-import MySidebar from "./sidebar";
 import { redirect } from "next/navigation";
-import Stats from "./stats";
+import Navigation from "./_components/Navigation";
 
 export default async function Layout({
     children,
@@ -13,12 +12,10 @@ export default async function Layout({
     }
 
     return (
-        <div className="min-h-screen font-sans antialiased bg-gray-100 grid grid-cols-[auto,1fr]">
-            <MySidebar />
-            <div className="p-5">
-                <Stats />
+        <div className="min-h-screen font-sans antialiased bg-gray-100">
+            <Navigation>
                 <div>{children}</div>
-            </div>
+            </Navigation>
         </div>
     );
 }

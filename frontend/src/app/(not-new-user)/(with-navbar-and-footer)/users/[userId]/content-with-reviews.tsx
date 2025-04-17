@@ -11,7 +11,7 @@ import { useMemo } from "react";
 import GoBackButton from "./go-back-button";
 import * as m from "@/paraglide/messages.js";
 
-import { useUser } from "@/lib/providers/user-provider";
+import { useUser } from "@/lib/providers/UserProvider";
 
 export default function ContentWithReviews({
     children,

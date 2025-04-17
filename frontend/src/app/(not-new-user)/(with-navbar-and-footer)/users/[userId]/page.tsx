@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import ContentWithReviews from "./content-with-reviews";
 import Link from "next/link";
-import SearchBarLanding from "../../_components/SearchBarLanding";
+import SearchBarLanding from "../../_components/ASearchBarLanding";
 import * as m from "@/paraglide/messages.js";
 
 type UserPageProps = {

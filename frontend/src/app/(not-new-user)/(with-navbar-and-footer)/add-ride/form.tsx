@@ -12,7 +12,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/actions/button";
+import { Button } from "@/components/ui/button";
 import { useMask } from "@react-input/mask";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import { Car, Rule, User } from "@prisma/client";
 import { getDirections } from "./actions";
-import { Autocomplete } from "@/components/ui/data-input/autocomplete";
+import { Autocomplete } from "@/components/ui/autocomplete";
 import { Circle, MapPin } from "lucide-react";
 import PLACES from "@/lib/constants/places";
 import { languageTag } from "@/paraglide/runtime";

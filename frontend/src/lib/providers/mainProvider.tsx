@@ -1,9 +1,9 @@
 "use client";
 import { User } from "@prisma/client";
-import { UserProvider } from "./user-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PushNotificationProvider } from "./push-notification-provider";
-import { ThemeProvider  } from "next-themes";
+import { ThemeProvider } from "next-themes";
+import PushNotificationProvider from "./PushNotificationProvider";
+import UserProvider from "./UserProvider";
 
 type MainProviderProps = {
     children: React.ReactNode;

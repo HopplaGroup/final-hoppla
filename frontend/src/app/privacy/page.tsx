@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import * as m from "@/paraglide/messages.js";
 import { languageTag } from "@/paraglide/runtime";
-import { LanguageSwitcher } from "@/components/common/navbar/language-switcher";
+import LanguageSwitcher from "@/app/_components/LanguageSwitcher";
 import { useRouter } from "@/lib/i18n";
 import { ArrowBigLeftDash, ArrowLeft, House } from "lucide-react";
 

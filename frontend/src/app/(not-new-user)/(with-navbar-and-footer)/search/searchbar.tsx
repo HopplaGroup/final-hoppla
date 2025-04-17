@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/actions/button";
-import { Autocomplete } from "@/components/ui/data-input/autocomplete";
+import { Button } from "@/components/ui/button";
+import { Autocomplete } from "@/components/ui/autocomplete";
 import PLACES from "@/lib/constants/places";
 import { languageTag } from "@/paraglide/runtime";
 import { Circle, MapPin } from "lucide-react";

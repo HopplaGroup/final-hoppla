@@ -28,9 +28,9 @@ import { CarCreateSchema } from "@zenstackhq/runtime/zod/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useMask } from "@react-input/mask";
-import { UploadForm } from "@/components/S3UploadForm";
+import { UploadForm } from "@/app/_components/AS3UploadForm";
 import { Input } from "@/components/ui/input";
-import { Autocomplete } from "@/components/ui/data-input/autocomplete";
+import { Autocomplete } from "@/components/ui/autocomplete";
 import { CAR_LIST } from "../../../../lib/constants/car-list";
 import {
     Select,

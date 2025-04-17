@@ -1,22 +1,30 @@
 import { getUser } from "@/lib/utils/auth";
-import TwoColumnFooter from "@/components/common/footer/footer";
-import { Navbar } from "@/components/common/navbar/navbar";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+import BottomNavigation from "./BottomNavigation";
+import WholeNavigation from "./WholeNavigation";
 
 export default async function WithNavbarAndFooter({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const user = await getUser();
+    const user = await getUser({
+        driverVerificationRequest: {
+            select: {
+                status: true,
+            },
+        },
+    });
 
     return (
         <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
             <header>
-                <Navbar user={user} />
+                <WholeNavigation user={user} />
             </header>
-            <main className="mt-20">{children}</main>
+            <main className="md:mt-20">{children}</main>
             <div>
-                <TwoColumnFooter />
+                <Footer />
             </div>
         </div>
     );

@@ -3,7 +3,7 @@
 import { ShieldQuestion } from "lucide-react";
 import * as m from "@/paraglide/messages.js";
 import Link from "next/link";
-import { useUser } from "@/lib/providers/user-provider";
+import { useUser } from "@/lib/providers/UserProvider";
 import { useFindUniqueDriverVerificationRequest } from "@/lib/hooks";
 
 export default function NotDriverAlert() {

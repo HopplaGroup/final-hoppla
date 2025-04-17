@@ -1,14 +1,13 @@
 "use client";
-import React from "react";
 import Image from "next/image";
 import * as m from "@/paraglide/messages.js";
 import highWay from "../../../../../public/assets/road-svg.svg";
-import SearchBarLanding from "./SearchBarLanding";
+import SearchBarLanding from "./ASearchBarLanding";
+import { TrendingUp } from "lucide-react";
 
 export default function Hero() {
     return (
         <section className="relative w-full">
-            {/* Background image container */}
             <div className="absolute inset-0 h-[550px] w-full overflow-hidden">
                 <Image
                     className="object-cover object-center h-full w-full"
@@ -25,7 +24,18 @@ export default function Hero() {
                 <div className="container mx-auto px-4 h-full">
                     <div className="flex flex-col h-full justify-between items-center sm:py-12">
                         {/* Top section with headline */}
-                        <div className="max-w-2xl mt-12 text-center">
+                        <div className="flex justify-center pt-5 md:hidden mt-3">
+                            <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2">
+                                <TrendingUp
+                                    size={16}
+                                    className="text-primary"
+                                />
+                                <span className="text-sm font-medium text-white">
+                                    {m.cute_mealy_termite_sprout()}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="max-w-2xl mt-5 md:mt-12 text-center">
                             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
                                 {m.ago_clean_fireant_zoom()}
                             </h1>
@@ -53,7 +63,7 @@ export default function Hero() {
             </div>
 
             {/* Features section below the hero */}
-            <div className="bg-gray-50 mt-16 sm:mt-0 pt-20 pb-12">
+            <div className="bg-gray-50 mt-32 sm:mt-16 md:mt-0 pt-20 pb-12">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                         {[

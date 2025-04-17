@@ -1,5 +1,5 @@
 "use client";
-import { UploadForm } from "@/components/S3UploadForm";
+import { UploadForm } from "@/app/_components/AS3UploadForm";
 import { User } from "@prisma/client";
 import { changeProfileImg } from "./actionts";
 

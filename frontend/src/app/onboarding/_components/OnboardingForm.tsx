@@ -8,22 +8,15 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import * as m from "@/paraglide/messages";
-import { zodPhoneSchema } from "@/lib/utils/phone-schema";
-import { updateUser } from "../_actions/actions";
+import { zodPhoneSchema } from "@/lib/utils/phoneSchema";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/lib/i18n";
-
-// Form schema
-const OnboardingSchema = z.object({
-    name: z.string().min(1).max(50),
-    mobileNumber: zodPhoneSchema,
-    birthDate: z.date(),
-    sex: z.enum(["MAN", "WOMAN", "OTHER"]),
-    bio: z.string().min(1).max(500),
-});
-
-type FormValues = z.infer<typeof OnboardingSchema>;
+import updateUser from "../_actions/updateUser";
+import {
+    UpdateUserInput,
+    UpdateUserSchema,
+} from "../_actions/updateUser.schema";
 
 export default function OnboardingForm() {
     const router = useRouter();
@@ -43,10 +36,10 @@ export default function OnboardingForm() {
         handleSubmit,
         formState: { errors },
         setValue,
-        watch,
         trigger,
-    } = useForm<FormValues>({
-        resolver: zodResolver(OnboardingSchema),
+        watch,
+    } = useForm<UpdateUserInput>({
+        resolver: zodResolver(UpdateUserSchema),
         defaultValues: {
             name: "",
             sex: "MAN",
@@ -63,7 +56,7 @@ export default function OnboardingForm() {
     const selectedBio = watch("bio");
     const watchedFields = watch();
 
-    async function onSubmit(values: FormValues) {
+    async function onSubmit(values: UpdateUserInput) {
         if (step !== totalSteps) return;
         setIsPending(true);
         try {
@@ -353,17 +346,7 @@ export default function OnboardingForm() {
                                                 <input
                                                     id="birthDate"
                                                     type="date"
-                                                    // from and to like age should be at least 5 years
-                                                    max={
-                                                        new Date(
-                                                            new Date().setFullYear(
-                                                                new Date().getFullYear() -
-                                                                    5
-                                                            )
-                                                        )
-                                                            .toISOString()
-                                                            .split("T")[0]
-                                                    }
+                                                    max="2023-12-31"
                                                     className={`w-full outline-none rounded-lg border ${
                                                         errors.birthDate
                                                             ? "border-red-500 focus:ring-red-500"

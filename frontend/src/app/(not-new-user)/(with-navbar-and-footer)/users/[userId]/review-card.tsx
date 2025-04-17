@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { getQueryKey, useDeleteUserReview } from "@/lib/hooks";
-import { useUser } from "@/lib/providers/user-provider";
+import { useUser } from "@/lib/providers/UserProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { Prisma, UserReview } from "@zenstackhq/runtime/models";
 import { Delete, Ellipsis, LoaderCircle, Stars, Trash } from "lucide-react";

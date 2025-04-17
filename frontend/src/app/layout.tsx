@@ -4,7 +4,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "react-responsive-pagination/themes/classic.css";
 import "@/lib/styles/globals.css";
 import { cn } from "@/lib/utils/cn";
-import { MainProvider } from "@/lib/providers/mainProvider";
 import { Toaster } from "react-hot-toast";
 import { getUser } from "@/lib/utils/auth";
 import type { Metadata, Viewport } from "next";
@@ -12,6 +11,7 @@ import * as m from "@/paraglide/messages.js";
 import Script from "next/script";
 import { menv } from "@/lib/utils/menv";
 import BlockedUserPage from "./_components/BlockedUserPage";
+import { MainProvider } from "@/lib/providers/MainProvider";
 
 export const dynamic = "force-dynamic";
 

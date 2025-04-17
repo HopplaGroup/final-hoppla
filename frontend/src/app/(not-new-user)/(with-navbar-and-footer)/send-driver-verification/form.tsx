@@ -12,11 +12,11 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/actions/button";
+import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import * as m from "@/paraglide/messages.js";
 import { DriverVerificationRequest, User } from "@prisma/client";
-import { UploadForm } from "@/components/S3UploadForm";
+import { UploadForm } from "@/app/_components/AS3UploadForm";
 import { DriverVerificationRequestCreateSchema } from "@zenstackhq/runtime/zod/models";
 import {
     useCreateDriverVerificationRequest,

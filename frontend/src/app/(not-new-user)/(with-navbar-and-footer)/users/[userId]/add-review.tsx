@@ -31,7 +31,7 @@ import * as m from "@/paraglide/messages.js";
 
 import { z } from "zod";
 import { UserReviewCreateSchema } from "@zenstackhq/runtime/zod/models";
-import { useUser } from "@/lib/providers/user-provider";
+import { useUser } from "@/lib/providers/UserProvider";
 
 export default function AddReview({ revieweeId }: { revieweeId: string }) {
     const { mutate, isPending } = useCreateUserReview({
