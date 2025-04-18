@@ -7,5 +7,6 @@ export * from './ride-started-confirmation';
 export * from './ride-rule';
 export * from './rule';
 export * from './user-review';
+export * from './contact-submission';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react';

@@ -272,3 +272,32 @@ model UserReview extends Base {
   @@allow('update', false)
   @@allow('delete', auth() == author)
 }
+
+
+enum ContactSubmissionStatus {
+  NEW
+  IN_PROGRESS
+  REPLIED
+  RESOLVED
+  CLOSED
+  SPAM
+}
+
+enum ContactSubmissionType {
+  GENERAL
+  SUPPORT
+  FEEDBACK
+}
+
+model ContactSubmission extends Base {
+  name    String
+  email   String                  @email
+  message String
+  status  ContactSubmissionStatus @default(NEW)
+  type    ContactSubmissionType
+
+  @@allow('create', true)
+  @@allow('read', false)
+  @@allow('update', false)
+  @@allow('delete', false)
+}

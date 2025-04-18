@@ -1,7 +1,5 @@
 import { getUser } from "@/lib/utils/auth";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
-import BottomNavigation from "./BottomNavigation";
 import WholeNavigation from "./WholeNavigation";
 
 export default async function WithNavbarAndFooter({

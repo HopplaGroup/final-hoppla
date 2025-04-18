@@ -631,6 +631,48 @@ const metadata = {
             ,
         }
         ,
+        contactSubmission: {
+            name: 'ContactSubmission', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, email: {
+                    name: "email",
+                    type: "String",
+                }, message: {
+                    name: "message",
+                    type: "String",
+                }, status: {
+                    name: "status",
+                    type: "ContactSubmissionStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, type: {
+                    name: "type",
+                    type: "ContactSubmissionType",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
     }
     ,
     deleteCascade: {

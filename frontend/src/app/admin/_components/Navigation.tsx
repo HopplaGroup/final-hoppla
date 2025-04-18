@@ -198,12 +198,12 @@ export default function Navigation({
             </aside>
 
             {/* Bottom Navigation (Mobile Only) */}
-            <div className="fixed bottom-0 left-0 right-0 z-20 bg-neutral-900 text-white shadow-lg md:hidden">
+            <div className="fixed border-t-2 border-gray-300 bottom-0 left-0 right-0 z-20 bg-white shadow-lg md:hidden">
                 <div className="flex justify-between items-center px-4">
                     {/* Mobile Menu Button */}
                     <button
                         onClick={toggleSidebar}
-                        className="p-4 text-white hover:bg-neutral-800 flex flex-col items-center justify-center"
+                        className="p-4 hover:bg-gray-200 flex flex-col items-center justify-center"
                     >
                         <MenuIcon className="w-6 h-6" />
                         <span className="text-xs mt-1">
@@ -219,9 +219,9 @@ export default function Navigation({
                             <Link
                                 key={item.label}
                                 href={item.href}
-                                className="p-4 hover:bg-neutral-800 flex flex-col items-center justify-center"
+                                className="p-4 hover:bg-gray-200 flex flex-col items-center justify-center"
                             >
-                                <span className="text-white">{item.icon}</span>
+                                <span className="">{item.icon}</span>
                                 <span className="text-xs mt-1 truncate max-w-14">
                                     {item.label}
                                 </span>

@@ -3,17 +3,19 @@ import { Plus, Ticket, X, Menu, Home, Info, Phone, Car } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import * as m from "@/paraglide/messages.js";
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import Logo from "@/app/_components/Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
-import AuthBlock from "./AAuthBlock";
+import AuthBlock from "./AuthBlock";
 
 export default function Navbar({
     user,
     openSidebar,
     isSidebarOpened,
 }: {
-    user: User | null;
+    user: Prisma.UserGetPayload<{
+        include: { driverVerificationRequest: { select: { status: true } } };
+    }> | null;
     openSidebar: () => void;
     isSidebarOpened: boolean;
 }) {
@@ -100,7 +102,7 @@ export default function Navbar({
 
                         <div className="flex items-center gap-0">
                             <Link
-                                href="/search/current-rides"
+                                href="/upcoming-rides"
                                 className="flex items-center gap-2 px-4 py-3.5 text-sm font-medium bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors"
                             >
                                 <Ticket size={18} />

@@ -41,7 +41,7 @@ export default function BottomNavigation({
     const MAIN_NAV_ITEMS = [
         { href: "/", label: m.lofty_nimble_goat_succeed(), icon: Home },
         {
-            href: "/search/current-rides",
+            href: "/upcoming-rides",
             label: m.odd_sleek_mink_taste(),
             icon: Ticket,
         },

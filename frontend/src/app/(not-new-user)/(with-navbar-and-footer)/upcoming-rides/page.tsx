@@ -1,13 +1,15 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
-import RideCard from "../_components/ride-card";
+// import RideCard from "../_components/ride-card";
 import { notFound, redirect } from "next/navigation";
 
 import * as m from "@/paraglide/messages.js";
-import { RideResponse } from "../response-ride-type";
+// import { RideResponse } from "../response-ride-type";
 import { getUser } from "@/lib/utils/auth";
 import db from "@/lib/utils/db";
 import { menv } from "@/lib/utils/menv";
+import { RideResponse } from "../search/response-ride-type";
+import RideCard from "../search/_components/ride-card";
 
 export default async function CurrentRidesPage() {
     const user = await getUser();
@@ -18,11 +20,8 @@ export default async function CurrentRidesPage() {
         );
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-
     const userId = user.id;
 
-    // Fetch ride data from database directly
     const currentRides = await db.ride.findMany({
         where: {
             status: "ACTIVE",

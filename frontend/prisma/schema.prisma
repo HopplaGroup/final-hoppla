@@ -76,6 +76,21 @@ enum RidePassengerRequestStatus {
   UNPAID
 }
 
+enum ContactSubmissionStatus {
+  NEW
+  IN_PROGRESS
+  REPLIED
+  RESOLVED
+  CLOSED
+  SPAM
+}
+
+enum ContactSubmissionType {
+  GENERAL
+  SUPPORT
+  FEEDBACK
+}
+
 /// @@deny('all', auth().status == 'BLOCKED')
 /// @@allow('all', auth().role == 'ADMIN')
 /// @@auth
@@ -289,4 +304,22 @@ model UserReview {
   revieweeId String
 
   @@unique([authorId, revieweeId])
+}
+
+/// @@deny('all', auth().status == 'BLOCKED')
+/// @@allow('all', auth().role == 'ADMIN')
+/// @@allow('create', true)
+/// @@allow('read', false)
+/// @@allow('update', false)
+/// @@allow('delete', false)
+model ContactSubmission {
+  id        String                  @id() @default(cuid())
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt()
+  name      String
+  /// @email
+  email     String
+  message   String
+  status    ContactSubmissionStatus @default(NEW)
+  type      ContactSubmissionType
 }

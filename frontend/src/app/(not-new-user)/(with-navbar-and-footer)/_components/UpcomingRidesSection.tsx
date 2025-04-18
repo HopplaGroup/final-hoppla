@@ -1,15 +1,13 @@
-"use client";
 import RideCard from "@/app/(not-new-user)/(with-navbar-and-footer)/search/_components/ride-card";
 import { RideResponse } from "@/app/(not-new-user)/(with-navbar-and-footer)/search/response-ride-type";
 import * as m from "@/paraglide/messages.js";
-
-import { useFindManyRide } from "@/lib/hooks";
-import { useMemo } from "react";
 import RideCardEmpty from "@/app/(not-new-user)/(with-navbar-and-footer)/search/_components/ride-card-empty";
+import db from "@/lib/utils/db";
 
-export default function UpcomingRidesSection() {
-    const date = useMemo(() => new Date(), []);
-    const { data: currentRides } = useFindManyRide({
+export default async function UpcomingRidesSection() {
+    const date = new Date();
+
+    const currentRides = await db.ride.findMany({
         include: {
             car: true,
             driver: true,
@@ -35,19 +33,11 @@ export default function UpcomingRidesSection() {
             departure: {
                 gt: date,
             },
-            driver: {
-                driverVerificationRequest: {
-                    status: "APPROVED",
-                },
-            },
-            car: {
-                status: "APPROVED",
-            },
         },
         orderBy: {
             departure: "desc",
         },
-        take: 10,
+        take: 3,
     });
 
     const mappedCurrentRides = currentRides?.map(
