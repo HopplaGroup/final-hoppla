@@ -38,7 +38,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useMemo, useState } from "react";
-import { ruleToIcon, ruleToLabel } from "../../search/_components/rule-icons";
 import bookRide from "@/lib/bog/book-ride";
 import { cn } from "@/lib/utils/cn";
 import { useQueryClient } from "@tanstack/react-query";

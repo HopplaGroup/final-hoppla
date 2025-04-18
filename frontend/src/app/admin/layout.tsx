@@ -13,9 +13,7 @@ export default async function Layout({
 
     return (
         <div className="min-h-screen font-sans antialiased bg-gray-100">
-            <Navigation>
-                <div>{children}</div>
-            </Navigation>
+            <Navigation>{children}</Navigation>
         </div>
     );
 }

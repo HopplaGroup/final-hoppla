@@ -1,12 +1,10 @@
 // components/RideCard.tsx
 import Link from "next/link";
 import { format } from "date-fns";
-import { Divide, Stars } from "lucide-react";
+import { Car, Caravan, Divide, Stars, Users } from "lucide-react";
 
 import Image from "next/image";
-import { SVGCarMinivan, SVGCarStandard, SVGSeat } from "./svgs";
 import { Separator } from "@/components/ui/separator";
-import { dummyRules, ruleToIcon, ruleToLabel } from "./rule-icons";
 
 import { RideResponse } from "../response-ride-type";
 import PLACES from "@/lib/constants/places";
@@ -71,7 +69,7 @@ const RideCard: React.FC<RideCardProps> = ({
                             }
                         )}
                     >
-                        <SVGSeat className="w-8 h-8 " />
+                        <Users className="w-8 h-8 " />
                         <div className="">
                             {takenSeats} {"/"} {maxSeats}{" "}
                         </div>
@@ -236,10 +234,10 @@ const RideCard: React.FC<RideCardProps> = ({
                 </div>
                 <div className="flex w-full relative  items-center border-t pt-5 p-5">
                     {ride.car.type === "STANDARD" && (
-                        <SVGCarStandard className="fill-gray-500" />
+                        <Car className="fill-gray-500" />
                     )}
                     {ride.car.type === "MINIVAN" && (
-                        <SVGCarMinivan className="fill-gray-500" />
+                        <Caravan className="fill-gray-500" />
                     )}
                     <img
                         className="w-10 bg-gray-400 h-10 rounded-full mr-4"

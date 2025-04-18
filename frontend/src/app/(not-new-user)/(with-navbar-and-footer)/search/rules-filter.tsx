@@ -1,8 +1,6 @@
 "use client";
 import { useFindManyRule } from "@/lib/hooks";
-import { Rule } from "@prisma/client";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { ruleToLabel } from "./_components/rule-icons";
 import { languageTag } from "@/paraglide/runtime";
 import * as m from "@/paraglide/messages.js";
 import {

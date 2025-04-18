@@ -15,6 +15,27 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+export async function sendEmailToEmail({
+    email,
+    subject,
+    htmlRender,
+    senderName = "Hoppla Contact",
+}: {
+    email: string;
+    subject: string;
+    htmlRender: JSX.Element;
+    senderName?: string;
+}) {
+    await transporter.sendMail({
+        from: `"${senderName}" <hopplagroup@gmail.com>`,
+        to: email,
+        subject,
+        html: await render(htmlRender, {
+            pretty: true,
+        }),
+    });
+}
+
 export async function sendEmail({
     to,
     subject,

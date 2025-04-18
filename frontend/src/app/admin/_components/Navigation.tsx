@@ -73,7 +73,7 @@ export default function Navigation({
         // contact-submissions and rules
         {
             label: m.yummy_top_lemming_reap(),
-            href: "/admin/contact-submissions",
+            href: "/admin/contact",
             icon: <Contact className="w-5 h-5" />,
         },
         {

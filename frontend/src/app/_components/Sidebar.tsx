@@ -77,16 +77,16 @@ export default function Sidebar({
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    useEffect(() => {
-        if (isSidebarOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [isSidebarOpen]);
+    // useEffect(() => {
+    //     if (isSidebarOpen) {
+    //         document.body.style.overflow = "hidden";
+    //     } else {
+    //         document.body.style.overflow = "";
+    //     }
+    //     return () => {
+    //         document.body.style.overflow = "";
+    //     };
+    // }, [isSidebarOpen]);
 
     return (
         <>

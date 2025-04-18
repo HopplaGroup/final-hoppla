@@ -41,7 +41,6 @@ import { RideCreateSchema } from "@zenstackhq/runtime/zod/models";
 import { useCreateRide } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
-import { ruleToLabel } from "../search/_components/rule-icons";
 
 const FormSchema = RideCreateSchema.extend({
     ruleIds: z.array(z.string()).optional(),

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { revalidatePath } from "next/cache";
 import { FileEdit, Trash2, Plus, Save } from "lucide-react";
 import * as m from "@/paraglide/messages.js";
 import db from "@/lib/utils/db";
@@ -95,21 +94,30 @@ export default async function RulesAdminPage() {
                         </div>
 
                         {/* Mobile list view */}
-                        <div className="md:hidden">
-                            <div className="bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700">
-                                {m.sour_merry_kudu_nudge()}
-                            </div>
-                            <div className="divide-y divide-gray-200">
+                        <table className="md:hidden w-full">
+                            <thead>
+                                <tr>
+                                    <th className="bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700">
+                                        {m.sour_merry_kudu_nudge()}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
                                 {rules.map((rule) => (
                                     <RuleRow key={rule.id} rule={rule} />
                                 ))}
                                 {rules.length === 0 && (
-                                    <div className="text-center py-6 text-gray-500 px-4">
-                                        {m.cool_such_sloth_file()}
-                                    </div>
+                                    <tr>
+                                        <td
+                                            colSpan={6}
+                                            className="text-center py-6 text-gray-500 px-4"
+                                        >
+                                            {m.cool_such_sloth_file()}
+                                        </td>
+                                    </tr>
                                 )}
-                            </div>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
             </div>
