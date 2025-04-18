@@ -5,7 +5,7 @@ import * as m from "@/paraglide/messages.js";
 import db from "@/lib/utils/db";
 import LanguageSwitcher from "@/app/_components/LanguageSwitcher";
 import { addRule, deleteRule, updateRule } from "./actionts";
-import { AddRuleButton, RuleRow } from "./_components/cc";
+import { AddRuleButton, RuleRow } from "./_components/RuleRow";
 
 export default async function RulesAdminPage() {
     const rules = await db.rule.findMany({
