@@ -10,6 +10,8 @@ import {
     Settings,
     Menu as MenuIcon,
     X,
+    WholeWord,
+    Contact,
 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
@@ -67,6 +69,17 @@ export default function Navigation({
             label: m.neat_left_scallop_promise(),
             href: "/admin/settings",
             icon: <Settings className="w-5 h-5" />,
+        },
+        // contact-submissions and rules
+        {
+            label: m.yummy_top_lemming_reap(),
+            href: "/admin/contact-submissions",
+            icon: <Contact className="w-5 h-5" />,
+        },
+        {
+            label: m.lime_good_gorilla_pat(),
+            href: "/admin/rules",
+            icon: <WholeWord className="w-5 h-5" />,
         },
     ];
 

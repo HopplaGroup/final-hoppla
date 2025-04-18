@@ -547,12 +547,17 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
                 }, price: {
                     name: "price",
                     type: "Float",
+                }, labels: {
+                    name: "labels",
+                    type: "Json",
+                    attributes: [{ "name": "@default", "args": [{ "value": "{ \"en\": \"No Smoking\", \"ka\": \"არ ვეწევით\" }" }] }],
+                }, svg: {
+                    name: "svg",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, ruleRides: {
                     name: "ruleRides",
                     type: "RideRule",

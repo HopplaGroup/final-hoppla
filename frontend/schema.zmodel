@@ -245,9 +245,10 @@ model RideRule extends Base {
 }
 
 model Rule extends Base {
-  description String
-  price       Float
-  ruleRides   RideRule[]
+  price     Float
+  labels    Json       @default('{ "en": "No Smoking", "ka": "არ ვეწევით" }')
+  svg       String     @default("")
+  ruleRides RideRule[]
 
   @@allow('create', false)
   @@allow('read', true)

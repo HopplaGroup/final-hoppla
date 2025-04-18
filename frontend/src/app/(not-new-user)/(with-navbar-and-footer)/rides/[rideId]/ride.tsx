@@ -492,18 +492,19 @@ export function Ride({
 
                         <div className=" grid grid-cols-2 ">
                             {ride.rideRules.length > 0 ? (
-                                ride.rideRules.map(({ rule }, index) => (
+                                ride.rideRules.map(({ rule }: any, index) => (
                                     <div className="flex " key={index}>
                                         <div className="flex items-center">
-                                            {ruleToIcon[rule.description]}
+                                            <div
+                                                className="fill-gray-500 w-4 h-4  sm:w-7 sm:h-7 text-gray-600"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: rule.svg,
+                                                }}
+                                            />
                                         </div>
                                         <div className="flex items-center">
                                             <div className="text-gray-500  ">
-                                                {
-                                                    ruleToLabel[
-                                                        rule.description
-                                                    ][languageTag()]
-                                                }
+                                                {rule.labels[languageTag()]}
                                             </div>
                                         </div>
                                     </div>

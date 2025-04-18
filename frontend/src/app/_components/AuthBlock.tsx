@@ -64,7 +64,7 @@ export default function AuthBlock({
                             alt="user avatar"
                             width={25}
                             height={25}
-                            className="object-cover size-[20px] rounded-full"
+                            className="object-cover size-[30px] rounded-full"
                         />
                         <div className="md:flex flex-col items-start ml-2 max-w-[200px] overflow-hidden">
                             <div className="flex justify-center items-center gap-1">

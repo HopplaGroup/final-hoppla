@@ -275,12 +275,13 @@ model RideRule {
 /// @@allow('update', false)
 /// @@allow('delete', false)
 model Rule {
-  id          String     @id() @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt()
-  description String
-  price       Float
-  ruleRides   RideRule[]
+  id        String     @id() @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt()
+  price     Float
+  labels    Json       @default("{ \"en\": \"No Smoking\", \"ka\": \"არ ვეწევით\" }")
+  svg       String     @default("")
+  ruleRides RideRule[]
 }
 
 /// @@deny('all', auth().status == 'BLOCKED')

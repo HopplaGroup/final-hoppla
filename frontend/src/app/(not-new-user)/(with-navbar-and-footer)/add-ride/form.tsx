@@ -418,9 +418,9 @@ export function CreateRideForm({
                                     placeholder={m.ok_full_duck_edit()}
                                     options={rules.map((r) => ({
                                         value: r.id,
-                                        label: ruleToLabel[r.description][
+                                        label: (r.labels as any)[
                                             languageTag()
-                                        ],
+                                        ] as any,
                                     }))}
                                     className="basic-multi-select py-0"
                                     classNamePrefix="select"

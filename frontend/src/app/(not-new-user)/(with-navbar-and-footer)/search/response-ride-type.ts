@@ -19,7 +19,8 @@ export type RideResponse = {
     };
     rules: {
         id: string;
-        description: string;
+        labels: any;
+        svg: string;
     }[];
     passengers: {
         id: string;

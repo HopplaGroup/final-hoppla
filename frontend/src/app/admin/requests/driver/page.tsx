@@ -11,7 +11,7 @@ import ResponsivePagination from "react-responsive-pagination";
 import { cn } from "@/lib/utils/cn";
 import Skeleton from "react-loading-skeleton";
 import { useDebounce } from "use-debounce";
-import SearchBox from "../../components/searchbox";
+import SearchBox from "../../_components/SearchBox";
 
 const PAGE_COUNT = 10;
 

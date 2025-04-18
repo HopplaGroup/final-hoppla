@@ -322,7 +322,7 @@ export function useSuspenseCountRule<TArgs extends Prisma.RuleCountArgs, TQueryF
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Rule', `${endpoint}/rule/count`, args, options, fetch);
 }
 
-export function useCheckRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; description?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; svg?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Rule', `${endpoint}/rule/check`, args, options, fetch);
 }

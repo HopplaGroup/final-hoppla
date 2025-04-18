@@ -1,7 +1,6 @@
 import LanguageSwitcher from "@/app/_components/LanguageSwitcher";
 import Stats from "./_components/Stats";
 import {
-    LayoutDashboard,
     Settings,
     Users,
     Activity,

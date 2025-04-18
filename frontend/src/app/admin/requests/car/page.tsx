@@ -12,7 +12,7 @@ import { Prisma } from "@zenstackhq/runtime/models";
 import ResponsivePagination from "react-responsive-pagination";
 import { cn } from "@/lib/utils/cn";
 import Skeleton from "react-loading-skeleton";
-import SearchBox from "../../components/searchbox";
+import SearchBox from "../../_components/SearchBox";
 import { useDebounce } from "use-debounce";
 
 const PAGE_COUNT = 10;

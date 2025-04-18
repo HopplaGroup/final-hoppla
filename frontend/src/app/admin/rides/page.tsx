@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils/cn";
 import { Prisma } from "@zenstackhq/runtime/models";
 import ResponsivePagination from "react-responsive-pagination";
 import Skeleton from "react-loading-skeleton";
-import SearchBox from "../components/searchbox";
+import SearchBox from "../_components/SearchBox";
 import RideCard from "./ride-card";
 
 const PAGE_COUNT = 10;

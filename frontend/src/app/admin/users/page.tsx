@@ -8,7 +8,7 @@ import { Prisma } from "@zenstackhq/runtime/models";
 import UserCard from "./user-card";
 import ResponsivePagination from "react-responsive-pagination";
 import Skeleton from "react-loading-skeleton";
-import SearchBox from "../components/searchbox";
+import SearchBox from "../_components/SearchBox";
 
 const PAGE_COUNT = 10;
 

@@ -68,7 +68,8 @@ export default async function UpcomingRidesSection() {
                 })),
                 rules: ride.rideRules.map((rule) => ({
                     id: rule.id,
-                    description: rule.rule.description,
+                    labels: rule.rule.labels,
+                    svg: rule.rule.svg,
                 })),
             } as RideResponse)
     );
